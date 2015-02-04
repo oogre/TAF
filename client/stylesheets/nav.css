@@ -1,0 +1,146 @@
+.cbp-spmenu {
+    position: fixed;
+    
+}
+ 
+.cbp-spmenu h3 {
+    color: #ffffff;
+    font-size: 1.2em;
+    margin: 0;
+    font-weight: 300;
+    margin-bottom: 7px;
+}
+.cbp-spmenu a {
+    font-weight: 300;
+}
+
+nav.cbp-spmenu-vertical .nav>li>a:hover:not(:focus){
+    background-color: transparent; 
+} 
+.cbp-spmenu-vertical a.active:hover,
+.cbp-spmenu-vertical a.active,
+.cbp-spmenu-vertical a:focus,
+.cbp-spmenu-vertical a:focus:hover,
+
+.cbp-spmenu-vertical a:active,
+.cbp-spmenu-vertical a:active:hover
+ {
+    outline: none;
+    background-color: #fff; 
+    color: #373737;
+}
+ 
+/* Orientation-dependent styles for the content of the menu */
+ 
+.cbp-spmenu-vertical {
+    width: 240px;
+    height: 100%;
+    top: 0;
+    z-index: 1000;
+    background-color: #444;
+    box-shadow: -10px 0 10px rgba(0, 0, 0, 0.2) inset;
+}
+ 
+.cbp-spmenu-vertical a {
+    border-bottom: 1px solid #373737;
+    padding: 1em;
+        display: block;
+    color: #fff;
+    font-size: 1.1em;
+    font-weight: 300;
+}
+ 
+.cbp-spmenu-horizontal {
+    width: 100%;
+    height: 75px;
+    left: 0;
+    z-index: 1000;
+    overflow: hidden;
+    background-color: #55F;
+    box-shadow: 0 -10px 10px rgba(0, 0, 0, 0.1) inset;
+    padding: 7px;
+}
+ 
+.cbp-spmenu-horizontal h3 {
+    text-align: center;
+    display: block;
+}
+ 
+/* Vertical menu that slides from the left */
+ 
+.cbp-spmenu-left {
+    left: -240px;
+}
+ 
+.cbp-spmenu-left.cbp-spmenu-open {
+    left: 0;
+}
+ 
+/* Horizontal menu that slides from the top */
+ 
+.cbp-spmenu-top {
+    top: -75px;
+}
+ 
+ 
+.cbp-spmenu-top.cbp-spmenu-open {
+    top: 0;
+}
+ 
+ 
+/* Push classes applied to the body */
+ 
+.cbp-spmenu-push {
+    overflow-x: hidden;
+    position: relative;
+    left: 0;
+    top: 0;
+    height: 100%;
+}
+ 
+.cbp-spmenu-push-toright {
+    left: 240px;
+}
+.cbp-spmenu-push-tobottom {
+    top: 75px;
+}
+ 
+/* Transitions */
+ 
+.cbp-spmenu,
+.cbp-spmenu-push {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.toggle-context-menu.btn:focus, 
+.toggle-context-menu.btn:active:focus, 
+.toggle-context-menu.btn.active:focus, 
+.toggle-main-menu.btn:focus, 
+.toggle-main-menu.btn:active:focus, 
+.toggle-main-menu.btn.active:focus{
+    outline: none;
+}
+.toggle-context-menu,
+.toggle-main-menu{
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+    text-shadow: 0 0 3px #ccc;
+}
+@media screen and (min-width: 800px){
+    .cbp-spmenu-push {
+        left: 240px;
+    }
+    .cbp-spmenu-left {
+        left: 0px;
+    }
+     
+    .cbp-spmenu-righ {
+        right: 0px;
+    }
+    .toggle-main-menu{
+        display : none;
+    }
+}

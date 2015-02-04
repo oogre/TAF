@@ -1,0 +1,23 @@
+<template name="shopselector">
+	<label class="col-sm-2">Client/Magasin</label>
+	<div class="form-group col-sm-5">
+		<div class="input-group col-sm-12">
+			<label class="input-group-addon" for="shopName" >Nom</label>
+
+			<input 	class="typeahead" name="shopName" id="shopName" type="text" 
+					placeholder="Client/Magasin" autocomplete="off" spellcheck="off" 
+					data-source="shops" data-highlight="true" required/>
+		</div>
+	</div>
+{{#if newShop}}
+	<div class="form-group col-sm-offset-2 col-sm-5">
+		<div class="input-group col-sm-12">
+			<label class="input-group-addon" for="contact" >Contact</label>
+			<input type="text" class="form-control" id="contact" name="contact" autocomplete="off" required/>
+		</div>
+	</div>
+	<div class="form-group col-sm-offset-2 col-sm-5">
+		<button class="btn btn-primary saveShop" >Enregistrer</button>
+	</div>
+{{/if}}
+</template>	

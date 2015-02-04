@@ -1,0 +1,14 @@
+<template name="work-action">
+	<h3>Nouvelle fiche de travail</h3>
+	<ul class="list-inline text-center">
+		<li>
+			<a class="btn btn-sm btn-default" href="{{pathFor route='work.new' hash='depannage'}}">Dépannage</a>
+		</li>
+		<li>
+			<a class="btn btn-sm btn-default" href="{{pathFor route='work.new' hash='installation'}}">Installation</a>
+		</li>
+		<li>
+			<a class="btn btn-sm btn-default" href="{{pathFor route='work.new' hash='maintenance'}}">Maintenance</a>
+		</li>
+	</ul>
+</template>

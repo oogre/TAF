@@ -1,0 +1,42 @@
+<template name="mainmenu">
+	<ul class="nav">
+		<li>
+			<a href="{{pathFor route='home'}}">
+				<img src="/images/logo.png">
+			</a>
+		</li>
+		{{#if currentUser}}
+			<li>
+				<a href="/worker" class="">
+					<i class="fa fa-fw fa-2x fa-users"></i>&nbsp; Travailleurs
+				</a>
+			</li>
+			<li>
+				<a href="/shop" class="">
+					<i class="fa fa-fw fa-2x fa-smile-o"></i>&nbsp; Magasins
+				</a>
+			</li>
+			<li>
+				<a href="/work" class="">
+					  <i class="fa fa-fw fa-2x fa-wrench"></i>&nbsp; Travaux
+				</a>
+			</li>
+			<li>
+				<a href="/material" class="">
+					  <i class="fa fa-fw fa-2x fa-cogs"></i>&nbsp; Matériels
+				</a>
+			</li>
+			<li>
+				<a href="{{pathFor route='user.signout'}}">
+					<i class="fa fa-fw fa-2x fa-sign-out"></i>&nbsp; Déconnection
+				</a>
+			</li>
+		{{else}}
+			<li>
+				<a href="{{pathFor route='home'}}" class="{{#if currentUser}}{{else}}active{{/if}}">
+					<i class="fa fa-fw fa-2x fa-sign-in"></i>&nbsp; Connection
+				</a>
+			</li>
+		{{/if}}
+	</ul>
+</template>

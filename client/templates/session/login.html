@@ -1,0 +1,21 @@
+<template name="signin">
+	<form class="form-inline">
+		<fieldset>
+			<div class="input-group">
+				<label for="login-email" class="input-group-addon"><i class="fa fa-2x fa-user"></i></label>
+				<input type="email" id="login-email" class="input-lg form-control" placeholder="email">
+			</div>
+		</fieldset>
+		<br/>
+		<fieldset>
+			<div class="input-group">
+				<label for="login-password" class="input-group-addon"><i class="fa fa-2x fa-eye-slash"></i></label>
+				<input type="password" id="login-password" class="input-lg form-control" placeholder="mot de passe">
+			</div>
+		</fieldset>
+		<br/>
+		<fieldset>
+			<button type="submit" class="btn btn-primary">Connection</button><a class="btn btn-link" href="{{pathFor route='user.signup'}}" >Créer un compte</a>
+		</fieldset>
+	</form>
+</template>
