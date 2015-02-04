@@ -6,8 +6,6 @@
 /*global Session : false */
 /*global Template : false */
 
-Session.setDefault("newShop", false);
-
 
 Template.shopselector.rendered = function(){
 	// initializes all typeahead instances
@@ -17,10 +15,10 @@ Template.shopselector.rendered = function(){
 
 Template.shopselector.helpers({
 	newShop : function(){
-		return Session.get("newShop");
+		return Session.get(Meteor.NEW_SHOP_KEY);
 	},
 	shops: function(query, callback){
-		Session.set("newShop", false);
+		Session.set(Meteor.NEW_SHOP_KEY, false);
 		callback(	Shops
 					.find({
 						name : {
@@ -37,22 +35,21 @@ Template.shopselector.helpers({
 
 Template.shopselector.events({
 	"keyup .typeahead": function(event) {
-		console.log(event.keyCode);
 		if(event.keyCode === 13 || event.keyCode === 16 || event.keyCode === 9 || (event.keyCode>=37 && event.keyCode<=40)) return ;
 		if(event.target.value && $(".tt-suggestions").length === 0){
-			Session.set("newShop", true);
+			Session.set(Meteor.NEW_SHOP_KEY, true);
 		}
 		else{
-			Session.set("newShop", false);
+			Session.set(Meteor.NEW_SHOP_KEY, false);
 		}
 	},
 
 	"blur .typeahead": function(event) {
 		if(Shops.find({name : event.target.value.toLowerCase()}).fetch().length === 0){
-			Session.set("newShop", true);
+			Session.set(Meteor.NEW_SHOP_KEY, true);
 		}
 		else{
-			Session.set("newShop", false);
+			Session.set(Meteor.NEW_SHOP_KEY, false);
 		}
 	},
 

@@ -1,12 +1,14 @@
 
 "use strict";
-/*global Template : false */
+/*global Meteor : false */
 /*global Session : false */
+/*global Template : false */
 
-var MENU_KEY = "navOpen";
+
 
 Template.mainmenu.events({
   "click a": function() {
-    Session.set(MENU_KEY, false);
+    Session.set(Meteor.MENU_KEY, false);
+    Session.set(Meteor.CONTEXT_MENU_KEY, false);
   },
 });

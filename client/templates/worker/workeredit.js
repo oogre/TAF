@@ -6,7 +6,6 @@
 /*global Template : false */
 
 
-Session.setDefault("changepwd", false);
 
 Template.workeredit.rendered = function(){
 
@@ -14,14 +13,14 @@ Template.workeredit.rendered = function(){
 
 Template.workeredit.helpers({
 	currentUser : function(){
-		Session.set("changepwd", false);
+		Session.set(Meteor.CHANGE_PWD_KEY, false);
 		if(Meteor.user())
 			return Meteor.user();
 		else
 			return {};
 	},
 	changepwd : function(){
-		return Session.get("changepwd");
+		return Session.get(Meteor.CHANGE_PWD_KEY);
 	}
 });
 
@@ -80,7 +79,7 @@ Template.workeredit.events({
 		return false;
 	},
 	"click .changepwd": function () {
-		Session.set("changepwd", !Session.get("changepwd"));
+		Session.set(Meteor.CHANGE_PWD_KEY, !Session.get(Meteor.CHANGE_PWD_KEY));
 		return false;
 	},
 
@@ -124,7 +123,7 @@ Template.workeredit.events({
 				.removeClass("btn-primary")
 				.addClass("btn-success");
 				setTimeout(function(){
-					Session.set("changepwd", false);
+					Session.set(Meteor.CHANGE_PWD_KEY, false);
 				}, 1000);
 			}
 		});

@@ -1,12 +1,12 @@
 
 "use strict";
-/*global Template : false */
+/*global Meteor : false */
 /*global Session : false */
+/*global Template : false */
 
-var CONTEXT_MENU_KEY = "contextMenuOpen";
 
 Template.contextmenu.events({
-  "click a": function() {
-    Session.set(CONTEXT_MENU_KEY, false);
-  }
+	"click a": function() {
+		Session.set(Meteor.CONTEXT_MENU_KEY, false);
+	}
 });
