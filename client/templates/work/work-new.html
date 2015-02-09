@@ -1,7 +1,7 @@
 <template name="work-new">
 	<div class="container">
-	<div>
-		<h3>Nouvelle fiche {{hash}}</h3>
+		<div>
+			<h3>Nouvelle fiche {{hash}}</h3>
 			<hr/>
 			<form class="form-inline" role="form"> 
 				<input class="form-control" type="hidden" id="workType" name="workType" value="{{hash}}">
@@ -33,11 +33,7 @@
 				<hr/>
 				<fieldset class="row">
 					<div class="form-group col-sm-offset-2 col-sm-5">
-						<div class="form-group">
-							<div class="input-group col-sm-12">
-								<button class="btn btn-lg btn-primary workSave" >Créer {{hash}}</button>
-							</div>
-						</div>
+						<button class="btn btn-lg btn-block btn-primary workSave" >Créer {{hash}}</button>
 					</div>
 				</fieldset>
 			</form>

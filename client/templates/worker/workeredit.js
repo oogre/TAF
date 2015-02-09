@@ -54,7 +54,7 @@ Template.workeredit.events({
 			return false;
 		}
 
-		Meteor.call("updateWorker", Meteor.user()._id, {
+		Meteor.call("workerUpdator", Meteor.user()._id, {
 			firstname : firstname.value.toLowerCase(),
 			lastname : lastname.value.toLowerCase(),
 			address : {

@@ -1,0 +1,50 @@
+<template name="workerlist">
+	<div class="col-sm-7">
+		<table class="table" data-db-table-name="worker" >
+			<thead>
+				<tr>
+					<th data-db-row-name="worker_name">
+						Nom
+					</th>
+					{{#if schedular}}
+						<th>
+							Travail
+						</th>
+					{{/if}}
+				</tr>
+			</thead>
+			<tbody>
+				{{#each workers}}
+					{{>workeritem}}
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<template name="workeritem">
+	<tr data-worker-id="{{_id}}">
+		{{#with profile}}
+			<td class="td-lg">
+				{{firstname}} {{lastname}} 
+			</td>
+		{{else}}
+			<td class="td-lg">
+				...
+			</td>
+		{{/with}}
+		{{#if schedular}}
+			<td>
+				{{#if working }}
+					<button class="btn btn-lg btn-success btn-block schedule stop">
+						<i class="fa fa-stop"></i>&nbsp; Stop
+					</button>
+				{{else}}
+					<button class="btn btn-lg btn-default btn-block schedule start">
+						<i class="fa fa-play"></i>&nbsp; Start
+					</button>
+				{{/if}}
+			</td>
+		{{/if}}
+	</tr>
+</template>

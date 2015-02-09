@@ -90,6 +90,11 @@ form[enctype="multipart/form-data"] .form-control.upload-control{
 #contextactions li {
 	padding: 6px;
 }
+
+.worker .table>tbody>tr>td.td-lg{
+	padding-top: 22px;
+	text-transform: capitalize;
+}
 /*
 
 *{

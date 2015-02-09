@@ -3,6 +3,7 @@
 /*global Template : false */
 /*global console : false */
 /*global Meteor : false */
+/*global Router : false */
 
 Template["work-new"].helpers({
 	rendezvous : function(){
@@ -47,7 +48,7 @@ Template["work-new"].events({
 			var rdv = rdvPicker ? rdvPicker : rdvPlanner;
 			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, wiki, function(error, work){
 				if(error) return console.log(error);
-				console.log("go to /work/"+work);
+				Router.go("work.show", {workId : work});
 			});
 		});
 		return false;

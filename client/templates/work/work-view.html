@@ -1,0 +1,27 @@
+<template name="work-view">
+	<div class="container" data-work-id="{{_id}}">
+		<h3>{{type}} chez {{shop.name}}</h3>
+		<hr/>
+		<form class="form-inline" role="form"> 
+			<fieldset class="row worker">
+				{{>workerlist schedular=true worker_ids=worker_ids workId=_id}}
+				{{>workerselector autoAdd=true notPickable=worker_ids}}
+			</fieldset>
+			<hr/>
+			<fieldset class="wikiform">
+				{{>wikilist wiki_ids}}
+			</fieldset>
+
+			<hr/>
+			<fieldset class="wikiform">
+				{{>wikiform}}
+			</fieldset>
+			<hr/>
+			<fieldset class="row">
+				<div class="form-group col-sm-offset-2 col-sm-5">
+					<button class="btn btn-lg btn-block btn-primary workClose" >Cloturer</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</template>
