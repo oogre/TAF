@@ -13,3 +13,5 @@ accounts-password
 rzymek:fullcalendar
 momentjs:moment
 sergeyt:typeahead
+tomi:upload-server
+tomi:upload-jquery
