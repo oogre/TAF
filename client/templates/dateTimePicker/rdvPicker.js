@@ -38,7 +38,7 @@ var validator = function(template, next){
 		if(	validation(rendezvous)){
 			return next(new Meteor.Error("validation-error"));
 		}
-		return next(null, moment(rendezvous.value, rendezvous.getAttribute("data-date-format")).toISOString());
+		return next(null, moment(rendezvous.value, rendezvous.getAttribute("data-date-format")).hour("03").toISOString());
 	}else{
 		return next(null, null);
 	}
@@ -53,6 +53,6 @@ Template.rdvPicker.rendered = function(){
 			down: "fa fa-arrow-down"
 		},
 		language : "fr",
-		defaultDate : moment().add(1, "days").hour("08").minute("00")
+		defaultDate : moment().add(1, "days")
 	});
 };

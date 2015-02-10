@@ -1,0 +1,46 @@
+.twitter-typeahead{
+
+}
+.typeahead.tt-input:focus,
+.typeahead.tt-input:active,
+.typeahead.tt-input:active:focus,
+.typeahead.tt-input.active:focus{
+	outline: none;
+}
+.typeahead.tt-input{
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border: none;
+	text-transform: capitalize;
+	background-color: transparent;
+}
+.tt-cursor{
+	background-color: #428bca;
+	color: #fff;
+}
+.tt-suggestion{
+	height: 46px;
+	font-size: 18px;
+	line-height: 1.33;
+	padding: 12px 16px;
+}
+.tt-dropdown-menu{
+	overflow: hidden;
+	padding: 0;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 100%;
+}
+
+.twitter-typeahead.form-control, 
+button.multiselect{
+	height: 46px;
+	font-size: 18px;
+	line-height: 1.33;
+	border-radius: 6px;
+	padding: 0 16px;
+}

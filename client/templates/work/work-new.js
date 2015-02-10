@@ -48,9 +48,9 @@ Template["work-new"].events({
 		.done(function(shop, rdvPicker, rdvPlanner, workers, wiki){
 			var rdv = rdvPicker ? rdvPicker : rdvPlanner;
 			rdv = rdv || moment().toISOString();
-			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, wiki, function(error, work){
+			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, wiki, function(error, workId){
 				if(error) return console.log(error);
-				Router.go("work.show", {workId : work});
+				Router.go("work.show", {workId : workId});
 			});
 		});
 		return false;

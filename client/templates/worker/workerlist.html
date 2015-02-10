@@ -12,6 +12,11 @@
 								Travail
 							</th>
 						{{/if}}
+						{{#if schedularSummary}}
+							<th>
+								Temps de travail
+							</th>
+						{{/if}}
 					</tr>
 				</thead>
 				<tbody>
@@ -46,6 +51,11 @@
 						<i class="fa fa-play"></i>&nbsp; Start
 					</button>
 				{{/if}}
+			</td>
+		{{/if}}
+		{{#if schedularSummary}}
+			<td class="td-lg">
+				{{schedularSummary}}
 			</td>
 		{{/if}}
 	</tr>

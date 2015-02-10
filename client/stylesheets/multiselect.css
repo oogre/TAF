@@ -1,0 +1,13 @@
+.multiselect-container{
+	width: 100%;
+}
+.multiselect-container>li {
+	padding: 0;
+	height: 46px;
+	font-size: 18px;
+	line-height: 1.33;
+}
+.multiselect-container.dropdown-menu a{
+	height: 100%;
+	padding-top: 10px;
+}

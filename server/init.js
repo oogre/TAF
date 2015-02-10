@@ -10,7 +10,6 @@ Meteor.startup(function () {
 		title : "",
 		description : "",
 	});
-	
 
 	UploadServer.init({
 		tmpDir : process.env.PWD + "/.uploads/tmp",

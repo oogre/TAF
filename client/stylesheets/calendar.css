@@ -1,0 +1,39 @@
+#calendar .fc-toolbar button{
+	font-size: 18px;
+	margin-bottom: 5px;
+	color: #333;
+	background-color: #fff;
+	border-color: #ccc;
+	background-image: none;
+}
+#calendar .fc-toolbar button.fc-state-active,
+#calendar .fc-toolbar button:focus,
+#calendar .fc-toolbar button:hover{
+	outline: none;
+	color: #333;
+	background-color: #e6e6e6;
+	border-color: #adadad;
+}
+#calendar h2{
+	font-size: 1.7em;
+	line-height: 1.6em;
+}
+#calendar .fc-day-grid-event:hover{
+	cursor: pointer;
+}
+#calendar .fc-basicDay-view .fc-day-grid-event{
+	padding: 10px 16px;
+	font-size: 18px;
+	line-height: 1.33;
+	border-radius: 6px;
+}
+#calendar .fc-day-grid-event .fc-time{
+	font-size: initial;
+	display: block;
+}
+#calendar .fc-day-grid-event .fc-title{
+	display: block;
+}
+#calendar.fc-unthemed .fc-today {
+	background: #E6E6E6;
+}

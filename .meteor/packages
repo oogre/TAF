@@ -15,3 +15,4 @@ momentjs:moment
 sergeyt:typeahead
 tomi:upload-server
 tomi:upload-jquery
+underscorestring:underscore.string

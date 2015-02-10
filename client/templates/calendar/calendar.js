@@ -1,38 +1,57 @@
 "use strict";
 /*global Template : false */
-/*global Meteor : false */
+/*global moment : false */
 /*global Works : false */
 /*global $ : false */
+/*global Router : false */
+/*global Deps : false */
 
-var getEvents = function (start, end) {
+var getWorks = function (start, end) {
 	return Works.find({
-		rdv : {
-			$gte: start.toISOString(),
-			$lte: end.toISOString()
-		}
-	});
+		$or : [{
+			rdv : {
+				$gte: start.toISOString(),
+				$lte: end.toISOString()
+			}
+		},{
+			end : {
+				$exists: false
+			}
+		},{
+			end : {
+				$gte: start.toISOString(),
+				$lte: end.toISOString()
+			}
+		}]
+	})
+	.fetch();
 };
-var mapDbEventsToEventSource = function (eventCursor) {
-  var eventArray = [];
-  eventCursor.forEach(function (eventData) {
-    var title = eventData.type + " chez " + eventData.shop.name;
-    if (eventData.isPrivate) {
-      title += " - PRIVATE";
-    }
-    var color = "#3a87ad";
-    if (eventData.ownerId !== Meteor.userId()) {
-      color = "#ad433a";
-    }
-    var event = {
-      title: title,
-      start: eventData.rdv,
-      //end: eventData.end,
-      /*allDay: true,*/
-      color: color
-    };
-    eventArray.push(event);
-  });
-  return eventArray;
+var mapWorkToEvent = function (works) {
+	return 	works
+			.map(function (work) {
+				var color;
+				switch(work.type){
+					case "installation":
+						color = "#3A51AD";
+						break;
+					case "maintenance":
+						color = "#6D3AAD";
+						break;
+					default:
+						color = "#AD433A";
+						break;
+				}
+				if(work.end){
+					color = "#6F6F6F";
+				}
+				return {
+					title: work.type + " chez " + work.shop.name,
+					start: work.rdv,
+					end: work.end || moment().toISOString(),
+					color: color,
+					id : work._id
+				};
+			});
 };
 
 Template.calendar.rendered = function () {
@@ -46,14 +65,26 @@ Template.calendar.rendered = function () {
 		},
 		lang : "fr",
 		editable: false,
-		events: function (start, end, timezone, callback) {
-			var events = getEvents(start, end);
-			var eventSource = mapDbEventsToEventSource(events);
-			callback(eventSource);
+		events: function (start, end, timezone, next) {
+			var works = getWorks(start, end);
+			next(mapWorkToEvent(works));
 		},
-		selectable: true,
-		select: function (start, end, allDay) {
+		eventClick: function(calEvent) {
+			Router.go("work.show", {
+				workId:calEvent.id
+			});
+		}
+	});
 
+	Deps.autorun(function(c) {
+		if (Works.find().count()) {
+			if(!c.firstRun){
+				if($("#calendar").length){
+					$("#calendar").fullCalendar("refetchEvents");
+				}else{
+					c.stop();
+				}
+			}
 		}
 	});
 };

@@ -49,7 +49,7 @@ var validator = function(template, next){
 			return next(new Meteor.Error("validation-error"));
 		}
 
-		firstdate = moment(firstdate.value, firstdate.getAttribute("data-date-format"));
+		firstdate = moment(firstdate.value, firstdate.getAttribute("data-date-format")).hour("03");
 		var lastdate = moment(firstdate).add(duration.value, "year");
 		var currentDate = _.clone(firstdate);
 		var dates = [];
@@ -74,6 +74,6 @@ Template.rdvPlanner.rendered = function(){
 			down: "fa fa-arrow-down"
 		},
 		language : "fr",
-		defaultDate : moment().add(1, "days").hour("08").minute("00")
+		defaultDate : moment().add(1, "days")
 	});
 };
