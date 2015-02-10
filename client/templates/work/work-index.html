@@ -1,5 +1,22 @@
 <template name="work-index">
-	<div class="row">
-		<hr/>
+	<div class="container">
+		<div>
+			<h3>Travaux</h3>
+			<hr/>
+
+			{{#if list}}
+			<ul class="list-unstyled">
+				{{#each works}}
+					<li data-work-id="{{_id}}">{{>workItem this}}</li>
+				{{/each}}
+			</ul>
+			{{else}}
+				{{> calendar works}}
+			{{/if}}
+		</div>
 	</div>
+</template>
+
+<template name="workItem">
+	<a href="{{pathFor route='work.show' workId=_id}}">{{type}} chez {{shop.name}}</a>
 </template>
