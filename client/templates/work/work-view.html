@@ -4,14 +4,28 @@
 		<hr/>
 		<form class="form-inline" role="form"> 
 			<fieldset class="row worker">
+				{{#if canAddWorker }}
+					{{#if addWorker}}
+						{{>workerselector autoAdd=true notPickable=worker_ids}}
+					{{else}}
+						<label class="col-sm-2">Hommes</label>
+						<div class="form-group col-sm-5">
+							<div class="form-group">
+								<div class="input-group col-sm-12">
+									<button class="btn btn-default btn-lg workerAdd" >Ajouter</button>
+								</div>
+							</div>
+						</div>
+					{{/if}}
+				{{/if}}
+			</fieldset>
+			<fieldset class="row worker">
 				{{>workerlist schedular=true worker_ids=worker_ids workId=_id}}
-				{{>workerselector autoAdd=true notPickable=worker_ids}}
 			</fieldset>
 			<hr/>
 			<fieldset class="wikiform">
 				{{>wikilist wiki_ids}}
 			</fieldset>
-
 			<hr/>
 			<fieldset class="wikiform">
 				{{>wikiform}}

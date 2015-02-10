@@ -1,25 +1,27 @@
 <template name="workerlist">
-	<div class="col-sm-7">
-		<table class="table" data-db-table-name="worker" >
-			<thead>
-				<tr>
-					<th data-db-row-name="worker_name">
-						Nom
-					</th>
-					{{#if schedular}}
-						<th>
-							Travail
+	{{#if workers}}
+		<div class="form-group col-sm-7">
+			<table class="table" data-db-table-name="worker" >
+				<thead>
+					<tr>
+						<th data-db-row-name="worker_name">
+							Nom
 						</th>
-					{{/if}}
-				</tr>
-			</thead>
-			<tbody>
-				{{#each workers}}
-					{{>workeritem}}
-				{{/each}}
-			</tbody>
-		</table>
-	</div>
+						{{#if schedular}}
+							<th>
+								Travail
+							</th>
+						{{/if}}
+					</tr>
+				</thead>
+				<tbody>
+					{{#each workers}}
+						{{>workeritem}}
+					{{/each}}
+				</tbody>
+			</table>
+		</div>
+	{{/if}}
 </template>
 
 <template name="workeritem">

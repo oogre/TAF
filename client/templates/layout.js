@@ -15,11 +15,13 @@ Meteor.startup(function () {
     wipeRight: function () {
       Session.set(Meteor.MENU_KEY, true);
     },
-    wipeBottom: function () {
-      Session.set(Meteor.CONTEXT_MENU_KEY, true);
+    wipeUp : function () {
+      if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY))
+        Session.set(Meteor.CONTEXT_MENU_KEY, true);
     },
-    wipeTop: function () {
-      Session.set(Meteor.CONTEXT_MENU_KEY, false);
+    wipeDown: function () {
+      if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY))
+        Session.set(Meteor.CONTEXT_MENU_KEY, false);
     },
     preventDefaultEvents: false
   });
