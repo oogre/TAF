@@ -21,13 +21,23 @@ Template.shopselector.helpers({
 		Session.set(Meteor.NEW_SHOP_KEY, false);
 		callback(	Shops
 					.find({
-						name : {
-							$regex : ".*"+query.toLowerCase()+".*"
-						}
+						$or : [{
+							name : {
+								$regex : ".*"+query.toLowerCase()+".*"
+							}
+						},{
+							brand : {
+								$regex : ".*"+query.toLowerCase()+".*"
+							}
+						}, {
+							$where : function(){
+								return (this.brand+" - "+this.name).match(query.toLowerCase());
+							}
+						}]
 					})
 					.fetch()
 					.map(function(it){
-						return {value: it.name};
+						return {value: (it.brand||"")+" - "+it.name};
 					})
 		);
 	}
@@ -40,7 +50,11 @@ Template.shopselector.shop = function(template, next){
 			deferred.reject(error);
 			return next(error);
 		}
-		var shop = Shops.findOne(values);
+		var shop = Shops.findOne({
+			$where : function(){
+				return (this.brand+" - "+this.name).match(values.name);
+			}
+		});
 		if(shop){
 			var result = $.extend({}, values, {_id : shop._id});
 			deferred.resolve(result);
@@ -85,7 +99,7 @@ var validator = function(template, next){
 		}
 		return next(null, {
 			name : shopName.value.toLowerCase(),
-			contact : contact.value.toLowerCase(),
+			contacts : [contact.value.toLowerCase()],
 		});
 	}
 	else{
@@ -128,7 +142,11 @@ Template.shopselector.events({
 	},
 
 	"blur .typeahead": function(event) {
-		if(event.target.value && Shops.find({name : event.target.value.toLowerCase()}).fetch().length === 0){
+		if(event.target.value && Shops.find({
+				$where : function(){
+					return ((this.brand||"")+" - "+this.name) === event.target.value.toLowerCase();
+				}
+			}).fetch().length === 0){
 			Session.set(Meteor.NEW_SHOP_KEY, true);
 		}
 		else{

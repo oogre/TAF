@@ -7,7 +7,7 @@
 /*global $ : false */
 /*global s : false */
 
-Template.workerlist.helpers({
+Template.workerindex.helpers({
 	workers : function(){
 		var self = this;
 		if(!this.worker_ids)return [];
@@ -40,7 +40,7 @@ Template.workerlist.helpers({
 	}
 });
 
-Template.workerlist.events({
+Template.workerindex.events({
 	"click .schedule" : function(event){
 		var $this = $(event.target);
 		var workerId = $this.parents("[data-worker-id]").first().attr("data-worker-id");

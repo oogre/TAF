@@ -8,62 +8,58 @@
 
 
 <template name="workEdit">
-	
-		<div class="container" data-work-id="{{_id}}">
-			<h3>{{type}} chez {{shop.name}}</h3>
-			<hr/>
-			<form class="form-inline" role="form"> 
-				<fieldset class="row worker">
-					{{#if canAddWorker }}
-						{{#if addWorker}}
-							{{>workerselector autoAdd=true notPickable=worker_ids}}
-						{{else}}
-							<label class="col-sm-2">Hommes</label>
-							<div class="form-group col-sm-5">
-								<div class="form-group">
-									<div class="input-group col-sm-12">
-										<button class="btn btn-default btn-lg workerAdd" >Ajouter</button>
-									</div>
+	<div data-work-id="{{_id}}">
+		<h3>{{type}} chez {{shop.name}}</h3>
+		<hr/>
+		<form class="form-inline" role="form"> 
+			<fieldset class="row worker">
+				{{#if canAddWorker }}
+					{{#if addWorker}}
+						{{>workerselector autoAdd=true notPickable=worker_ids}}
+					{{else}}
+						<label class="col-sm-2">Hommes</label>
+						<div class="form-group col-sm-5">
+							<div class="form-group">
+								<div class="input-group col-sm-12">
+									<button class="btn btn-default btn-lg workerAdd" >Ajouter</button>
 								</div>
 							</div>
-						{{/if}}
+						</div>
 					{{/if}}
-				</fieldset>
-				<fieldset class="row worker">
-					{{>workerlist schedular=true worker_ids=worker_ids workId=_id}}
-				</fieldset>
-				<hr/>
-				<fieldset class="wikiform">
-					{{>wikilist wiki_ids}}
-				</fieldset>
-				<hr/>
-				<fieldset class="wikiform">
-					{{>wikiform}}
-				</fieldset>
-				<hr/>
-				<fieldset class="row">
-					<div class="form-group col-sm-offset-2 col-sm-5">
-						<button class="btn btn-lg btn-block btn-primary workClose" >Cloturer</button>
-					</div>
-				</fieldset>
-			</form>
-		</div>
-	
+				{{/if}}
+			</fieldset>
+			<fieldset class="worker">
+				{{>workerindex schedular=true worker_ids=worker_ids workId=_id}}
+			</fieldset>
+			<hr/>
+			<fieldset class="wikiform">
+				{{>wikilist wiki_ids}}
+			</fieldset>
+			<hr/>
+			<fieldset class="wikiform">
+				{{>wikiform}}
+			</fieldset>
+			<hr/>
+			<fieldset class="row">
+				<div class="form-group col-sm-offset-2 col-sm-5">
+					<button class="btn btn-lg btn-block btn-primary workClose" >Cloturer</button>
+				</div>
+			</fieldset>
+		</form>
+	</div>
 </template>
 
 
 <template name="workSummary">
-	
-		<div class="container" data-work-id="{{_id}}">
-			<h3>{{type}} chez {{shop.name}}</h3>
-			<hr/>
-			<div class="row worker">
-				{{>workerlist schedularSummary=true worker_ids=worker_ids workId=_id}}
-			</div>
-			<hr/>
-			<div class="wikiform">
-				{{>wikilist wiki_ids}}
-			</div>
+	<div data-work-id="{{_id}}">
+		<h3>{{type}} chez {{shop.name}}</h3>
+		<hr/>
+		<div class="worker">
+			{{>workerindex schedularSummary=true worker_ids=worker_ids workId=_id}}
 		</div>
-	
+		<hr/>
+		<div class="wikiform">
+			{{>wikilist wiki_ids}}
+		</div>
+	</div>
 </template>

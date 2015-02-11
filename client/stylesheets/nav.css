@@ -134,6 +134,7 @@ nav.cbp-spmenu-vertical .nav>li>a:hover:not(:focus){
 @media screen and (min-width: 800px){
     .cbp-spmenu-push {
         left: 240px;
+        padding-right: 240px;
     }
     .cbp-spmenu-left {
         left: 0px;
@@ -144,5 +145,12 @@ nav.cbp-spmenu-vertical .nav>li>a:hover:not(:focus){
     }
     .toggle-main-menu{
         display : none;
+    }
+    .container.main {
+        width: auto;
+    }
+    .cbp-spmenu-horizontal.cbp-spmenu-open{
+        margin-left: 240px;
+        width: auto;
     }
 }

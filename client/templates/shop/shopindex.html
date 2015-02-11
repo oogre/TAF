@@ -1,0 +1,30 @@
+<template name="shopindex">
+	{{#if shops}}
+		<div class="row">
+			<div class="col-sm-7">
+				<table class="table" data-db-table-name="shop" >
+					<thead>
+						<tr>
+							<th data-db-row-name="shop_name">
+								Nom
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each shops}}
+							{{>shopitem}}
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{{/if}}
+</template>
+
+<template name="shopitem">
+	<tr data-worker-id="{{_id}}">
+		<td class="td-lg">
+			{{name}}
+		</td>
+	</tr>
+</template>

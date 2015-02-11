@@ -7,18 +7,13 @@
 		</li>
 		{{#if currentUser}}
 			<li>
-				<a href="/worker" class="">
+				<a href="{{pathFor route='worker.index'}}" class="">
 					<i class="fa fa-fw fa-2x fa-users"></i>&nbsp; Travailleurs
 				</a>
 			</li>
 			<li>
-				<a href="/shop" class="">
-					<i class="fa fa-fw fa-2x fa-smile-o"></i>&nbsp; Magasins
-				</a>
-			</li>
-			<li>
-				<a href="/work" class="">
-					  <i class="fa fa-fw fa-2x fa-wrench"></i>&nbsp; Travaux
+				<a href="{{pathFor route='shop.index'}}" class="">
+					<i class="fa fa-fw fa-2x fa-smile-o"></i>&nbsp; Magasins/Clients
 				</a>
 			</li>
 			<li>

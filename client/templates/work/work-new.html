@@ -1,42 +1,38 @@
 <template name="work-new">
-	<div class="container">
-		<div>
-			<h3>Nouvelle fiche {{hash}}</h3>
+	<h3>Nouvelle fiche {{hash}}</h3>
+	<hr/>
+	<form class="form-inline" role="form"> 
+		<input class="form-control" type="hidden" id="workType" name="workType" value="{{hash}}">
+		<fieldset class="row shopselector">
+			{{>shopselector}}
+		</fieldset>
+		{{#if rendezvous}}
 			<hr/>
-			<form class="form-inline" role="form"> 
-				<input class="form-control" type="hidden" id="workType" name="workType" value="{{hash}}">
-				<fieldset class="row shopselector">
-					{{>shopselector}}
-				</fieldset>
-				{{#if rendezvous}}
-					<hr/>
-					<fieldset class="rdvPicker">
-						{{>rdvPicker}}
-					</fieldset>
-				{{/if}}
-				{{#if planner}}
-					<hr/>
-					<fieldset class="rdvPlanner">
-						{{>rdvPlanner}}
-					</fieldset>
-				{{/if}}
-				{{#if worker}}
-					<hr/>
-					<fieldset class="row worker">
-						{{>workerselector}}
-					</fieldset>
-				{{/if}}
-				<hr/>
-				<fieldset class="wikiform">
-					{{>wikiform}}
-				</fieldset>
-				<hr/>
-				<fieldset class="row">
-					<div class="form-group col-sm-offset-2 col-sm-5">
-						<button class="btn btn-lg btn-block btn-primary workSave" >Créer {{hash}}</button>
-					</div>
-				</fieldset>
-			</form>
-		</div>
-	</div>
+			<fieldset class="rdvPicker">
+				{{>rdvPicker}}
+			</fieldset>
+		{{/if}}
+		{{#if planner}}
+			<hr/>
+			<fieldset class="rdvPlanner">
+				{{>rdvPlanner}}
+			</fieldset>
+		{{/if}}
+		{{#if worker}}
+			<hr/>
+			<fieldset class="row worker">
+				{{>workerselector}}
+			</fieldset>
+		{{/if}}
+		<hr/>
+		<fieldset class="wikiform">
+			{{>wikiform}}
+		</fieldset>
+		<hr/>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<button class="btn btn-lg btn-block btn-primary workSave" >Créer {{hash}}</button>
+			</div>
+		</fieldset>
+	</form>
 </template>
