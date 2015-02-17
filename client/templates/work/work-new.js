@@ -5,6 +5,7 @@
 /*global Meteor : false */
 /*global Router : false */
 /*global moment : false */
+/*global Session : false */
 
 Template["work-new"].helpers({
 	rendezvous : function(){
@@ -48,6 +49,7 @@ Template["work-new"].events({
 		.done(function(shop, rdvPicker, rdvPlanner, workers, wiki){
 			var rdv = rdvPicker ? rdvPicker : rdvPlanner;
 			rdv = rdv || moment().toISOString();
+			Session.set(Meteor.WIKI_CURRENT_KEY, false);
 			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, wiki, function(error, workId){
 				if(error) return console.log(error);
 				Router.go("work.show", {workId : workId});

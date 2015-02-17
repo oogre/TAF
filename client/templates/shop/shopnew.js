@@ -4,6 +4,7 @@
 /*global Meteor : false */
 /*global Template : false */
 /*global Session : false */
+/*global Router : false */
 
 
 
@@ -73,8 +74,6 @@ Template.shopnew.events({
 			return false;
 		}
 
-		
-
 		Meteor.call("shopCreator", {
 			tva : tva.value.toLowerCase(),
 			brand : brand.value.toLowerCase(),
@@ -94,7 +93,7 @@ Template.shopnew.events({
 									null, 
 									undefined
 						)
-		}, function(error){
+		}, ".shopSave", function(error){
 			if(error){
 				console.log(error);
 			}
@@ -102,6 +101,7 @@ Template.shopnew.events({
 				$(savShop)
 				.removeClass("btn-primary")
 				.addClass("btn-success");
+				Router.go("shop.index");
 			}
 		});
 

@@ -1,105 +1,128 @@
 "use strict";
 /*global $ : false */
-/*global console : false */
-/*global Meteor : false */
-/*global Template : false */
+/*global _ : false */
 /*global Wikis : false */
-/*global Uploader : false */
+/*global Meteor : false */
 /*global Session : false */
-/*global Tracker : false */
+/*global Template : false */
+/*global MeteorCamera : false */
+
+
+Template.wikiform.rendered = function(){
+	$("textarea").autosize();
+};
 
 Template.wikiform.helpers({
 	wikiEdit : function(){
 		return Session.get(Meteor.WIKI_CURRENT_KEY);
 	},
-	image : function(){
-		return Wikis.findOne({_id: Session.get(Meteor.WIKI_CURRENT_KEY)});
+	photo: function () {
+		var wiki = Wikis.findOne(Session.get(Meteor.WIKI_CURRENT_KEY));
+		var photos = [];
+		if(wiki){
+			photos = 	wiki
+						.uploads
+						.map(function(upload){
+							if(_.isString(upload)) return upload;
+							return "/upload/"+upload.path;
+						});
+		}
+		return photos;
 	},
-	myFormData: function() {
-		return { directoryName: "images", prefix: this.name, _id: this._id };
-	},
-	filesToUpload: function() {
-		return Uploader.info.get();
+	mobile : function(){
+		return Meteor.isCordova;
 	}
 });
 
 Template.wikiform.events({
+	"blur textarea" : function(event, template){
+		Meteor.call("wikiUpdator", Session.get(Meteor.WIKI_CURRENT_KEY), {
+			description : template.find("textarea").value
+		});
+	},
 	"click .wikiEdit": function(){
 		if(!Session.get(Meteor.WIKI_CURRENT_KEY)){
-			Meteor.call("wikiCreator", {name: (new Date()).getTime(), uploads: [], title : "", description:""}, function(err, currentWiki){
+			Meteor.call("wikiCreator", $("[data-work-id]").attr("data-work-id"), function(err, currentWiki){
 				if(err) return console.log(err);
-				console.log(currentWiki);
 				Session.set(Meteor.WIKI_CURRENT_KEY, currentWiki);
 			});
 		}
 		else{
-			Session.set(Meteor.WIKI_OLD_KEY, Session.get(Meteor.WIKI_CURRENT_KEY));
 			Session.set(Meteor.WIKI_CURRENT_KEY, false);
 		}
 		return false;
+	},
+	"click button.photoShoot": function () {
+		MeteorCamera.getPicture({quality : 100}, function (error, data) {
+			uploadImage(Session.get(Meteor.WIKI_CURRENT_KEY), data);
+		});
+		return false;
+	},
+	"change input[type='file']" : function(event){
+		
+		var success = function(e) {
+			var image  = new Image();
+			image.src = e.target.result;
+			uploadImage(Session.get(Meteor.WIKI_CURRENT_KEY), e.target.result);
+		};
+		for(var i = 0 ; i < event.target.files.length ; i ++ ){
+			var file = event.target.files[i];
+			var FR= new FileReader();
+			FR.onloadend = success;
+			FR.readAsDataURL(file);
+		}
+		return true;
 	}
 });
 
 Template.wikiform.wiki = function(template, next){
+	var wiki = ($("textarea").val() || $(".pictureList").children().length) ? Session.get(Meteor.WIKI_CURRENT_KEY) : null;
+	if(_.isFunction(next)){
+		next(null, wiki);
+	}
 	var deferred = new $.Deferred();
-	saveWiki(template, function(error, wiki){
-		if(error){
-			deferred.reject(error);
-			return next(error);
-		}
-		deferred.resolve(wiki);
-		return next(null, wiki);
-	});
+	deferred.resolve(wiki);
 	return deferred;
 };
-
-var saveWiki = function(template, next){
-	if(Session.get(Meteor.WIKI_CURRENT_KEY)){
-		validator(template, function(error, values){
-			if(error) return next(error);
-			Meteor.call("wikiUpdator", Session.get(Meteor.WIKI_CURRENT_KEY), values, function(err, wiki){
-				if(error){
-					return next(error);
-				}
-				else{
-					var saveWiki = template.find(".saveWiki");
-					$(saveWiki)
-					.removeClass("btn-primary")
-					.addClass("btn-success");
-					return next(null, wiki);
-				}
-			});
-		});
-	}else{
-		return next(null, null);
-	}
-};
-
-var validator = function(template, next){
-	var wikiName = template.find("#wikiname");
-	var wikiDescription = template.find("#"+Session.get(Meteor.WIKI_CURRENT_KEY));
-	var errors = template.find(".wikiform .has-error");
+function uploadImage(wikiId, photo){
+	var formData = new FormData();
+	formData.append("directoryName", "images");
+	formData.append("_id", wikiId);
 	
-	$(errors)
-	.removeClass("has-error");
-
-	var validation = function(element){
-		console.log(element);
-		console.log(element.value);
-		if(!element.value){
-			$(element)
-			.parents(".form-group")
-			.first()
-			.addClass("has-error");
-			return true;
-		}
-		return false;
-	};
-	if(	validation(wikiName) || validation(wikiDescription)){
-		return next(new Meteor.Error("validation-error"));
+	if(!Meteor.status().connected){
+		Meteor.call("wikiUploadUpdator", wikiId, photo);
+		return ;
 	}
-	return next(null, {
-		title : wikiName.value,
-		description : wikiDescription.value,
+	
+	b64toBlob(photo, function success(blob) {
+		formData.append("file[]", blob);
+		$.ajax({
+			url: "/upload",
+			type: "POST",
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false
+		})
+		.fail(function(){
+			Meteor.call("wikiUploadUpdator", wikiId, photo);
+		});
+	}, function error(err){
+		console.log(err);
+		console.log("error");
 	});
-};
+}
+
+function b64toBlob(b64, onsuccess, onerror) {
+	var img = new Image();
+	img.onerror = onerror;
+	img.onload = function onload() {
+		var canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+		canvas.toBlob(onsuccess);
+	};
+	img.src = b64;
+}

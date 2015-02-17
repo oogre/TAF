@@ -12,6 +12,10 @@
 		<h3>{{type}} chez {{shop.name}}</h3>
 		<hr/>
 		<form class="form-inline" role="form"> 
+			<fieldset class="rdvPicker">
+				{{>rdvPicker rdv=rdv workId=_id}}
+			</fieldset>
+			<hr/>
 			<fieldset class="row worker">
 				{{#if canAddWorker }}
 					{{#if addWorker}}
@@ -33,17 +37,10 @@
 			</fieldset>
 			<hr/>
 			<fieldset class="wikiform">
-				{{>wikilist wiki_ids}}
-			</fieldset>
-			<hr/>
-			<fieldset class="wikiform">
 				{{>wikiform}}
 			</fieldset>
-			<hr/>
-			<fieldset class="row">
-				<div class="form-group col-sm-offset-2 col-sm-5">
-					<button class="btn btn-lg btn-block btn-primary workClose" >Cloturer</button>
-				</div>
+			<fieldset class="">
+				{{>wikilist label=false wiki_id=wiki_id}}
 			</fieldset>
 		</form>
 	</div>
@@ -58,8 +55,8 @@
 			{{>workerindex schedularSummary=true worker_ids=worker_ids workId=_id}}
 		</div>
 		<hr/>
-		<div class="wikiform">
-			{{>wikilist wiki_ids}}
+		<div class="">
+			{{>wikilist label=true wiki_id=wiki_id}}
 		</div>
 	</div>
 </template>

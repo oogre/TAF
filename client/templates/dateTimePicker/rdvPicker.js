@@ -45,6 +45,9 @@ var validator = function(template, next){
 };
 
 Template.rdvPicker.rendered = function(){
+	var sefl = this;
+	var date = this.data.rdv || moment().add(1, "days").toISOString();
+
 	$("#rendezvous").datetimepicker({
 		icons: {
 			time: "fa fa-clock-o",
@@ -53,6 +56,18 @@ Template.rdvPicker.rendered = function(){
 			down: "fa fa-arrow-down"
 		},
 		language : "fr",
-		defaultDate : moment().add(1, "days")
+		defaultDate : moment(date)
 	});
+	if(this.data.rdv){
+		$("#rendezvous").on("dp.change",function (event) {
+			Meteor.call("workRdvUpadtor", sefl.data.workId, event.date.toISOString());
+		});
+	}
 };
+
+Template.rdvPicker.helpers({
+	dateFormat : function(){
+		if(this.rdv) return "dd-DD/MM/YY HH:mm";
+		else return "dd-DD/MM/YY";	
+	}
+});

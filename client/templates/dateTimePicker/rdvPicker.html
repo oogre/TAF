@@ -3,8 +3,8 @@
 			<label class="col-sm-2">Planning</label>
 			<div class="form-group col-sm-5">
 				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="rendezvous">Début</label>
-					<input class="form-control input-lg" type="text" name="rendezvous" id="rendezvous" value=""  data-date-format="dd-DD/MM/YY" readonly autocomplete="off" required />
+					<label class="input-group-addon" for="rendezvous">{{#if rdv}}Rendez-vous{{else}}Début{{/if}}</label>
+					<input class="form-control input-lg" type="text" name="rendezvous" id="rendezvous" value=""  data-date-format="{{dateFormat}}" readonly autocomplete="off" required />
 				</div>
 			</div>
 		</fieldset>

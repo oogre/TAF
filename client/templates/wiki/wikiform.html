@@ -5,16 +5,16 @@
 			<div class="form-group col-sm-5">
 				<div class="form-group">
 					<div class="input-group col-sm-12">
-						<button class="btn btn-lg btn-danger wikiEdit" >Annuler</button>
+						<div class="btn-margin-bottom">
+							{{#if mobile}}
+								<button class="btn btn-default btn-lg photoShoot" >Photo</button>
+							{{else}}
+								<span class="btn btn-primary btn-lg btn-file photoLoad">Photo
+									<input type="file" multiple>
+								</span>
+							{{/if}}
+						</div>
 					</div>
-				</div>
-			</div>
-		</fieldset>
-		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
-				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="wikiname" >Name</label>
-					<input class="form-control input-lg" type="text" id="wikiname" name="wikiname" value="" required autocomplete="off">
 				</div>
 			</div>
 		</fieldset>
@@ -26,25 +26,22 @@
 				</div>
 			</div>
 		</fieldset>	
-		{{#with image}}
-			<fieldset class="row">
-				<div class="form-group col-sm-offset-2 col-sm-5">
-					{{> upload_bootstrap formData=myFormData }}
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-md-7 col-sm-offset-0 col-sm-5">
+				<div class="input-group col-sm-12">
+					{{>pictureList photo}}
 				</div>
-			</fieldset>
-			<fieldset class="row">
-				<div class="form-group col-sm-offset-2 col-sm-5">
-					{{> pictureList images=uploads }}
-				</div>
-			</fieldset>
-		{{/with}}
+			</div>
+		</fieldset>
 	{{else}}
 		<fieldset class="row">
 			<label class="col-sm-2">Wiki</label>
 			<div class="form-group col-sm-5">
 				<div class="form-group">
 					<div class="input-group col-sm-12">
-						<button class="btn btn-default btn-lg wikiEdit" >Ajouter</button>
+						<div class="btn-margin-bottom">
+							<button class="btn btn-default btn-lg wikiEdit" >Ajouter</button>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -53,10 +50,10 @@
 </template>
 
 <template name="pictureList">
-	<ul class="list-unstyled">
-		{{#each images}}
+	<ul class="list-inline pictureList">
+		{{#each this}}
 			<li>
-				<img src="/upload/{{path}}" class="img-responsive img-thumbnail" alt="Responsive image">
+				<img src="{{this}}" class="img-responsive img-thumbnail" alt="Responsive image">
 			</li>
 		{{/each}}
 	</ul>

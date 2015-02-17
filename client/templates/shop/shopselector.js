@@ -127,6 +127,9 @@ var saveShop = function(template, next){
 				return next(null, shopId);
 			}
 		});
+		if(Meteor.status().connected === false){
+			return next(null, Shops.findOne({name : values.name})._id);
+		}
 	});
 };
 

@@ -17,3 +17,5 @@ tomi:upload-server
 tomi:upload-jquery
 underscorestring:underscore.string
 http
+mdg:camera
+percolate:synced-cron

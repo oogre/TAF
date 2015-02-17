@@ -56,6 +56,7 @@ var mapWorkToEvent = function (works) {
 
 Template.calendar.rendered = function () {
 	$("#calendar").fullCalendar({
+		timezone : "local",
 		height: $(window).height() - $("#calendar").offset().top,
 		defaultView : "basicDay",
 		header: {
