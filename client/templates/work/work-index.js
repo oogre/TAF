@@ -1,8 +1,8 @@
 "use strict";
-/*global Template : false */
-/*global Session : false */
-/*global Meteor : false */
 /*global Works : false */
+/*global Meteor : false */
+/*global Session : false */
+/*global Template : false */
 
 
 Template["work-index"].helpers({

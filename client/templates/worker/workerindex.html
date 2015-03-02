@@ -15,7 +15,12 @@
 						{{/if}}
 						{{#if schedularSummary}}
 							<th>
-								Temps de travail
+								Temps de travail - hh:mm
+							</th>
+						{{/if}}
+						{{#if actions }}
+							<th>
+								Actions
 							</th>
 						{{/if}}
 					</tr>
@@ -59,6 +64,12 @@
 			<td class="td-lg">
 				{{schedularSummary}}
 			</td>
+		{{/if}}
+		
+		{{#if actions }}
+				<th>
+					<a class="btn btn-lg btn-default" href="{{pathFor route='user.edit' workerId=_id}}">Modifier</a>
+				</th>
 		{{/if}}
 	</tr>
 </template>

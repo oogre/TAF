@@ -37,3 +37,7 @@
 #calendar.fc-unthemed .fc-today {
 	background: #E6E6E6;
 }
+
+#calendar .fc-state-disabled{
+	display: none;
+}

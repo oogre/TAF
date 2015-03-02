@@ -1,11 +1,11 @@
  "use strict";
-/*global Workers : false */
+/*global s : false */
+/*global $ : false */
 /*global Works : false */
 /*global Meteor : false */
-/*global Template : false */
 /*global moment : false */
-/*global $ : false */
-/*global s : false */
+/*global Workers : false */
+/*global Template : false */
 
 Template.workerindex.helpers({
 	workers : function(){
@@ -33,7 +33,7 @@ Template.workerindex.helpers({
 						currentDuration.add(duration);
 					});
 				}
-				worker.schedularSummary = s.pad(currentDuration.hours(), 2, "0")+":"+s.pad(currentDuration.minutes(), 2, "0");
+				worker.schedularSummary = s.pad(Math.floor(currentDuration.asHours()), 2, "0")+":"+s.pad(currentDuration.minutes(), 2, "0");
 			}
 			return worker;
 		});
@@ -49,5 +49,10 @@ Template.workerindex.events({
 			if(error) console.log(error);
 		});
 		return false;
+	}
+});
+Template.workeritem.helpers({
+	actions : function(){
+		return !this.schedularSummary && !this.schedular && Meteor.user().profile.role >= 80;
 	}
 });

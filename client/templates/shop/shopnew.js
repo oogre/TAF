@@ -1,10 +1,10 @@
 "use strict";
-/*global $ : false */
 /*global _ : false */
+/*global $ : false */
 /*global Meteor : false */
-/*global Template : false */
-/*global Session : false */
 /*global Router : false */
+/*global Session : false */
+/*global Template : false */
 
 
 

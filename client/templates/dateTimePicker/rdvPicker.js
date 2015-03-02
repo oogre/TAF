@@ -1,8 +1,8 @@
 "use strict";
 /*global $ : false */
-/*global Template : false */
 /*global Meteor : false */
 /*global moment : false */
+/*global Template : false */
 
 Template.rdvPicker.date = function(template, next){
 	var deferred = new $.Deferred();

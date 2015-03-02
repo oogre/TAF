@@ -1,0 +1,95 @@
+<template name="workernew">
+	<h3>Créer un travailleur</h3>
+	<hr/>
+	<form class="form-inline" role="form" > 
+		<fieldset class="row">
+			<label class="col-sm-2">Identification</label>
+			<div class="form-group col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="firstname" >Prénom</label>
+					<input class="form-control input-lg" type="text" id="firstname" name="firstname" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="lastname" >Nom</label>
+					<input class="form-control input-lg" type="text" id="lastname" name="lastname" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="emails" >email</label>
+					<input class="form-control input-lg" type="email" id="emails" name="emails[0].address" >
+				</div>
+			</div>
+		</fieldset>
+
+		<hr/>
+
+		{{> roleselector }}
+		
+		<hr/>
+		
+		<fieldset class="row">
+			<label class="col-sm-2">Contact</label>
+			<div class="form-group col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="address_street" >Rue</label>
+					<input class="form-control input-lg" type="text" id="address_street" name="address_street" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="address_number" >Numéro</label>
+					<input class="form-control input-lg" type="text" id="address_number" name="address_number" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="address_city" >Ville</label>
+					<input class="form-control input-lg" type="text" id="address_city" name="address_city" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="address_zipcode" >Code Postale</label>
+					<input class="form-control input-lg" type="text" id="address_zipcode" name="address_zipcode" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="address_country" >Pays</label>
+					<input class="form-control input-lg" type="text" id="address_country" name="address_country" >
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="phone" >Téléphone</label>
+					<input class="form-control input-lg" type="text" id="phone" name="phone" >
+				</div>
+			</div>
+		</fieldset>
+
+		<hr/>
+
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<button type="submit" name="submit" class="btn btn-lg btn-block btn-primary createUser">Enregistrer</button>
+			</div>
+		</fieldset>
+	</form>
+</template>

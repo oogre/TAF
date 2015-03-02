@@ -1,11 +1,11 @@
 "use strict";
 /*global $ : false */
-/*global Template : false */
-/*global console : false */
 /*global Meteor : false */
 /*global Router : false */
 /*global moment : false */
 /*global Session : false */
+/*global console : false */
+/*global Template : false */
 
 Template["work-new"].helpers({
 	rendezvous : function(){

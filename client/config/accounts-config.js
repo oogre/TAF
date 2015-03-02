@@ -1,6 +1,7 @@
 "use strict";
-/*global Accounts : false */
 /*global Meteor : false */
+/*global Accounts : false */
+
 Meteor.startup(function () {
 	Accounts.ui.config({
 		passwordSignupFields: "USERNAME_ONLY"

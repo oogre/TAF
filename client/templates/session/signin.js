@@ -1,8 +1,8 @@
 "use strict";
-/*global Template : false */
 /*global Meteor : false */
 /*global Router : false */
 /*global console : false */
+/*global Template : false */
 
 
 Template.signin.events({

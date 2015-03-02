@@ -1,7 +1,7 @@
 "use strict";
+/*global Meteor : false */
 /*global Template : false */
 /*global Accounts : false */
-/*global Meteor : false */
 
 
 Template.signup.events({

@@ -28,8 +28,11 @@ Template.workeredit.events({
 	"click .updateUser" : function(event, template){
 		var savUser = template.find(".updateUser");
 		var errors = template.find(":not(.pwd) .has-error");
+		
+		var _id = template.find("#_id");
 		var firstname = template.find("#firstname");
 		var lastname = template.find("#lastname");
+		var role = $("#role")[0];
 		var address_street = template.find("#address_street");
 		var address_number = template.find("#address_number");
 		var address_zipcode = template.find("#address_zipcode");
@@ -54,7 +57,7 @@ Template.workeredit.events({
 			return false;
 		}
 
-		Meteor.call("workerUpdator", Meteor.user()._id, {
+		Meteor.call("workerUpdator", _id.value, {
 			firstname : firstname.value.toLowerCase(),
 			lastname : lastname.value.toLowerCase(),
 			address : {
@@ -64,6 +67,7 @@ Template.workeredit.events({
 				city : address_city.value.toLowerCase(),
 				country : address_country.value.toLowerCase()
 			},
+			role : parseInt(role.value),
 			phone : phone.value.toLowerCase()
 		}, function(error){
 			if(error){

@@ -1,12 +1,12 @@
 "use strict";
-/*global Meteor : false */
-/*global Session : false */
-/*global Template : false */
-/*global Workers : false */
-/*global moment : false */
-/*global console : false */
-/*global Router : false */
 /*global $ : false */
+/*global Router : false */
+/*global Meteor : false */
+/*global moment : false */
+/*global Session : false */
+/*global Workers : false */
+/*global console : false */
+/*global Template : false */
 
 Template.workEdit.helpers({
 	addWorker : function(){

@@ -1,10 +1,10 @@
 "use strict";
-/*global Template : false */
-/*global moment : false */
-/*global Works : false */
 /*global $ : false */
-/*global Router : false */
 /*global Deps : false */
+/*global Works : false */
+/*global Router : false */
+/*global moment : false */
+/*global Template : false */
 
 var getWorks = function (start, end) {
 	return Works.find({

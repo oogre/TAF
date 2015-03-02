@@ -1,27 +1,14 @@
 "use strict";
 /*global Meteor : false */
+/*global Roles : false */
 /*global process : false */
 /*global UploadServer : false */
-/*global Npm : false */
 
-
-Meteor.startup(function () {
-	var os = Npm.require("os");
-	var ifaces = os.networkInterfaces();
-
-	Object.keys(ifaces).forEach(function (ifname) {
-		ifaces[ifname].forEach(function (iface) {
-			if ("IPv4" !== iface.family || iface.internal !== false) {
-	  			// skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
-	  			return;
-			}
-	  		Meteor.serverIP = iface.address;
-		});
-	});
-
+var uploadServerInit = function(){
 	UploadServer.init({
 		tmpDir : process.env.PWD + "/.uploads/tmp",
 		uploadDir : process.env.PWD + "/.uploads/",
+		minFileSize : 20,
 		checkCreateDirectories : true, //create the directories for you
 		getDirectory: function(fileInfo, formData) {
 			if (formData && formData.directoryName) {
@@ -42,4 +29,35 @@ Meteor.startup(function () {
 			}
 		}
 	});
+};
+
+var rolesInit = function(){
+	if(Roles.find().count() === 0 ){
+		Roles.insert({
+			level : 100,
+			name : "administrator"
+		});
+		Roles.insert({
+			level : 90,
+			name : "boss"
+		});
+		Roles.insert({
+			level : 80,
+			name : "chef"
+		});
+		Roles.insert({
+			level : 60,
+			name : "travailleur"
+		});
+		Roles.insert({
+			level : 50,
+			name : "visiteur"
+		});
+	}	
+};
+
+
+Meteor.startup(function () {
+	uploadServerInit();
+	rolesInit();
 });

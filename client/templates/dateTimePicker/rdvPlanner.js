@@ -1,9 +1,9 @@
 "use strict";
-/*global $ : false */
 /*global _ : false */
-/*global Template : false */
+/*global $ : false */
 /*global Meteor : false */
 /*global moment : false */
+/*global Template : false */
 
 Template.rdvPlanner.dates = function(template, next){
 	var deferred = new $.Deferred();

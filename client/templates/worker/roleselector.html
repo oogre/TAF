@@ -1,0 +1,17 @@
+<template name="roleselector">
+	<fieldset class="row">
+		<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="input-group col-sm-12">
+				<label class="input-group-addon" for="role" >Rôle</label>
+				<select class="form-control input-lg" id="role" name="role" >
+					{{#each roles}}
+						{{> roleoption}}
+					{{/each}}
+				</select>
+			</div>
+		</div>
+	</fieldset>
+</template>
+<template name="roleoption">
+	<option value="{{this.level}}" selected="{{this.selected}}" >{{this.name}}</option>
+</template>

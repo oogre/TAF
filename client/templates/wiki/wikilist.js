@@ -1,10 +1,10 @@
 "use strict";
-/*global Template : false */
-/*global Session : false */
+/*global _ : false */
+/*global Wikis : false */
 /*global moment : false */
 /*global Meteor : false */
-/*global Wikis : false */
-/*global _ : false */
+/*global Session : false */
+/*global Template : false */
 
 Template.wikilist.helpers({
 	wikis : function(){

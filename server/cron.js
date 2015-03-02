@@ -52,7 +52,7 @@ Meteor.startup(function () {
 				.uploads
 				.map(function(upload, key){
 					if(_.isString(upload)){
-						var arrayBuffer = new Uint8Array(b64toArrayBuffer(upload));
+						var arrayBuffer = b64toArrayBuffer(upload);
 						var data = upload.split(";")[0];
 						var ext = data.split("/")[1];
 						var filename = wiki._id + "-" + (new Date()).getTime() + "." + ext;

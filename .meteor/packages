@@ -19,3 +19,4 @@ underscorestring:underscore.string
 http
 mdg:camera
 percolate:synced-cron
+email

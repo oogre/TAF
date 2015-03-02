@@ -1,7 +1,7 @@
 "use strict";
 /*global $ : false */
-/*global Workers : false */
 /*global Meteor : false */
+/*global Workers : false */
 /*global Template : false */
 
 var getWorkers = function(notPickable){

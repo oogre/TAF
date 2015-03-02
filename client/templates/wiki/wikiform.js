@@ -43,7 +43,7 @@ Template.wikiform.events({
 	"click .wikiEdit": function(){
 		if(!Session.get(Meteor.WIKI_CURRENT_KEY)){
 			Meteor.call("wikiCreator", $("[data-work-id]").attr("data-work-id"), function(err, currentWiki){
-				if(err) return console.log(err);
+				if(err) throw new Meteor.Error(err);
 				Session.set(Meteor.WIKI_CURRENT_KEY, currentWiki);
 			});
 		}
@@ -54,6 +54,7 @@ Template.wikiform.events({
 	},
 	"click button.photoShoot": function () {
 		MeteorCamera.getPicture({quality : 100}, function (error, data) {
+			if(error) throw new Meteor.Error(error);
 			uploadImage(Session.get(Meteor.WIKI_CURRENT_KEY), data);
 		});
 		return false;
@@ -89,7 +90,7 @@ function uploadImage(wikiId, photo){
 	formData.append("directoryName", "images");
 	formData.append("_id", wikiId);
 	
-	if(!Meteor.status().connected){
+	if( Meteor.isCordova || !Meteor.status().connected){
 		Meteor.call("wikiUploadUpdator", wikiId, photo);
 		return ;
 	}
@@ -108,8 +109,7 @@ function uploadImage(wikiId, photo){
 			Meteor.call("wikiUploadUpdator", wikiId, photo);
 		});
 	}, function error(err){
-		console.log(err);
-		console.log("error");
+		if(err) throw new Meteor.Error(err);
 	});
 }
 
