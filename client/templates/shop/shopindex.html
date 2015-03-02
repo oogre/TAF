@@ -8,6 +8,9 @@
 							<th data-db-row-name="shop_name">
 								Nom
 							</th>
+							<th>
+								Action
+							</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -25,6 +28,11 @@
 	<tr data-worker-id="{{_id}}">
 		<td class="td-lg">
 			{{name}}
+		</td>
+		<td>
+			<a href="{{pathFor route='shop.edit' shopId=_id}}" class="btn btn-lg">
+				Modifier
+			</a>
 		</td>
 	</tr>
 </template>
