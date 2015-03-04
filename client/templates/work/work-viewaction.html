@@ -2,9 +2,9 @@
 	<h3>Fiche de travail</h3>
 	<ul class="list-unstyled text-center">
 		<li>
-			{{#unless end}}
+			{{#if removeVisible }}
 				<button class="btn btn-lg btn-block btn-danger workDestructor" >Supprimer</button>
-			{{/unless}}
+			{{/if}}
 		</li>
 		<li>
 			{{#if end}}

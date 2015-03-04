@@ -10,9 +10,33 @@
 
 
 
+Template.shopedit.helpers({
+	contacts : function(){
+		var contacts = Session.get(Meteor.CONTACT_LIST) || [];
+		if(_.isArray(this.contacts)) return this.contacts.concat(contacts||[]);
+		return contacts;
+	}	
+});
 
-Template.shopnew.events({
-	"click .shopUpdate" : function(){
+Template.shopedit.events({
+	"click .addContact" : function(){
+		Session.set(Meteor.CONTACT_LIST, Session.get(Meteor.CONTACT_LIST).concat([""]));
+		return false;
+	},
+	"blur input#tva" : function(event, template){
+		var TVA = $(event.target).val();
+		Meteor.call("checkTVA", TVA, function(error, data){
+			if(error)console.log(error);
+			template.find("#tva").value = data.TVA.toLowerCase();
+			template.find("#name").value = data.name.toLowerCase();
+			template.find("#address_street").value = data.address.street.toLowerCase();
+			template.find("#address_number").value = data.address.number.toLowerCase();
+			template.find("#address_city").value = data.address.city.toLowerCase();
+			template.find("#address_zipcode").value = data.address.zipcode.toLowerCase();
+		});
+	},
+	"click .shopUpdate" : function(event, template){
+		
 		var savShop = template.find(".shopUpdate");
 		var errors = template.find(".has-error");
 		var _id = template.find("#_id");
@@ -24,17 +48,11 @@ Template.shopnew.events({
 		var address_zipcode = template.find("#address_zipcode");
 		var address_city = template.find("#address_city");
 		var contacts = template.findAll("[name='contact']");
-
+		
 		$(errors)
 		.removeClass("has-error");
 
-		var validation = function(element){
-			if(!element.value){
-				$(element)
-				.parent()
-				.addClass("has-error");
-				return true;
-			}
+		var validation = function(){
 			return false;
 		};
 

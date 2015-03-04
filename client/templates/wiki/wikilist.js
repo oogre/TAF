@@ -7,6 +7,9 @@
 /*global Template : false */
 
 Template.wikilist.helpers({
+	showList : function(){
+		return Session.get(Meteor.WIKI_OPEN_LIST);
+	},
 	wikis : function(){
 		var wikis = Wikis.find({
 			_id : {
@@ -18,6 +21,7 @@ Template.wikilist.helpers({
 			}
 		})
 		.fetch();
+		Session.set(Meteor.WIKI_LIST, wikis.length);
 		return wikis;
 	},
 	createdAt : function(){

@@ -4,29 +4,31 @@
 			<label class="col-sm-2">Wiki</label>
 		</fieldset>	
 	{{/if}}
-	<ul class="list-unstyled wikilist">
-		{{#each wikis}}
-			<li>
-				<fieldset class="row">
-					<div class="form-group col-sm-offset-2 col-sm-5">
-						<div class="input-group col-sm-12">
-							<div class="wiki-created">
-								{{createdAt}}
-							</div>							
-							<div class="wiki-desc">
-								{{description}}
+	{{#if showList}}
+		<ul class="list-unstyled wikilist">
+			{{#each wikis}}
+				<li>
+					<fieldset class="row">
+						<div class="form-group col-sm-offset-2 col-sm-5">
+							<div class="input-group col-sm-12">
+								<div class="wiki-created">
+									{{createdAt}}
+								</div>							
+								<div class="wiki-desc">
+									{{description}}
+								</div>
 							</div>
 						</div>
-					</div>
-				</fieldset>	
-				<fieldset class="row">
-					<div class="form-group col-sm-offset-2 col-md-7 col-sm-offset-0 col-sm-5">
-						<div class="input-group col-sm-12">
-							{{>pictureList uploads}}
+					</fieldset>	
+					<fieldset class="row">
+						<div class="form-group col-sm-offset-2 col-md-7 col-sm-offset-0 col-sm-5">
+							<div class="input-group col-sm-12">
+								{{>pictureList uploads}}
+							</div>
 						</div>
-					</div>
-				</fieldset>
-			</li>
-		{{/each}}
-	</ul>
+					</fieldset>
+				</li>
+			{{/each}}
+		</ul>
+	{{/if}}
 </template>

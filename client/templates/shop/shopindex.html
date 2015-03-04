@@ -27,10 +27,12 @@
 <template name="shopitem">
 	<tr data-worker-id="{{_id}}">
 		<td class="td-lg">
-			{{name}}
+			<a href="{{pathFor route='shop.view' shopId=_id}}" class="btn btn-lg btn-link">
+				{{name}}
+			</a>
 		</td>
 		<td>
-			<a href="{{pathFor route='shop.edit' shopId=_id}}" class="btn btn-lg">
+			<a href="{{pathFor route='shop.edit' shopId=_id}}" class="btn btn-lg btn-default">
 				Modifier
 			</a>
 		</td>

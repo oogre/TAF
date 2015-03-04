@@ -1,0 +1,17 @@
+<template name="position">
+	{{#if connected}}
+		<div class="btn-margin-bottom">
+			<button class="btn btn-lg btn-default mapSizer">
+				{{#if isLarge}}
+					Rétrécir
+				{{else}}
+					Agrandir
+				{{/if}}
+			</button>
+			<button class="btn btn-lg btn-default mapRouter">Itinéraire</button>
+		</div>
+		<div id="map-canvas"></div>
+	{{else}}
+		connection needed
+	{{/if}}
+</template>

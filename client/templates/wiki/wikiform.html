@@ -29,6 +29,16 @@
 		<fieldset class="row">
 			<div class="form-group col-sm-offset-2 col-md-7 col-sm-offset-0 col-sm-5">
 				<div class="input-group col-sm-12">
+					{{#if wikiCount}}
+						<button class="btn btn-default btn-lg wikiList">
+							{{#if wikiListOpen}}
+								Cacher
+							{{else}}
+								Voir - {{wikiCount}}
+							{{/if}}
+							
+						</button>
+					{{/if}}
 					{{>pictureList photo}}
 				</div>
 			</div>
@@ -41,6 +51,15 @@
 					<div class="input-group col-sm-12">
 						<div class="btn-margin-bottom">
 							<button class="btn btn-default btn-lg wikiEdit" >Ajouter</button>
+							{{#if wikiCount}}
+								<button class="btn btn-default btn-lg wikiList">
+									{{#if wikiListOpen}}
+										Cacher
+									{{else}}
+										Voir - {{wikiCount}}
+									{{/if}}
+								</button>
+							{{/if}}
 						</div>
 					</div>
 				</div>

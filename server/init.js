@@ -56,7 +56,6 @@ var rolesInit = function(){
 	}	
 };
 
-
 Meteor.startup(function () {
 	uploadServerInit();
 	rolesInit();
