@@ -1,0 +1,46 @@
+<template name="modulenew">
+		<h3>Créer un Module</h3>
+	<hr/>
+	<form class="form-inline" role="form" > 
+		<fieldset class="row">
+			<label class="col-sm-2">Identification</label>
+			<div class="form-group col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="serial" >N°de série</label>
+					<input class="form-control input-lg" type="text" id="serial" name="serial" value="{{module.serial}}">
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="name" >Nom</label>
+					<input class="form-control input-lg" type="text" id="name" name="name" value="{{module.name}}">
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="type" >Type</label>
+					<input 	class="typeahead input-lg" name="type" id="type" type="text" value="{{module.type}}" autocomplete="off" spellcheck="off" 
+					data-source="types" data-highlight="true"/>
+				</div>
+			</div>
+		</fieldset>
+		
+		<hr/>
+
+		<fieldset class="row">
+			{{>taskselector}}
+		</fieldset>
+
+		<hr/>
+
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<button type="submit" name="submit" class="btn btn-lg btn-block btn-primary shopSave">Enregistrer</button>
+			</div>
+		</fieldset>
+	</form>
+</template>

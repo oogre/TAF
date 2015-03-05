@@ -32,11 +32,10 @@ form[enctype="multipart/form-data"] .form-control.upload-control{
 	padding: 6px;
 }
 
-.worker .table>tbody>tr>td.td-lg{
-	padding-top: 22px;
-	padding-bottom: 20px;
+.table>tbody>tr>td.td-lg{
 	text-transform: capitalize;
 }
+
 h3{
 	margin-bottom: 15px;
 	padding-top: 8px;
@@ -89,4 +88,7 @@ body .btn.active:focus{
 .wikilist>li{
 	border-top: dashed 1px #ccc;
 	padding: 5px 0;
+}
+address{
+	text-transform: capitalize;
 }

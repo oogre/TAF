@@ -1,0 +1,58 @@
+<template name="shopview">
+	<h3>{{name}} - {{brand}}</h3>
+
+	<hr/>
+		
+	{{#if location}}
+		<div class="row">
+			<label class="col-sm-2">Carte</label>
+			<div class="col-sm-10">
+				{{>position location}}
+			</div>
+		</div>
+
+		<hr/>
+	{{/if}}
+
+	<div class="row">
+		<label class="col-sm-2">Adresse</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				<address>
+					<strong>{{name}} - {{brand}}</strong><br>
+					{{#with address}}
+						{{street}} {{number}}<br/>
+						{{zipcode}} {{city}}
+					{{/with}}
+				</address>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+	
+	<div class="row">
+		<label class="col-sm-2">Contact</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				{{#each contacts}}
+					{{this}} <br/>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+	
+	<div class="row">
+		<label class="col-sm-2">Modules</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				{{#each modules}}
+					{{this.name}} <br/>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+
+</template>

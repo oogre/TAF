@@ -1,5 +1,5 @@
 <template name="position">
-	{{#if connected}}
+	{{#if mapReady}}
 		<div class="btn-margin-bottom">
 			<button class="btn btn-lg btn-default mapSizer">
 				{{#if isLarge}}
@@ -8,10 +8,26 @@
 					Agrandir
 				{{/if}}
 			</button>
-			<button class="btn btn-lg btn-default mapRouter">Itinéraire</button>
+			{{#if routingReady}}
+				<button class="btn btn-lg btn-default mapRouting">
+					Commencer
+				</button>
+			{{else}}
+				<button class="btn btn-lg btn-default mapRouter">
+					Itinéraire
+				</button>
+			{{/if}}
+			{{#unless followCenter}}
+				<button class="btn btn-lg btn-default mapResume">
+					Recentrer
+				</button>
+			{{/unless}}
 		</div>
-		<div id="map-canvas"></div>
-	{{else}}
-		connection needed
 	{{/if}}
+	{{#if duration}}
+		<div class="col-sm-12 btn-margin-bottom">
+			Vous vous trouvez à {{duration}} de votre destination
+		</div>
+	{{/if}}
+	<div id="map-canvas"></div>
 </template>

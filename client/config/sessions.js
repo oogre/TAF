@@ -13,6 +13,10 @@ Meteor.ADD_WORKER				= "addWorker";
 Meteor.LIST_CALENDAR_SWITCHER	= "listCalSwitch";
 Meteor.CONTACT_LIST				= "contactList";
 Meteor.MAP_LARGE				= "mapSize";
+Meteor.MAP_ROUTING				= "mapRouting";
+Meteor.MAP_FOLLOW_CENTER		= "mapFollowCenter";
+Meteor.MAP_READY				= "mapReady";
+Meteor.MAP_ROUTING_DURATION		= "mapRoutingDuration";
 
 Session.setDefault(Meteor.MENU_KEY, false);
 Session.setDefault(Meteor.CONTEXT_MENU_KEY, false);
@@ -25,3 +29,7 @@ Session.setDefault(Meteor.ADD_WORKER, false);
 Session.setDefault(Meteor.LIST_CALENDAR_SWITCHER, false);
 Session.setDefault(Meteor.CONTACT_LIST, [""]);
 Session.setDefault(Meteor.MAP_LARGE, false);
+Session.setDefault(Meteor.MAP_ROUTING, null);
+Session.setDefault(Meteor.MAP_FOLLOW_CENTER, true);
+Session.setDefault(Meteor.MAP_READY, false);
+Session.setDefault(Meteor.MAP_ROUTING_DURATION, false);

@@ -40,7 +40,9 @@
 	<tr data-worker-id="{{_id}}">
 		{{#with profile}}
 			<td class="td-lg">
-				{{firstname}} {{lastname}} 
+				<a href="{{pathFor route='worker.view' workerId=_id}}" class="btn btn-lg btn-link">
+					{{firstname}} {{lastname}} 
+				</a>
 			</td>
 		{{else}}
 			<td class="td-lg">
