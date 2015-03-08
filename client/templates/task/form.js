@@ -1,0 +1,87 @@
+"use strict";
+/*global _ : false */
+/*global $ : false */
+/*global Router : false */
+/*global Meteor : false */
+/*global Modules : false */
+/*global Template : false */
+
+Template.taskform.rendered = function(){
+	// initializes all typeahead instances
+	Meteor.typeahead.inject();
+	$(".twitter-typeahead").addClass("form-control");
+};
+
+Template.taskform.helpers({
+	moduletypes : function(){
+		var self = this;
+		return 	_
+				.chain(Modules.find().fetch())
+				.groupBy(function(module){ 
+					return module.type;
+				})
+				.keys()
+				.map(function(moduletype){
+					return {
+						moduletype : moduletype,
+						selected : self.task && self.task.moduletype === moduletype
+					};
+				})
+				.sortBy(function(module){
+					return module.moduletype;
+				})
+				.value();
+	}
+});
+Template.taskform.events({
+	"click button[type='submit']" : function(event, template){
+		var button = template.find("button[type='submit']");
+		var errors = template.find(".has-error");
+		var _id = template.find("#_id");
+		var name = template.find("#name");
+		var value = template.find("#value");
+		var moduletype = template.find("#moduletype");
+		
+		$(errors)
+		.removeClass("has-error");
+
+		var validation = function(element){
+			if(!element.value){
+				$(element)
+				.parent()
+				.addClass("has-error");
+				return true;
+			}
+			return false;
+		};
+		
+		if( validation(name)){
+			return false;
+		}
+		var data = {
+			name : name.value.toLowerCase(),
+			value : value.checked,
+			moduletype : moduletype.value.toLowerCase()
+		};
+		var next = function(error){
+			if(error){
+				console.log(error);
+			}
+			else{
+				$(button)
+				.removeClass("btn-primary")
+				.addClass("btn-success");
+				Router.go("task.index");
+			}
+		};
+
+		if(_id.value){
+			Meteor.call("taskUpdator", _id.value, data, "button[type='submit']", next);
+		}else{
+			Meteor.call("taskCreator", data, "button[type='submit']", next);	
+		}
+		
+
+		return false;
+	}
+});

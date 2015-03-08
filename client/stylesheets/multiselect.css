@@ -7,7 +7,17 @@
 	font-size: 18px;
 	line-height: 1.33;
 }
+
 .multiselect-container.dropdown-menu a{
 	height: 100%;
+}
+
+.multiselect-container > li.multiselect-group-clickable {
+	border-top: dashed 1px #ccc;
+	
 	padding-top: 10px;
+}
+
+.multiselect-container > li.multiselect-group-clickable label{
+	text-decoration: underline;
 }

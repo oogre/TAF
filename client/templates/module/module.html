@@ -1,0 +1,22 @@
+<template name="module">
+	{{#if modulOpen}}
+		<div class="module open">
+			<button class=" btn btn-default dropdown-toggle btn-lg btn-module">
+				{{module.type}} - {{module.name}}&emsp;<i class="fa fa-caret-down"></i>
+			</button>
+			{{#if showRemove}}
+				<button class="btn btn-danger btn-lg removeModule">
+					<i class="fa fa-trash"></i>
+				</button>
+			{{/if}}
+			{{>taskselector raw=true task_ids=taskIds shopId=shop._id moduleId=module._id key=key forced_id=forced_id}}
+			
+		</div>
+	{{else}}
+		<div class="module">
+			<button class=" btn btn-default dropdown-toggle btn-lg btn-module">
+				{{module.type}} - {{module.name}}&emsp;<i class="fa fa-caret-right"></i>
+			</button>
+		</div>
+	{{/if}}
+</template>

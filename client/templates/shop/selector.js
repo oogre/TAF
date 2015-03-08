@@ -145,15 +145,17 @@ Template.shopselector.events({
 	},
 
 	"blur .typeahead": function(event) {
-		if(event.target.value && Shops.find({
-				$where : function(){
-					return ((this.brand||"")+" - "+this.name) === event.target.value.toLowerCase();
-				}
-			}).fetch().length === 0){
-			Session.set(Meteor.NEW_SHOP_KEY, true);
+		var shop = Shops.findOne({
+			$where : function(){
+				return ((this.brand||"")+" - "+this.name) === event.target.value.toLowerCase();
+			}
+		});
+		Session.set(Meteor.SHOP_ID, shop._id);
+		if(event.target.value && shop){
+			Session.set(Meteor.NEW_SHOP_KEY, false);
 		}
 		else{
-			Session.set(Meteor.NEW_SHOP_KEY, false);
+			Session.set(Meteor.NEW_SHOP_KEY, true);
 		}
 	}
 });

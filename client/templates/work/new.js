@@ -1,8 +1,10 @@
 "use strict";
 /*global $ : false */
+/*global Shops : false */
 /*global Meteor : false */
 /*global Router : false */
 /*global moment : false */
+/*global Modules : false */
 /*global Session : false */
 /*global console : false */
 /*global Template : false */
@@ -19,6 +21,19 @@ Template["work-new"].helpers({
 	worker : function(){
 		if(this.hash === "dépannage" ) return true;
 		return false;
+	},
+	shopModules : function(){
+		var self ;
+		if(Session.get(Meteor.SHOP_ID) && (self = Shops.findOne(Session.get(Meteor.SHOP_ID)))){
+			return (self.modules||[]).map(function(module, key){
+				return {
+					module : Modules.findOne(module.id),
+					forced_id : module.tasks||[],
+					shop : self,
+					key : key
+				};
+			});
+		}
 	}
 });
 

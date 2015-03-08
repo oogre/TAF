@@ -8,17 +8,13 @@
 
 
 
-
-
-Template.shopedit.helpers({
+Template.shopform.helpers({
 	contacts : function(){
-		var contacts = Session.get(Meteor.CONTACT_LIST) || [];
-		if(_.isArray(this.contacts)) return this.contacts.concat(contacts||[]);
-		return contacts;
+		return (this.contacts||[]).concat(Session.get(Meteor.CONTACT_LIST));
 	}	
 });
 
-Template.shopedit.events({
+Template.shopform.events({
 	"click .addContact" : function(){
 		Session.set(Meteor.CONTACT_LIST, Session.get(Meteor.CONTACT_LIST).concat([""]));
 		return false;
@@ -35,9 +31,9 @@ Template.shopedit.events({
 			template.find("#address_zipcode").value = data.address.zipcode.toLowerCase();
 		});
 	},
-	"click .shopUpdate" : function(event, template){
+	"click button[type='submit']" : function(event, template){
 		
-		var savShop = template.find(".shopUpdate");
+		var button = template.find("button[type='submit']");
 		var errors = template.find(".has-error");
 		var _id = template.find("#_id");
 		var tva = template.find("#tva");
@@ -59,8 +55,7 @@ Template.shopedit.events({
 		if( validation(tva) || validation(brand) || validation(name) ||validation(address_street) || validation(address_number) || validation(address_zipcode) || validation(address_city) ){
 			return false;
 		}
-
-		Meteor.call("shopUpdator", _id.value, {
+		var data = {
 			tva : tva.value.toLowerCase(),
 			brand : brand.value.toLowerCase(),
 			name : name.value.toLowerCase(),
@@ -79,17 +74,26 @@ Template.shopedit.events({
 									null, 
 									undefined
 						)
-		}, ".shopUpdate", function(error){
+		};
+		var next = function(error){
 			if(error){
 				console.log(error);
 			}
 			else{
-				$(savShop)
+				$(button)
 				.removeClass("btn-primary")
 				.addClass("btn-success");
 				Router.go("shop.index");
 			}
-		});
+		};
+
+		if(_id.value){
+			Meteor.call("shopUpdator", _id.value, data, "button[type='submit']", next);
+		}else{
+			Meteor.call("shopCreator", data, "button[type='submit']", next);	
+		}
+		
+
 		return false;
 
 	}

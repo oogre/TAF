@@ -8,11 +8,13 @@
 /*global Template : false */
 /*global GoogleMaps : false */
 
-var map ;
+
 var directionsDisplay;
 var markers = {};
 var center;
 var zoom;
+var map ;
+
 var initRouter = function(destination){
 	Meteor.getLocation(function(error, origin){
 		if(error) return console.log(error);
@@ -60,8 +62,11 @@ var startRouting = function(){
 };
 
 Template.position.destroyed = function(){
+	if(_.isNumber(Session.get(Meteor.MAP_ROUTING))){
+		navigator.geolocation.clearWatch(Session.get(Meteor.MAP_ROUTING));
+		Session.set(Meteor.MAP_ROUTING, null);
+	}
 	Session.set(Meteor.MAP_LARGE, false);
-	Session.set(Meteor.MAP_ROUTING, null);
 	Session.set(Meteor.MAP_FOLLOW_CENTER, true);
 	Session.set(Meteor.MAP_READY, false);
 	Session.set(Meteor.MAP_ROUTING_DURATION, false);
@@ -162,7 +167,7 @@ Template.position.events({
 		return false;
 	},
 	"click .mapRouting" : function(){
-		if(Session.get(Meteor.MAP_ROUTING)){
+		if(_.isNumber(Session.get(Meteor.MAP_ROUTING))){
 			navigator.geolocation.clearWatch(Session.get(Meteor.MAP_ROUTING));
 			Session.set(Meteor.MAP_ROUTING, false);
 		}

@@ -1,0 +1,27 @@
+<template name="shopmodule">
+	<h3>Les modules de {{shop.name}} - {{shop.brand}}</h3>
+	
+	<hr/>
+
+	<div class="row">
+		<label class="col-sm-2">Modules</label>
+		<div class="form-group col-sm-5">
+			<div class="input-group col-sm-12">
+				<label class="input-group-addon" >Modules</label>
+				<div class="modules form-control input-lg">
+					{{#each shopModules}}
+						{{>module}}
+					{{/each}}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<label class="col-sm-2">Tous les Modules</label>
+		<div class="form-group col-sm-5">
+			<div class="col-sm-12">
+				{{>moduleindex modules=modules}}
+			</div>
+		</div>
+	</div>
+</template>

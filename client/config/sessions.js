@@ -17,6 +17,9 @@ Meteor.MAP_ROUTING				= "mapRouting";
 Meteor.MAP_FOLLOW_CENTER		= "mapFollowCenter";
 Meteor.MAP_READY				= "mapReady";
 Meteor.MAP_ROUTING_DURATION		= "mapRoutingDuration";
+Meteor.MODULE_OPEN				= "modulOpen";
+Meteor.NEW_SHOP_KEY				= "newShopKey";
+Meteor.SHOP_ID					= "shopId";
 
 Session.setDefault(Meteor.MENU_KEY, false);
 Session.setDefault(Meteor.CONTEXT_MENU_KEY, false);
@@ -33,3 +36,6 @@ Session.setDefault(Meteor.MAP_ROUTING, null);
 Session.setDefault(Meteor.MAP_FOLLOW_CENTER, true);
 Session.setDefault(Meteor.MAP_READY, false);
 Session.setDefault(Meteor.MAP_ROUTING_DURATION, false);
+Session.setDefault(Meteor.MODULE_OPEN, false);
+Session.setDefault(Meteor.NEW_SHOP_KEY, false);
+Session.setDefault(Meteor.SHOP_ID, false);

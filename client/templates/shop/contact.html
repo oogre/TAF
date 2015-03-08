@@ -1,0 +1,13 @@
+<template name="shopcontacts">
+	{{#each this}}
+		<fieldset class="row">
+			<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" >Contact</label>
+					<input class="form-control input-lg" type="text" name="contact" placeholder="" value="{{this}}">
+				</div>
+			</div>
+		</fieldset>
+	{{/each}}
+</template>
+

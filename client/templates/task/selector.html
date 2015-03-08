@@ -1,10 +1,16 @@
 <template name="taskselector">
-	<label class="col-sm-2">Tâches</label>
-	<div class="form-group col-sm-5">
-		<div class="input-group col-sm-12">
-			<label class="input-group-addon" for="tasks" >Action</label>
+	{{#if raw}}
+		<div>
 			<select class="input-lg" multiple="multiple" id="tasks" name="tasks"></select>
 		</div>
-	</div>
+	{{else}}
+		<label class="col-sm-2">Tâches</label>
+		<div class="form-group col-sm-5">
+			<div class="input-group col-sm-12">
+				<label class="input-group-addon" for="tasks" >Action</label>
+				<select class="input-lg" multiple="multiple" id="tasks" name="tasks"></select>
+			</div>
+		</div>
+	{{/if}}
 	{{initMultiselector}}
 </template>	

@@ -24,7 +24,25 @@
 				{{>workerselector}}
 			</fieldset>
 		{{/if}}
+
+		{{#if planner}}
+			<hr/>
+			<div class="row">
+				<label class="col-sm-2">Modules</label>
+				<div class="form-group col-sm-5">
+					<div class="input-group col-sm-12">
+						<label class="input-group-addon" >Modules</label>
+						<div class="modules form-control input-lg">
+							{{#each shopModules}}
+								{{>module}}
+							{{/each}}
+						</div>
+					</div>
+				</div>
+			</div>
+		{{/if}}
 		<hr/>
+
 		<fieldset class="wikiform">
 			{{>wikiform}}
 		</fieldset>

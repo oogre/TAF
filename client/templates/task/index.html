@@ -1,2 +1,40 @@
 <template name="taskindex">
+	{{#if tasks}}
+		<div class="row">
+			<div class="col-sm-7">
+				<table class="table" data-db-table-name="tasks" >
+					<thead>
+						<tr>
+							<th data-db-row-name="task_name">
+								Nom
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each tasks}}
+							{{>taskitem}}
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{{/if}}
+</template>
+
+<template name="taskitem">
+	<tr data-task-id="{{_id}}">
+		<td class="td-lg">
+			<a href="{{pathFor route='task.view' taskId=_id}}" class="btn btn-lg btn-link">
+				{{name}}
+			</a>
+		</td>
+		<td>
+			<a href="{{pathFor route='task.edit' taskId=_id}}" class="btn btn-lg btn-default">
+				Modifier
+			</a>
+		</td>
+	</tr>
 </template>
