@@ -1,5 +1,6 @@
 "use strict";
 /*global $ : false */
+/*global Hammer : false */
 /*global Meteor : false */
 /*global Session : false */
 /*global Template : false */
@@ -8,23 +9,29 @@
 
 Meteor.startup(function () {
   // set up a swipe left / right handler
-
-  $(document.body).touchwipe({
-    wipeLeft: function () {
-      Session.set(Meteor.MENU_KEY, false);
-    },
-    wipeRight: function () {
-      Session.set(Meteor.MENU_KEY, true);
-    },
-    wipeUp : function () {
-      if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY))
+  
+  new Hammer(document.body, {
+    swipe_velocity : 0.10 // px/ms
+  })
+  .on("swipeleft", function(event) {
+    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe")){
+      return false;
+    }
+    Session.set(Meteor.MENU_KEY, false);
+  })
+  .on("swiperight", function(event) {
+    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe")){
+      return false;
+    }
+    Session.set(Meteor.MENU_KEY, true);
+  })
+  .on("swipedown", function() {
+    if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY) && $(".cbp-spmenu-push").get(0).scrollTop === 0)
         Session.set(Meteor.CONTEXT_MENU_KEY, true);
-    },
-    wipeDown: function () {
-      if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY))
+  })
+  .on("swipeup", function() {
+   if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY))
         Session.set(Meteor.CONTEXT_MENU_KEY, false);
-    },
-    preventDefaultEvents: false
   });
 });
 
@@ -38,6 +45,9 @@ Template.layout.helpers({
   contextMenuOpen: function() {
     return Session.get(Meteor.CONTEXT_MENU_KEY) ? function(){
       Session.set(Meteor.MENU_KEY, false);
+      $(".cbp-spmenu-push").one("scroll", function(){
+        Session.set(Meteor.CONTEXT_MENU_KEY, false);
+      });
       return "cbp-spmenu-open";
     }() : "";
   },

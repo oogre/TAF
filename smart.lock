@@ -1,0 +1,32 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "crypto-base64": {},
+      "googlemaps": {},
+      "hammer": {}
+    },
+    "packages": {
+      "crypto-base64": {
+        "git": "https://github.com/dandv/meteor-crypto-base64.git",
+        "tag": "v3.1.2.0",
+        "commit": "03e523e80faaf7b10191ea50493414bec7cd0e3d"
+      },
+      "googlemaps": {
+        "git": "https://github.com/drewjw81/meteor-googlemaps.git",
+        "tag": "v0.0.2",
+        "commit": "da8785c82cfd7de0111f898ef10728e7ed24e361"
+      },
+      "hammer": {
+        "git": "https://github.com/noorderstorm/meteor-hammer.git",
+        "tag": "v0.1.3",
+        "commit": "1d37707c251c04c7d9b6023ba959b23c1f257c44"
+      },
+      "crypto-base": {
+        "git": "https://github.com/oortcloud/meteor-crypto-base.git",
+        "tag": "v3.1.2.1",
+        "commit": "5df8d82a0595553415bbfae2930c6ecbeece5794"
+      }
+    }
+  }
+}

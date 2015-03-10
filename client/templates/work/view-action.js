@@ -4,6 +4,8 @@
 
 Template["work-viewaction"].helpers({
 	removeVisible : function(){
-		return !this.end && Meteor.user().profile.role >= 90;
+		if(Meteor.user()){
+			return !this.end && Meteor.user().profile.role >= 90;
+		}
 	}
 });
