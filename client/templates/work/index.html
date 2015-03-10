@@ -1,13 +1,4 @@
 <template name="work-index">
-	<button class="btn btn-lg btn-default listCalSwitcher pull-right" >
-		{{#if listView }}
-			Calendrier
-		{{else}}
-			Liste
-		{{/if}}
-	</button>
-	<h3>Travaux</h3>
-	<hr/>
 	{{#if listView}}
 		<ul class="list-unstyled">
 			{{#each works}}

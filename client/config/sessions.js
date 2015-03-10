@@ -2,6 +2,8 @@
 /*global Meteor : false */
 /*global Session : false */
 
+
+Meteor.PAGE_TITLE				= "pageTitle";
 Meteor.MENU_KEY					= "navOpen";
 Meteor.CONTEXT_MENU_KEY			= "contextMenuOpen";
 Meteor.FILL_CONTEXT_MENU_KEY	= "fillContextMenu";
@@ -20,7 +22,11 @@ Meteor.MAP_ROUTING_DURATION		= "mapRoutingDuration";
 Meteor.MODULE_OPEN				= "modulOpen";
 Meteor.NEW_SHOP_KEY				= "newShopKey";
 Meteor.SHOP_ID					= "shopId";
+Meteor.TASK_INPUT_TEXT			= "taskInputText";
+Meteor.MODULE_SELECTED			= "moduleSelected";
+Meteor.TASK_SELECTED			= "taskSelected";
 
+Session.setDefault(Meteor.PAGE_TITLE, false);
 Session.setDefault(Meteor.MENU_KEY, false);
 Session.setDefault(Meteor.CONTEXT_MENU_KEY, false);
 Session.setDefault(Meteor.FILL_CONTEXT_MENU_KEY, false);
@@ -39,3 +45,6 @@ Session.setDefault(Meteor.MAP_ROUTING_DURATION, false);
 Session.setDefault(Meteor.MODULE_OPEN, false);
 Session.setDefault(Meteor.NEW_SHOP_KEY, false);
 Session.setDefault(Meteor.SHOP_ID, false);
+Session.setDefault(Meteor.TASK_INPUT_TEXT, false);
+Session.setDefault(Meteor.MODULE_SELECTED, false);
+Session.setDefault(Meteor.TASK_SELECTED, {});

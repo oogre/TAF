@@ -1,6 +1,4 @@
 <template name="work-new">
-	<h3>Nouvelle fiche {{hash}}</h3>
-	<hr/>
 	<form class="form-inline" role="form"> 
 		<input class="form-control" type="hidden" id="workType" name="workType" value="{{hash}}">
 		<fieldset class="row shopselector">
@@ -21,25 +19,23 @@
 		{{#if worker}}
 			<hr/>
 			<fieldset class="row worker">
-				{{>workerselector}}
+				<label class="col-sm-2">Hommes</label>
+				<div class="col-sm-10">
+					{{>workerselector}}
+				</div>
 			</fieldset>
 		{{/if}}
 
 		{{#if planner}}
-			<hr/>
-			<div class="row">
-				<label class="col-sm-2">Modules</label>
-				<div class="form-group col-sm-5">
-					<div class="input-group col-sm-12">
-						<label class="input-group-addon" >Modules</label>
-						<div class="modules form-control input-lg">
-							{{#each shopModules}}
-								{{>module}}
-							{{/each}}
-						</div>
+			{{#if shop}}
+				<hr/>
+				<div class="row">
+					<label class="col-sm-2">Modules</label>
+					<div class="form-group col-sm-10">
+						{{>workmodules shop=shop}}
 					</div>
 				</div>
-			</div>
+			{{/if}}
 		{{/if}}
 		<hr/>
 
@@ -48,7 +44,7 @@
 		</fieldset>
 		<hr/>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<button class="btn btn-lg btn-block btn-primary workSave" >Créer {{hash}}</button>
 			</div>
 		</fieldset>

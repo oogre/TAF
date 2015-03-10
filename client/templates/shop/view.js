@@ -10,27 +10,27 @@ Template.shopview.helpers({
 	},
 	modules : function(){
 		if(this.modules){
-			return 	_
+			return	_
 					.chain(
 						this.modules
-						.map(function(module){
-							return Modules.findOne(module.id);
-						})
 					)
 					.groupBy(function(module){
-						return module.type;
+						if(module)
+							return module.type;
 					})
 					.map(function(modules,key){
-						return {
-							type: key, 
-							modules: modules.map(function(module){
-								module.view = true;
-								return module;
-							})
-						};
+						if(modules)
+							return {
+								type: key, 
+								modules: modules.map(function(module){
+									module.view = true;
+									return module;
+								})
+							};
 					})
-					.sortBy(function(Modules){
-						return Modules.type;
+					.sortBy(function(modules){
+						if(modules)
+							return modules.type;
 					})
 					.value();
 		}

@@ -8,6 +8,7 @@
 
 Meteor.startup(function () {
   // set up a swipe left / right handler
+
   $(document.body).touchwipe({
     wipeLeft: function () {
       Session.set(Meteor.MENU_KEY, false);
@@ -54,6 +55,9 @@ Template.layout.helpers({
   },
   isContextMenu : function(){
     return Session.get(Meteor.FILL_CONTEXT_MENU_KEY);
+  },
+  title : function(){
+    return Session.get(Meteor.PAGE_TITLE) || "Gestion DU Travail : Atelier du Froid";
   }
 });
 

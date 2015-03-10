@@ -6,6 +6,10 @@
 /*global Template : false */
 
 
+Template.shopselector.destroyed = function(){
+	Session.set(Meteor.SHOP_ID, false);
+};
+
 Template.shopselector.rendered = function(){
 	// initializes all typeahead instances
 	Meteor.typeahead.inject();
@@ -150,7 +154,11 @@ Template.shopselector.events({
 				return ((this.brand||"")+" - "+this.name) === event.target.value.toLowerCase();
 			}
 		});
-		Session.set(Meteor.SHOP_ID, shop._id);
+		if(shop){
+			Session.set(Meteor.SHOP_ID, shop._id);
+		}else{
+			Session.set(Meteor.SHOP_ID, false);
+		}
 		if(event.target.value && shop){
 			Session.set(Meteor.NEW_SHOP_KEY, false);
 		}

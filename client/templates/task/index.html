@@ -1,27 +1,40 @@
 <template name="taskindex">
 	{{#if tasks}}
 		<div class="row">
-			<div class="col-sm-7">
+			<div class="col-sm-12">
 				<table class="table" data-db-table-name="tasks" >
 					<thead>
 						<tr>
 							<th data-db-row-name="task_name">
-								Nom
+								Catégorie
 							</th>
 							<th>
-								Action
+								Nom
 							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{{#each tasks}}
-							{{>taskitem}}
+							{{>taskgroup}}
 						{{/each}}
 					</tbody>
 				</table>
 			</div>
 		</div>
 	{{/if}}
+</template>
+
+<template name="taskgroup">
+	<tr data-task-id="{{_id}}">
+		<td class="td-lg">
+			{{category}}
+		</td>
+		<td>
+			{{#each tasks}}
+				{{>taskitem}}
+			{{/each}}
+		</td>
+	</tr>
 </template>
 
 <template name="taskitem">

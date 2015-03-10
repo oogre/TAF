@@ -1,0 +1,11 @@
+<template name="moduleselector">
+	<div class="input-group col-sm-12">
+		<label class="input-group-addon" for="modules" >Modules</label>
+		<select class="form-control input-lg" id="modules" name="modules" data-shopId="{{shopId}}">
+			<option disabled selected value="">Ajouter</option>
+			{{#each modules}}
+				<option value="{{_id}}">{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}</option>
+			{{/each}}
+		</select>
+	</div>
+</template>

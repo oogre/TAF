@@ -3,9 +3,13 @@
 /*global $ : false */
 /*global Router : false */
 /*global Meteor : false */
+/*global Session : false */
 /*global Modules : false */
 /*global Template : false */
 
+Template.taskform.destroyed = function(){
+	Session.set(Meteor.TASK_INPUT_TEXT, false);
+};
 Template.taskform.rendered = function(){
 	// initializes all typeahead instances
 	Meteor.typeahead.inject();
@@ -31,9 +35,16 @@ Template.taskform.helpers({
 					return module.moduletype;
 				})
 				.value();
+	},
+	checked : function(){
+		return Session.get(Meteor.TASK_INPUT_TEXT) ? "checked" : "";
 	}
 });
 Template.taskform.events({
+	"click #value" : function(){
+		Session.set(Meteor.TASK_INPUT_TEXT, !Session.get(Meteor.TASK_INPUT_TEXT));
+		return false;
+	},
 	"click button[type='submit']" : function(event, template){
 		var button = template.find("button[type='submit']");
 		var errors = template.find(".has-error");
@@ -60,7 +71,7 @@ Template.taskform.events({
 		}
 		var data = {
 			name : name.value.toLowerCase(),
-			value : value.checked,
+			value : $(value).hasClass("checked"),
 			moduletype : moduletype.value.toLowerCase()
 		};
 		var next = function(error){

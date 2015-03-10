@@ -5,7 +5,7 @@
 		<input type="hidden" id="_id" name="_id" value="{{_id}}">
 		<fieldset class="row">
 			<label class="col-sm-2">Identification</label>
-			<div class="form-group col-sm-5">
+			<div class="form-group col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="firstname" >Prénom</label>
 					<input class="form-control input-lg" type="text" id="firstname" name="firstname" value="{{profile.firstname}}">
@@ -13,7 +13,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="lastname" >Nom</label>
 					<input class="form-control input-lg" type="text" id="lastname" name="lastname" value="{{profile.lastname}}">
@@ -21,7 +21,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				{{#each emails}}
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="emails" >email</label>
@@ -39,7 +39,7 @@
 
 		<fieldset class="row">
 			<label class="col-sm-2">Contact</label>
-			<div class="form-group col-sm-5">
+			<div class="form-group col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="address_street" >Rue</label>
 					<input class="form-control input-lg" type="text" id="address_street" name="address_street" placeholder="" value="{{profile.address.street}}">
@@ -47,7 +47,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="address_number" >Numéro</label>
 					<input class="form-control input-lg" type="text" id="address_number" name="address_number" placeholder="" value="{{profile.address.number}}">
@@ -55,7 +55,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="address_city" >Ville</label>
 					<input class="form-control input-lg" type="text" id="address_city" name="address_city" placeholder="" value="{{profile.address.city}}">
@@ -63,7 +63,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="address_zipcode" >Code Postale</label>
 					<input class="form-control input-lg" type="text" id="address_zipcode" name="address_zipcode" placeholder="" value="{{profile.address.zipcode}}">
@@ -71,7 +71,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="address_country" >Pays</label>
 					<input class="form-control input-lg" type="text" id="address_country" name="address_country" placeholder="" value="{{profile.address.country}}">
@@ -79,7 +79,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="phone" >Téléphone</label>
 					<input class="form-control input-lg" type="text" id="phone" name="phone" placeholder="" value="{{profile.phone}}">
@@ -93,7 +93,7 @@
 		{{#if changepwd}}
 			<fieldset class="row pwd">
 				<label class="col-sm-2">Mot de passe</label>
-				<div class="form-group col-sm-5">
+				<div class="form-group col-sm-10">
 					<div class="input-group col-sm-12">
 						<label class="input-group-addon" for="old_pwd" >Ancien mot de passe</label>
 						<input class="form-control input-lg" type="password" id="old_pwd" name="old_pwd">
@@ -101,7 +101,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="row pwd">
-				<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="form-group col-sm-offset-2 col-sm-10">
 					<div class="input-group col-sm-12">
 						<label class="input-group-addon" for="new_pwd" >Nouveau mot de passe</label>
 						<input class="form-control input-lg" type="password" id="new_pwd" name="new_pwd">
@@ -109,7 +109,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="row pwd">
-				<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="form-group col-sm-offset-2 col-sm-10">
 					<div class="input-group col-sm-12 repwd">
 						<label class='input-group-addon' for='re_pwd' >Réécrivez mot de passe</label>
 						<input class='form-control input-lg' type='password' id='re_pwd' name='re_pwd'>
@@ -117,7 +117,7 @@
 				</div>
 			</fieldset>
 			<fieldset class="row pwd">
-				<div class="form-group col-sm-offset-2 col-sm-5">
+				<div class="form-group col-sm-offset-2 col-sm-10">
 					<div class="input-group col-sm-12">
 						<button type="submit" name="submit" class="btn btn-lg btn-primary savepwd">Modifier</button>
 						<button class="btn btn-danger btn-lg changepwd" >Annuler</button>
@@ -127,7 +127,7 @@
 		{{else}}
 			<fieldset class="row pwd">
 				<label class="col-sm-2">Mot de passe</label>
-				<div class="form-group col-sm-5">
+				<div class="form-group col-sm-10">
 						<button class="btn btn-default btn-lg changepwd" >Changer</button>
 				</div>
 			</fieldset>
@@ -136,7 +136,7 @@
 		<hr/>
 		
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<button type="submit" name="submit" class="btn btn-lg btn-block btn-primary updateUser">Enregistrer</button>
 			</div>
 		</fieldset>

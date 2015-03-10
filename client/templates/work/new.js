@@ -22,17 +22,9 @@ Template["work-new"].helpers({
 		if(this.hash === "dépannage" ) return true;
 		return false;
 	},
-	shopModules : function(){
-		var self ;
-		if(Session.get(Meteor.SHOP_ID) && (self = Shops.findOne(Session.get(Meteor.SHOP_ID)))){
-			return (self.modules||[]).map(function(module, key){
-				return {
-					module : Modules.findOne(module.id),
-					forced_id : module.tasks||[],
-					shop : self,
-					key : key
-				};
-			});
+	shop : function(){
+		if(Session.get(Meteor.SHOP_ID)){
+			return Shops.findOne(Session.get(Meteor.SHOP_ID));
 		}
 	}
 });
@@ -65,7 +57,10 @@ Template["work-new"].events({
 			var rdv = rdvPicker ? rdvPicker : rdvPlanner;
 			rdv = rdv || moment().toISOString();
 			Session.set(Meteor.WIKI_CURRENT_KEY, false);
-			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, wiki, function(error, workId){
+
+			var modules = Template.workmodule.modules();
+
+			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, modules, wiki, function(error, workId){
 				if(error) return console.log(error);
 				Router.go("work.show", {workId : workId});
 			});

@@ -50,3 +50,6 @@ button.multiselect{
 	border-radius: 6px;
 	padding: 0 16px;
 }
+.twitter-typeahead.form-control{
+	z-index: 100;
+}

@@ -3,7 +3,7 @@
 		<input type="hidden" id="_id" name="_id" value="{{task._id}}">
 		<fieldset class="row">
 			<label class="col-sm-2">Identification</label>
-			<div class="form-group col-sm-5">
+			<div class="form-group col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="name" >Nom</label>
 					<input class="form-control input-lg" type="text" id="name" name="name" value="{{task.name}}">
@@ -11,11 +11,13 @@
 			</div>
 		</fieldset>
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="value">Champ texte
-					</label>
-					<input type="checkbox" id="value" name="value" class="form-control input-lg" value="value" checked="{{task.value}}">
+					<label class="input-group-addon" for="value">Champ texte</label>
+					<button id="value" class="btn btn-lg btn-default btn-block checkbox {{checked}}">
+						<i class="fa fa-2x fa-square-o"></i>
+						<i class="fa fa-2x fa-check-square-o"></i>
+					</button>
 				</div>
 			</div>
 		</fieldset>
@@ -23,11 +25,12 @@
 		<hr/>
 
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<label class="col-sm-2">Catégories</label>
+			<div class="form-group col-sm-10">
 				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="moduletype" >Lier à</label>
+					<label class="input-group-addon" for="moduletype" >Catégories</label>
 					<select class="form-control input-lg" id="moduletype" name="moduletype">
-						<option disabled selected value="">type de module</option>
+						<option disabled selected value="">Aucune</option>
 						{{#each moduletypes}}
 							<option value="{{this.moduletype}}" selected="{{this.selected}}">{{this.moduletype}}</option>
 						{{/each}}
@@ -37,7 +40,7 @@
 		</fieldset>
 
 		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-5">
+			<div class="form-group col-sm-offset-2 col-sm-10">
 				<button type="submit" name="submit" class="btn btn-lg btn-block btn-primary">Enregistrer</button>
 			</div>
 		</fieldset>

@@ -1,12 +1,15 @@
 <template name="moduleindex">
 	{{#if modules}}
 		<div class="row">
-			<div class="col-sm-7">
+			<div class="col-sm-12">
 				<table class="table" data-db-table-name="modules" >
 					<thead>
 						<tr>
 							<th data-db-row-name="module_name">
 								Type
+							</th>
+							<th>
+								N°Série
 							</th>
 							<th>
 								Nom
@@ -40,24 +43,17 @@
 <template name="moduleitem">
 	<tr data-shop-id="{{_id}}">
 		<td class="td-lg">
-			<a href="{{pathFor route='module.view' moduleId=_id}}" class="btn btn-lg btn-link">
-				{{name}}
-			</a>
+			{{serial}}
+		</td>
+		<td class="td-lg">
+			{{name}}
 		</td>
 		{{#unless view}}
-			{{#if shopId}}
-				<td>
-					<button data-shopId="{{shopId}}" data-moduleId="{{_id}}" class="btn btn-lg btn-default pull-right">
-						Ajouter
-					</button>
-				</td>
-			{{else}}
-				<td>
-					<a href="{{pathFor route='module.edit' moduleId=_id}}" class="btn btn-lg btn-default pull-right">
-						Modifier
-					</a>
-				</td>
-			{{/if}}
+			<td>
+				<a href="{{pathFor route='module.edit' moduleId=_id}}" class="btn btn-lg btn-default pull-right">
+					Modifier
+				</a>
+			</td>
 		{{/unless}}
 	</tr>
 </template>

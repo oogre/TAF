@@ -1,16 +1,12 @@
-<template name="shopmodule">
-	<h3>Les modules de {{shop.name}} - {{shop.brand}}</h3>
-	
-	<hr/>
-
+<template name="shopmodules">
 	<div class="row">
 		<label class="col-sm-2">Modules</label>
-		<div class="form-group col-sm-5">
+		<div class="form-group col-sm-10">
 			<div class="input-group col-sm-12">
 				<label class="input-group-addon" >Modules</label>
 				<div class="modules form-control input-lg">
 					{{#each shopModules}}
-						{{>module}}
+						{{>shopmodule}}
 					{{/each}}
 				</div>
 			</div>
@@ -18,10 +14,27 @@
 	</div>
 	<div class="row">
 		<label class="col-sm-2">Tous les Modules</label>
-		<div class="form-group col-sm-5">
-			<div class="col-sm-12">
-				{{>moduleindex modules=modules}}
-			</div>
+		<div class="form-group col-sm-10">
+			{{>moduleselector modules=modules shopId=shop._id}}
 		</div>
+	</div>
+</template>
+
+<template name="shopmodule">
+	<div class="module {{#if modulOpen}}open{{/if}}">
+		<header>
+			{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}&emsp;<i class="fa fa-caret-down"></i><i class="fa fa-caret-right"></i>
+		</header>
+		{{#if modulOpen}}
+			<section>
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="serial" >Identifiant</label>
+					<input class="form-control input-lg" type="text" id="serial" name="serial" value="{{serial}}">
+					<span class="input-group-btn">
+						<button id="removeModule" class="btn btn-lg btn-danger"><i class="fa fa-trash"></i></button>
+					</span>
+				</div>
+			</section>
+		{{/if}}
 	</div>
 </template>

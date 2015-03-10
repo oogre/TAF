@@ -8,6 +8,13 @@ body{
 header.navbar{
 	margin-bottom: 0;
 }
+.navbar-header{
+	width: 100%;
+}
+.navbar-header h3{
+	margin-top: 7px;
+	text-transform: none;
+}
 hr{
 	margin:5px 0; 
 }
@@ -20,6 +27,9 @@ ul.dropdown-menu li,
 }
 .form-control[type="email"]{
 	text-transform: lowercase;
+}
+.form-inline .form-group{
+	margin-bottom: 5px;
 }
 
 form[enctype="multipart/form-data"] .form-control.upload-control{
@@ -101,18 +111,39 @@ address{
 	height: auto;
 	min-height: 46px;
 }
-.modules .module .btn.btn-module{
-	background: none repeat scroll 0% 0% rgb(238, 238, 238);
-
-}
-.modules .module .btn{
-	margin: 5px;
-}
-.modules .module.open{
-	border: 1px dashed #ccc;
-	padding-right: 10px;
+.modules .module{
+	border: solid 1px #ccc;
 	border-radius: 5px;
+	padding: 10px 15px;
+	background: #eee;
+	margin:5px; 
+	min-height: 46px;
 }
+.modules .module section{
+	margin-top: 10px;
+	padding-top: 5px;
+	border-top: solid 1px #ccc;
+}
+.modules .module.open .fa-caret-right, 
+.modules .module.selected .fa-caret-right{
+	display:none;
+}
+.modules .module:not(.open):not(.selected) .fa-caret-down{
+	display:none;
+}
+.modules .module.selected{
+	border-color: #66AFE9;
+	outline: 0px none;
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 8px rgba(102, 175, 233, 0.6);
+}
+
+
 .multiselect{
 	overflow: hidden;
+}
+button.checkbox.checked .fa-square-o{
+	display:none;
+}
+button.checkbox:not(.checked) .fa-check-square-o{
+	display:none;
 }

@@ -1,0 +1,26 @@
+<template name="workmodules">
+	<div class="input-group col-sm-12">
+		<label class="input-group-addon" >Modules</label>
+		<div class="modules form-control input-lg">
+			{{#each workModules}}
+				{{>workmodule}}
+			{{/each}}
+		</div>
+	</div>
+</template>
+
+<template name="workmodule">
+	<div class="module {{moduleSelected}}">
+		<header>
+			{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}&emsp;<i class="fa fa-caret-down"></i><i class="fa fa-caret-right"></i>
+		</header>
+		{{#if moduleSelected}}
+			<section>
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="selected" >Tâches</label>
+					{{>taskselector key=key taskIds=taskIds}}
+				</div>
+			</section>
+		{{/if}}
+	</div>
+</template>

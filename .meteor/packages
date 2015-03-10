@@ -21,3 +21,4 @@ mdg:camera
 percolate:synced-cron
 email
 googlemaps
+mdg:geolocation

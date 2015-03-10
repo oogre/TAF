@@ -1,6 +1,9 @@
 "use strict";
 /*global Meteor : false */
 /*global Roles : false */
+/*global Tasks : false */
+/*global Wikis : false */
+/*global Modules : false */
 /*global process : false */
 /*global UploadServer : false */
 
@@ -54,6 +57,11 @@ var rolesInit = function(){
 			name : "visiteur"
 		});
 	}	
+};
+var clean = function(){
+	Modules.remove({});
+	Tasks.remove({});
+	Wikis.remove({});
 };
 
 Meteor.startup(function () {
