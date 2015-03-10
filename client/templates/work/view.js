@@ -1,5 +1,6 @@
 "use strict";
 /*global $ : false */
+/*global Shops : false */
 /*global Router : false */
 /*global Meteor : false */
 /*global moment : false */
@@ -9,6 +10,15 @@
 /*global Template : false */
 
 Template.workEdit.helpers({
+	showModule : function(){
+		if(this && this.type === "maintenance") return true;
+	},
+	shop : function(){
+		return Shops.findOne(this.shop._id);
+	},
+	addModule : function(){
+		return Session.get(Meteor.ADD_MODULE);
+	},
 	addWorker : function(){
 		return Session.get(Meteor.ADD_WORKER);
 	},
@@ -22,6 +32,17 @@ Template.workEdit.helpers({
 });
 
 Template.workEdit.events({
+	"click .moduleAdd" : function(){
+		if(Session.get(Meteor.ADD_MODULE)){
+			var modules = Template.workmodule.modules();
+			Meteor.call("workModuleTaskUpdator", this._id, modules);
+			Session.set(Meteor.SHOP_ID, false);
+		}else{
+			Session.set(Meteor.SHOP_ID, this.shop._id);
+		}
+		Session.set(Meteor.ADD_MODULE, !Session.get(Meteor.ADD_MODULE));
+		return false;
+	},
 	"click .workerAdd" : function(){
 		Session.set(Meteor.ADD_WORKER, !Session.get(Meteor.ADD_WORKER));
 		return false;

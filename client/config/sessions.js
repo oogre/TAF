@@ -25,6 +25,8 @@ Meteor.SHOP_ID					= "shopId";
 Meteor.TASK_INPUT_TEXT			= "taskInputText";
 Meteor.MODULE_SELECTED			= "moduleSelected";
 Meteor.TASK_SELECTED			= "taskSelected";
+Meteor.ADD_MODULE				= "addModule";
+
 
 Session.setDefault(Meteor.PAGE_TITLE, false);
 Session.setDefault(Meteor.MENU_KEY, false);
@@ -48,3 +50,4 @@ Session.setDefault(Meteor.SHOP_ID, false);
 Session.setDefault(Meteor.TASK_INPUT_TEXT, false);
 Session.setDefault(Meteor.MODULE_SELECTED, false);
 Session.setDefault(Meteor.TASK_SELECTED, {});
+Session.setDefault(Meteor.ADD_MODULE, false);

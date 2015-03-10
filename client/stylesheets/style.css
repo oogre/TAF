@@ -111,6 +111,10 @@ address{
 	height: auto;
 	min-height: 46px;
 }
+
+.modules .module.completed{
+	background: #DFF0D8;
+}
 .modules .module{
 	border: solid 1px #ccc;
 	border-radius: 5px;
@@ -118,6 +122,9 @@ address{
 	background: #eee;
 	margin:5px; 
 	min-height: 46px;
+}
+.modules .module header{
+	cursor: pointer;
 }
 .modules .module section{
 	margin-top: 10px;

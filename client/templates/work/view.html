@@ -28,8 +28,33 @@
 				{{>workerindex schedular=true worker_ids=worker_ids workId=_id}}
 				</div>
 			</fieldset>
+			
+			{{#if showModule}}
+				<hr/>
+				
+				<fieldset class="row modules">
+					<label class="col-sm-2">Modules</label>
+					<div class="form-group col-sm-10">
+						{{#if addModule }}
+							{{>workmodules shop=shop work=this}}
+						{{else}}
+							{{>workmodules work=this}}
+						{{/if}}
+					</div>
+				</fieldset>
+				<fieldset class="row">
+					<div class="form-group col-sm-offset-2 col-sm-10">
+						{{#if addModule }}
+							<button class="btn btn-primary btn-lg moduleAdd" >Enregistrer</button>
+						{{else}}
+							<button class="btn btn-default btn-lg moduleAdd" >Modifier</button>
+						{{/if}}
+					</div>
+				</fieldset>
 
+			{{/if}}
 			<hr/>
+
 			<fieldset class="wikiform">
 				{{>wikiform wiki_id=wiki_id}}
 			</fieldset>

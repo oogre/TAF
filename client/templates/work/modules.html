@@ -10,7 +10,7 @@
 </template>
 
 <template name="workmodule">
-	<div class="module {{moduleSelected}}">
+	<div class="module {{moduleSelected}} {{taskCompleted}}">
 		<header>
 			{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}&emsp;<i class="fa fa-caret-down"></i><i class="fa fa-caret-right"></i>
 		</header>
@@ -20,6 +20,27 @@
 					<label class="input-group-addon" for="selected" >Tâches</label>
 					{{>taskselector key=key taskIds=taskIds}}
 				</div>
+			</section>
+		{{/if}}
+		{{#if moduleOpened}}
+			<section>
+				{{#each tasks}}
+					<fieldset class="row">
+						<div class="form-group col-sm-12">
+							<div class="input-group col-sm-12">
+								<label class="input-group-addon" for="{{moduleKey}}_{{_id}}">{{name}}</label>
+								{{#if value}}
+									<input class="form-control input-lg" type="text" id="{{moduleKey}}_{{_id}}" name="checkbox" value="{{checked moduleKey _id}}">
+								{{else}}
+									<button id="{{moduleKey}}_{{_id}}" class="btn btn-lg btn-default btn-block checkbox {{checked moduleKey _id}}">
+										<i class="fa fa-2x fa-square-o"></i>
+										<i class="fa fa-2x fa-check-square-o"></i>
+									</button>
+								{{/if}}
+							</div>
+						</div>
+					</fieldset>
+				{{/each}}
 			</section>
 		{{/if}}
 	</div>
