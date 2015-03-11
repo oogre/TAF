@@ -2,7 +2,9 @@
 /*global $ : false */
 /*global Meteor : false */
 /*global moment : false */
+/*global Session : false */
 /*global Template : false */
+
 
 Template.rdvPicker.date = function(template, next){
 	var deferred = new $.Deferred();
@@ -45,8 +47,8 @@ var validator = function(template, next){
 };
 
 Template.rdvPicker.rendered = function(){
-	var sefl = this;
-	var date = this.data.rdv || moment().add(1, "days").toISOString();
+	var self = this;
+	var date = this.data.rdv || moment(Session.get(Meteor.CALENDAR_CONF).defaultDate).toISOString();
 
 	$("#rendezvous").datetimepicker({
 		icons: {
@@ -60,7 +62,7 @@ Template.rdvPicker.rendered = function(){
 	});
 	if(this.data.rdv){
 		$("#rendezvous").on("dp.change",function (event) {
-			Meteor.call("workRdvUpadtor", sefl.data.workId, event.date.toISOString());
+			Meteor.call("workRdvUpadtor", self.data.workId, event.date.toISOString());
 		});
 	}
 };

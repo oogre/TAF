@@ -1,6 +1,7 @@
 "use strict";
 /*global Meteor : false */
 /*global Session : false */
+/*global moment : false */
 
 
 Meteor.PAGE_TITLE				= "pageTitle";
@@ -26,6 +27,8 @@ Meteor.TASK_INPUT_TEXT			= "taskInputText";
 Meteor.MODULE_SELECTED			= "moduleSelected";
 Meteor.TASK_SELECTED			= "taskSelected";
 Meteor.ADD_MODULE				= "addModule";
+Meteor.CALENDAR_CONF			= "currentDate";
+Meteor.SIGNATURE				= "signature";
 
 
 Session.setDefault(Meteor.PAGE_TITLE, false);
@@ -51,3 +54,13 @@ Session.setDefault(Meteor.TASK_INPUT_TEXT, false);
 Session.setDefault(Meteor.MODULE_SELECTED, false);
 Session.setDefault(Meteor.TASK_SELECTED, {});
 Session.setDefault(Meteor.ADD_MODULE, false);
+Session.setDefault(Meteor.SIGNATURE, {});
+Session.setDefault(Meteor.CALENDAR_CONF, {
+	defaultDate : moment().toISOString(),
+	defaultView : "basicDay"
+});
+Session.set(Meteor.CALENDAR_CONF, {
+	defaultDate : moment().toISOString(),
+	defaultView : "basicDay"
+});
+

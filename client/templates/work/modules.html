@@ -30,9 +30,9 @@
 							<div class="input-group col-sm-12">
 								<label class="input-group-addon" for="{{moduleKey}}_{{_id}}">{{name}}</label>
 								{{#if value}}
-									<input class="form-control input-lg" type="text" id="{{moduleKey}}_{{_id}}" name="checkbox" value="{{checked moduleKey _id}}">
+									<input {{disabled}} class="form-control input-lg" type="text" id="{{moduleKey}}_{{_id}}" name="checkbox" value="{{checked moduleKey _id}}">
 								{{else}}
-									<button id="{{moduleKey}}_{{_id}}" class="btn btn-lg btn-default btn-block checkbox {{checked moduleKey _id}}">
+									<button {{disabled}} id="{{moduleKey}}_{{_id}}" class="btn btn-lg btn-default btn-block checkbox {{checked moduleKey _id}}">
 										<i class="fa fa-2x fa-square-o"></i>
 										<i class="fa fa-2x fa-check-square-o"></i>
 									</button>

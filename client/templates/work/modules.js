@@ -22,6 +22,7 @@ Template.workmodules.helpers({
 					});
 		}else if(this.work && this.work.modules){
 			var workId = this.work._id;
+			var abortUpdateTask = this.abortUpdateTask;
 			return 	(this
 					.work
 					.modules || [])
@@ -31,6 +32,7 @@ Template.workmodules.helpers({
 						module.tasks = module.tasks.map(function(task){
 							task.moduleKey = module.key;
 							task.workId = workId;
+							task.abortUpdateTask = abortUpdateTask;
 							return task;
 						});
 						return module;
@@ -81,6 +83,9 @@ Template.workmodule.helpers({
 	},
 	moduleOpened : function(){
 		return (this.workId && _.contains((Session.get(Meteor.MODULE_SELECTED)||[]), ""+this.key)) ? "open" : false;
+	},
+	disabled : function(){
+		return this.abortUpdateTask ? "disabled" : "";
 	},
 	checked : function(moduleKey, taskId){
 		var work = Works.findOne(this.workId);

@@ -28,7 +28,11 @@ var uploadServerInit = function(){
 		},
 		finished: function(fileInfo, formData) {
 			if (formData && formData._id) {
-				Meteor.call("wikiUploadUpdator", formData._id, fileInfo);
+				if(formData.next === "workSignature"){
+					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo);
+				}else{
+					Meteor.call("wikiUploadUpdator", formData._id, fileInfo);	
+				}
 			}
 		}
 	});

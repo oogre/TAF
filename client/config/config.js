@@ -2,8 +2,12 @@
 /*global Meteor : false */
 
 Meteor.startup(function () {
-	Meteor.call("serverIP", function(err, data){
-		Meteor.serverIP = data;
+	Meteor.call("getServerIp", function(err, data){
+		if(err || !data){
+			Meteor.serverIP = "";	
+		}else{
+			Meteor.serverIP = "http://"+data+":3000";
+		}
 	});
 });
 

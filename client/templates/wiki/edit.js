@@ -39,7 +39,7 @@ Template.wikiform.helpers({
 						.uploads
 						.map(function(upload){
 							if(_.isString(upload)) return upload;
-							return "/upload/"+upload.path;
+							return Meteor.serverIP+"/upload/"+upload.path;
 						});
 		}
 		return photos;
@@ -109,15 +109,15 @@ function uploadImage(wikiId, photo){
 	formData.append("directoryName", "images");
 	formData.append("_id", wikiId);
 	
-	if( Meteor.isCordova || !Meteor.status().connected){
+	if(!Meteor.status().connected){
 		Meteor.call("wikiUploadUpdator", wikiId, photo);
 		return ;
 	}
 	
-	b64toBlob(photo, function success(blob) {
+	Meteor.b64toBlob(photo, function success(blob) {
 		formData.append("file[]", blob);
 		$.ajax({
-			url: "/upload",
+			url: Meteor.serverIP+"/upload",
 			type: "POST",
 			data: formData,
 			cache: false,
@@ -132,16 +132,3 @@ function uploadImage(wikiId, photo){
 	});
 }
 
-function b64toBlob(b64, onsuccess, onerror) {
-	var img = new Image();
-	img.onerror = onerror;
-	img.onload = function onload() {
-		var canvas = document.createElement("canvas");
-		canvas.width = img.width;
-		canvas.height = img.height;
-		var ctx = canvas.getContext("2d");
-		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-		canvas.toBlob(onsuccess);
-	};
-	img.src = b64;
-}

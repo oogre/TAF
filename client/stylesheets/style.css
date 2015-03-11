@@ -88,8 +88,20 @@ body .btn.active:focus{
 	cursor: inherit;
 	display: block;
 }
-.btn-margin-bottom{
+
+.btn-margin-top,
+.margin-top{
+	margin-top: 5px;
+}
+.btn-margin-bottom, 
+.margin-bottom{
 	margin-bottom: 5px;
+}
+.no-padding{
+	padding: 0;
+}
+canvas.signature{
+	width: 100%;
 }
 
 .wiki-desc{

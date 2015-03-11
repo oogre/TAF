@@ -1,69 +1,26 @@
 <template name="wikiform">
 	{{#if wikiEdit }}
-		<fieldset class="row">
-			<label class="col-sm-2">Wiki</label>
-			<div class="form-group col-sm-10">
-				<div class="form-group">
-					<div class="input-group col-sm-12">
-						<div class="btn-margin-bottom">
-							{{#if mobile}}
-								<button class="btn btn-default btn-lg photoShoot" >Photo</button>
-							{{else}}
-								<span class="btn btn-primary btn-lg btn-file photoLoad">Photo
-									<input type="file" multiple>
-								</span>
-							{{/if}}
-						</div>
-					</div>
-				</div>
-			</div>
-		</fieldset>
-		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-10">
+		<fieldset>
+			<div class="form-group">
 				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="{{wikiEdit}}" >Description</label>
-					<textarea class="form-control input-lg" id="{{wikiEdit}}" name="{{wikiEdit}}" required></textarea>
-				</div>
-			</div>
-		</fieldset>	
-		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-10">
-				<div class="input-group col-sm-12">
-					{{#if wikiCount}}
-						<button class="btn btn-default btn-lg wikiList">
-							{{#if wikiListOpen}}
-								Cacher
-							{{else}}
-								Voir - {{wikiCount}}
-							{{/if}}
-							
-						</button>
+					{{#if mobile}}
+						<button class="btn btn-primary btn-lg photoShoot btn-margin-bottom" >Photo</button>
+					{{else}}
+						<span class="btn btn-primary btn-lg btn-file photoLoad">Photo
+							<input type="file" multiple>
+						</span>
 					{{/if}}
 					{{>pictureList photo}}
 				</div>
 			</div>
 		</fieldset>
-	{{else}}
-		<fieldset class="row">
-			<label class="col-sm-2">Wiki</label>
-			<div class="form-group col-sm-10">
-				<div class="form-group">
-					<div class="input-group col-sm-12">
-						<div class="btn-margin-bottom">
-							<button class="btn btn-default btn-lg wikiEdit" >Ajouter</button>
-							{{#if wikiCount}}
-								<button class="btn btn-default btn-lg wikiList">
-									{{#if wikiListOpen}}
-										Cacher
-									{{else}}
-										Voir - {{wikiCount}}
-									{{/if}}
-								</button>
-							{{/if}}
-						</div>
-					</div>
+		<fieldset class="margin-bottom">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="{{wikiEdit}}" >Description</label>
+					<textarea class="form-control input-lg" id="{{wikiEdit}}" name="{{wikiEdit}}" required></textarea>
 				</div>
-			</div>
 		</fieldset>
+	{{else}}
+		<button class="btn btn-default btn-lg wikiEdit" >Ajouter</button>
 	{{/if}}
 </template>

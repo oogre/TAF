@@ -1,0 +1,72 @@
+<template name="workSummary">
+	<div data-work-id="{{_id}}">
+		<form class="form-inline" role="form"> 
+
+			<fieldset class="row">
+				<label class="col-sm-2">Client/Magasin</label>
+				<div class="form-group col-sm-10">
+					<a href="{{pathFor route='shop.view' shopId=this.shop._id}}" class="btn btn-link btn-lg" >{{this.shop.name}} - {{this.shop.brand}}</a>
+				</div>
+			</fieldset>
+			
+			<hr/>
+
+			<fieldset class="row">
+				<label class="col-sm-2">Planning</label>
+				<div class="form-group col-sm-10">
+					<div class="input-group col-sm-12">
+						<label class="input-group-addon" for="rendezvous">Date début</label>
+						<input class="form-control input-lg" type="text" name="rendezvous" id="rendezvous" value="{{rdv}}" disabled/>
+					</div>
+				</div>
+				<div class="form-group col-sm-offset-2 col-sm-10">
+					<div class="input-group col-sm-12">
+						<label class="input-group-addon" for="rendezvous">Date fin</label>
+						<input class="form-control input-lg" type="text" name="rendezvous" id="rendezvous" value="{{end}}" disabled/>
+					</div>
+				</div>
+			</fieldset>
+			
+			<hr/>
+
+			<fieldset class="row worker">
+				<label class="col-sm-2">Hommes</label>
+					<div class="col-sm-10">
+						{{>workerindex schedularSummary=true worker_ids=worker_ids workId=_id}}
+					</div>
+			</fieldset>
+
+			{{#if showModule}}
+				<hr/>
+				
+				<fieldset class="row modules">
+					<label class="col-sm-2">Modules</label>
+					<div class="form-group col-sm-10">
+						{{>workmodules work=this abortUpdateTask=true}}
+					</div>
+				</fieldset>
+			{{/if}}
+
+			<hr/>
+
+			<fieldset class="row">
+				<label class="col-sm-2">Signature</label>
+				<div class="form-group col-sm-5">
+					{{>workSignature work=this client=true}}
+				</div>
+				<div class="form-group col-sm-5">
+					{{>workSignature work=this client=false}}
+				</div>
+			</fieldset>
+
+			<hr/>
+
+			<fieldset class="row">
+				<label class="col-sm-2">Wiki</label>
+				<div class="form-group col-sm-10">
+					{{>wikilist label=false wiki_id=wiki_id}}
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</template>

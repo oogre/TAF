@@ -4,6 +4,8 @@
 /*global Works : false */
 /*global Router : false */
 /*global moment : false */
+/*global Meteor : false */
+/*global Session : false */
 /*global Template : false */
 
 var getWorks = function (start, end) {
@@ -41,8 +43,11 @@ var mapWorkToEvent = function (works) {
 						color = "#AD433A";
 						break;
 				}
-				if(work.end){
-					color = "#6F6F6F";
+				if(work && work.signatures && work.signatures.client && work.signatures.adf ){
+					color = "#9F9F9F";
+				}
+				else if(work.end){
+					color = "#333";
 				}
 				return {
 					title: work.type + " chez " + work.shop.name,
@@ -58,7 +63,8 @@ Template.calendar.rendered = function () {
 	$("#calendar").fullCalendar({
 		timezone : "local",
 		height: $(window).height() - $("#calendar").offset().top,
-		defaultView : "basicDay",
+		defaultDate : Session.get(Meteor.CALENDAR_CONF).defaultDate,
+		defaultView : Session.get(Meteor.CALENDAR_CONF).defaultView,
 		header: {
 			center: "prev title next",
 			left : "month,basicDay",
@@ -73,6 +79,12 @@ Template.calendar.rendered = function () {
 		eventClick: function(calEvent) {
 			Router.go("work.show", {
 				workId:calEvent.id
+			});
+		},
+		eventAfterAllRender : function(view){
+			Session.set(Meteor.CALENDAR_CONF, {
+				defaultView : view.name,
+				defaultDate : view.calendar.getDate().format()
 			});
 		}
 	});

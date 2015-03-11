@@ -3,6 +3,7 @@
 /*global $ : false */
 /*global Meteor : false */
 /*global moment : false */
+/*global Session : false */
 /*global Template : false */
 
 Template.rdvPlanner.dates = function(template, next){
@@ -74,6 +75,7 @@ Template.rdvPlanner.rendered = function(){
 			down: "fa fa-arrow-down"
 		},
 		language : "fr",
-		defaultDate : moment().add(1, "days")
+		defaultDate : moment(Session.get(Meteor.CALENDAR_CONF).defaultDate)
+
 	});
 };

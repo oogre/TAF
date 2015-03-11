@@ -48,3 +48,17 @@ Meteor.watchLocation = function(next){
 		next(new Meteor.Error("location failed"));
 	}
 };
+
+Meteor.b64toBlob = function(b64, onsuccess, onerror) {
+	var img = new Image();
+	img.onerror = onerror;
+	img.onload = function onload() {
+		var canvas = document.createElement("canvas");
+		canvas.width = img.width;
+		canvas.height = img.height;
+		var ctx = canvas.getContext("2d");
+		ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+		canvas.toBlob(onsuccess);
+	};
+	img.src = b64;
+};
