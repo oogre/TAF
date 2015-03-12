@@ -1,0 +1,35 @@
+<template name="matterselector">
+	<div class="input-group col-sm-12">
+		<label class="input-group-addon" >Modules</label>
+		<div class="modules form-control input-lg">
+			{{#each workModules}}
+				{{>mattermodule}}
+			{{/each}}
+		</div>
+	</div>
+</template>
+
+<template name="mattermodule">
+	<div class="module {{moduleOpened}}">
+		<header>
+			{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}&emsp;<i class="fa fa-caret-down"></i><i class="fa fa-caret-right"></i>
+		</header>
+		{{#if moduleOpened}}
+			<section>
+				{{#each getMatters workId key matters}}
+					<fieldset class="row">
+						<div class="form-group col-sm-12">
+							<div class="input-group col-sm-12">
+								<label class="input-group-addon" for="{{_id}}_{{key}}_{{workId}}">{{name}}</label>
+								<input class="form-control input-lg" type="number" step="any" min="0" id="{{_id}}_{{key}}_{{workId}}" name="matter" value="{{value}}">
+								{{#if unit}}
+									<label class="input-group-addon lowercase" for="{{_id}}_{{key}}_{{workId}}">{{unit}}</label>
+								{{/if}}
+							</div>
+						</div>
+					</fieldset>
+				{{/each}}
+			</section>
+		{{/if}}
+	</div>
+</template>	

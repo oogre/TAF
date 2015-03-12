@@ -9,21 +9,25 @@
 /*global Template : false */
 
 var getWorks = function (start, end) {
+	start = start.subtract(1, "day").toISOString();
+	end = end.toISOString();
 	return Works.find({
+		rdv : {
+			$gte: start,
+			$lte: end
+		},
 		$or : [{
-			rdv : {
-				$gte: start.toISOString(),
-				$lte: end.toISOString()
-			}
-		},{
-			end : {
-				$exists: false
-			}
-		},{
-			end : {
-				$gte: start.toISOString(),
-				$lte: end.toISOString()
-			}
+				end : {
+					$exists: false
+				}	
+			},{
+				end : ""	
+			},
+			{
+				end : {
+					$gte: start,
+					$lte: end
+				}
 		}]
 	})
 	.fetch();

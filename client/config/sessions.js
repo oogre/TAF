@@ -25,10 +25,12 @@ Meteor.NEW_SHOP_KEY				= "newShopKey";
 Meteor.SHOP_ID					= "shopId";
 Meteor.TASK_INPUT_TEXT			= "taskInputText";
 Meteor.MODULE_SELECTED			= "moduleSelected";
+Meteor.MODULE_MATTER_SELECTED	= "moduleMatterSelected";
 Meteor.TASK_SELECTED			= "taskSelected";
 Meteor.ADD_MODULE				= "addModule";
 Meteor.CALENDAR_CONF			= "currentDate";
 Meteor.SIGNATURE				= "signature";
+Meteor.ADD_MATTER				= "addmatter";
 
 
 Session.setDefault(Meteor.PAGE_TITLE, false);
@@ -52,8 +54,10 @@ Session.setDefault(Meteor.NEW_SHOP_KEY, false);
 Session.setDefault(Meteor.SHOP_ID, false);
 Session.setDefault(Meteor.TASK_INPUT_TEXT, false);
 Session.setDefault(Meteor.MODULE_SELECTED, false);
+Session.setDefault(Meteor.MODULE_MATTER_SELECTED, false);
 Session.setDefault(Meteor.TASK_SELECTED, {});
 Session.setDefault(Meteor.ADD_MODULE, false);
+Session.setDefault(Meteor.ADD_MATTER, false);
 Session.setDefault(Meteor.SIGNATURE, {});
 Session.setDefault(Meteor.CALENDAR_CONF, {
 	defaultDate : moment().toISOString(),

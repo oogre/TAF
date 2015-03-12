@@ -34,7 +34,7 @@
 				<hr/>
 				
 				<fieldset class="row modules">
-					<label class="col-sm-2">Modules</label>
+					<label class="col-sm-2">Tâches</label>
 					<div class="form-group col-sm-10">
 						{{#if addModule }}
 							{{>workmodules shop=shop work=this}}
@@ -52,8 +52,17 @@
 						{{/if}}
 					</div>
 				</fieldset>
-
 			{{/if}}
+
+			<hr/>
+
+			<fieldset class="row modules">
+				<label class="col-sm-2">Matériels</label>
+				<div class="form-group col-sm-10">
+					{{>matterselector shop=shop work=this}}
+				</div>
+			</fieldset>
+
 			<hr/>
 
 			<fieldset class="row">

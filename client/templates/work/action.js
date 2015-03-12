@@ -4,12 +4,12 @@
 
 Template["work-action"].helpers({
 	depannageVisible : function(){
-		return Meteor.user() && Meteor.user().profile.role >= 60;
+		return Meteor.isWorker();
 	},
 	installationVisible : function(){
-		return Meteor.user() && Meteor.user().profile.role >= 90;
+		return Meteor.isBoss();
 	},
 	maintenanceVisible : function(){
-		return Meteor.user() && Meteor.user().profile.role >= 90;
+		return Meteor.isBoss();
 	}
 });

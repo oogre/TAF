@@ -9,12 +9,21 @@
 /*global console : false */
 /*global Template : false */
 
+Template.workEdit.destroyed = function(){
+	Session.set(Meteor.SHOP_ID, false);
+	Session.set(Meteor.ADD_MODULE, false);
+	Session.set(Meteor.ADD_WORKER, false);
+	Session.set(Meteor.ADD_MATTER, false);
+};
+
 Template.workEdit.helpers({
 	showModule : function(){
 		if(this && this.type === "maintenance") return true;
 	},
 	shop : function(){
-		return Shops.findOne(this.shop._id);
+		if(this && this.shop){
+			return Shops.findOne(this.shop._id);
+		}
 	},
 	addModule : function(){
 		if(Meteor.user() && Meteor.user().profile.role >= 90){
@@ -23,6 +32,9 @@ Template.workEdit.helpers({
 	},
 	addWorker : function(){
 		return Session.get(Meteor.ADD_WORKER);
+	},
+	addMatter : function(){
+		return Session.get(Meteor.ADD_MATTER);
 	},
 	canAddWorker : function(){
 		return Workers.find({
@@ -47,6 +59,10 @@ Template.workEdit.events({
 	},
 	"click .workerAdd" : function(){
 		Session.set(Meteor.ADD_WORKER, !Session.get(Meteor.ADD_WORKER));
+		return false;
+	},
+	"click .matterAdd" : function(){
+		Session.set(Meteor.ADD_MATTER, !Session.get(Meteor.ADD_MATTER));
 		return false;
 	},
 	"click .workClose" : function(event){

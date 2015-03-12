@@ -1,0 +1,40 @@
+<template name="matterindex">
+	{{#if matters}}
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table" data-db-table-name="matters" >
+					<thead>
+						<tr>
+							<th data-db-row-name="matter_name">
+								Nom
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each matters}}
+							{{>matteritem}}
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{{/if}}
+</template>
+
+<template name="matteritem">
+	<tr data-matter-id="{{_id}}">
+		<td class="td-lg">
+			<a href="{{pathFor route='matter.view' matterId=_id}}" class="btn btn-lg btn-link">
+				{{name}}
+			</a>
+		</td>
+		<td>
+			<a href="{{pathFor route='matter.edit' matterId=_id}}" class="btn btn-lg btn-default">
+				Modifier
+			</a>
+		</td>
+	</tr>
+</template>

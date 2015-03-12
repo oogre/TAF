@@ -1,27 +1,33 @@
-<template name="taskform">
+<template name="matterform">
 	<form class="form-inline" role="form" > 
-		<input type="hidden" id="_id" name="_id" value="{{task._id}}">
+		<input type="hidden" id="_id" name="_id" value="{{matter._id}}">
 		<fieldset class="row">
 			<label class="col-sm-2">Identification</label>
 			<div class="form-group col-sm-10">
 				<div class="input-group col-sm-12">
 					<label class="input-group-addon" for="name" >Nom</label>
-					<input class="form-control input-lg" type="text" id="name" name="name" value="{{task.name}}">
-				</div>
-			</div>
-		</fieldset>
-		<fieldset class="row">
-			<div class="form-group col-sm-offset-2 col-sm-10">
-				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="value">Champ texte</label>
-					<button id="value" class="btn btn-lg btn-default btn-block checkbox {{checked}}">
-						<i class="fa fa-2x fa-square-o"></i>
-						<i class="fa fa-2x fa-check-square-o"></i>
-					</button>
+					<input class="form-control input-lg" type="text" id="name" name="name" value="{{matter.name}}">
 				</div>
 			</div>
 		</fieldset>
 		
+		<hr/>
+
+		<fieldset class="row">
+			<label class="col-sm-2">Unité</label>
+			<div class="form-group col-sm-10">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="unti" >Unité</label>
+					<select class="form-control input-lg" id="unti" name="unti">
+						<option selected value="">Aucune</option>
+						{{#each units}}
+							<option value="{{this.shortname}}" selected="{{this.selected}}">{{this.name}}</option>
+						{{/each}}
+					</select>
+				</div>
+			</div>
+		</fieldset>
+
 		<hr/>
 
 		<fieldset class="row">

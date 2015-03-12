@@ -3,6 +3,7 @@
 /*global Roles : false */
 /*global Tasks : false */
 /*global Wikis : false */
+/*global Units : false */
 /*global Modules : false */
 /*global process : false */
 /*global UploadServer : false */
@@ -62,6 +63,32 @@ var rolesInit = function(){
 		});
 	}	
 };
+
+var unitsInit = function(){
+	if(Units.find().count() === 0 ){
+		Units.insert({
+			name : "gramme",
+			shortname : "g"
+		});
+		Units.insert({
+			name : "kilogramme",
+			shortname : "kg"
+		});
+		Units.insert({
+			name : "litre",
+			shortname : "l"
+		});
+		Units.insert({
+			name : "centimètre",
+			shortname : "cm"
+		});
+		Units.insert({
+			name : "mètre",
+			shortname : "m"
+		});
+	}	
+};
+
 var clean = function(){
 	Modules.remove({});
 	Tasks.remove({});
@@ -71,4 +98,5 @@ var clean = function(){
 Meteor.startup(function () {
 	uploadServerInit();
 	rolesInit();
+	unitsInit();
 });

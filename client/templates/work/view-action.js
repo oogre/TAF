@@ -11,17 +11,17 @@
 
 Template["work-viewaction"].helpers({
 	removeVisible : function(){
-		if(Meteor.user()){
-			return !this.end && Meteor.user().profile.role >= 90;
-		}
+		return Meteor.isBoss();
 	},
 	reopenable : function(){
-		var work = Works.findOne(this._id);
-		if(work && work.signatures && work.signatures.client && work.signatures.adf){
-			Session.set(Meteor.FILL_CONTEXT_MENU_KEY, false);
-			return false;
+		if(Meteor.isChief()){
+			var work = Works.findOne(this._id);
+			if( !work || !work.signatures || !work.signatures.client || !work.signatures.adf){
+				return true;
+			}
 		}
-		return true;
+		Session.set(Meteor.FILL_CONTEXT_MENU_KEY, false);
+		return false;
 	}
 });
 
