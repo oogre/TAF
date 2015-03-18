@@ -4,8 +4,10 @@
 		<li>
 			<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='user.edit' workerId=currentUser._id}}">Modifier votre compte</a>
 		</li>
-		<li>
-			<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='user.new'}}">Créer un travailleur</a>
-		</li>
+		{{#if isBoss}}
+			<li>
+				<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='user.new'}}" {{connected}}>Créer un travailleur</a>
+			</li>
+		{{/if}}
 	</ul>
 </template>

@@ -12,20 +12,20 @@ App.info({
 	email: "vincent@ogre.be",
 	website: "http://ogre.be"
 });
- /*
+ 
 // Set up resources such as icons and launch screens.
 App.icons({
-  "iphone": "icons/icon-60.png",
-  "iphone_2x": "icons/icon-60@2x.png",
-  // ... more screen sizes and platforms ...
+	"android_ldpi": "public/icons/icon-36x36.png",
+	"android_mdpi": "public/icons/icon-48x48.png",
+	"android_hdpi": "public/icons/icon-72x72.png",
+	"android_xhdpi": "public/icons/icon-96x96.png"
 });
- 
+
 App.launchScreens({
-  "iphone": "splash/Default~iphone.png",
-  "iphone_2x": "splash/Default@2x~iphone.png",
-  // ... more screen sizes and platforms ...
+	"android_hdpi_portrait": "public/splash/splash-480x800.jpg",
+	"android_xhdpi_portrait": "public/splash/splash-720x1280.jpg"
 });
- */
+
 // Set PhoneGap/Cordova preferences
 App.setPreference("BackgroundColor", "0xff0000ff");
 App.setPreference("HideKeyboardFormAccessoryBar", true);

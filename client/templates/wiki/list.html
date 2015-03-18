@@ -1,11 +1,13 @@
 <template name="wikilist">
-	<button class="btn btn-default btn-lg wikiList">
-		{{#if wikiListOpen}}
-			Cacher
-		{{else}}
-			Voir - {{wikiCount}}
-		{{/if}}
-	</button>
+	{{#if wikiCount}}
+		<button class="btn btn-default btn-lg wikiList">
+			{{#if wikiListOpen}}
+				Cacher
+			{{else}}
+				Voir - {{wikiCount}}
+			{{/if}}
+		</button>
+	{{/if}}
 	{{#if wikiListOpen}}
 		<fieldset class="margin-top">
 			<div class="input-group col-sm-12">

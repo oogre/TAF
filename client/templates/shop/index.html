@@ -1,5 +1,48 @@
 <template name="shopindex">
 	{{#if shops}}
+
+		{{#if isNav}}
+			<div class="row">
+				<div class="col-sm-12">
+					<nav>
+						{{#if isFiltered}}
+							<span class="btn-group pull-left">
+								<a href="{{pathFor route='shop.index'}}" class="btn btn-lg btn-warning">Recherche : "{{filter}}"</a>
+							</span>
+						{{/if}}
+						{{#if isPager}}
+							<ul class="pagination pagination-lg pull-right no-margin">
+								{{#each pager}}
+									{{#if first}}
+										<li>
+											<a href="{{pathFor route='shop.index' query=query}}" aria-label="Previous">
+												<i class="fa fa-angle-double-left"></i>
+											</a>
+										</li>
+									{{else}}
+										{{#if last}}
+											<li>
+												<a href="{{pathFor route='shop.index' query=query}}" aria-label="Next">
+													<i class="fa fa-angle-double-right"></i>
+												</a>
+											</li>
+										{{else}}
+											<li class="{{active}}">
+												<a href="{{pathFor route='shop.index' query=query}}">{{key}}</a>
+											</li>
+										{{/if}}
+									{{/if}}
+								{{/each}}
+							</ul>
+						{{/if}}	
+					</nav>
+				</div>
+			</div>
+
+			<hr/>
+		{{/if}}
+		
+
 		<div class="row">
 			<div class="col-sm-12">
 				<table class="table" data-db-table-name="shop" >
@@ -35,6 +78,7 @@
 			<a href="{{pathFor route='shop.edit' shopId=_id}}" class="btn btn-lg btn-default">
 				Modifier
 			</a>
+			{{>buttondestroy method="shopDestroyer" _id=_id}}
 		</td>
 	</tr>
 </template>

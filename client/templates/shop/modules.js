@@ -36,6 +36,13 @@ Template.shopmodule.helpers({
 	},
 	showRemove : function(){
 		return !_.isArray(this.tasks);
+	},
+	selector : function(){
+		return JSON.stringify({
+			shopId : this.shopId,
+			moduleId : this._id,
+			key : this.key
+		});
 	}
 });
 
@@ -49,17 +56,11 @@ Template.shopmodule.events({
 		}
 		return false;
 	},
-	"click #removeModule" : function(){
-		Meteor.call("shopModuleDestroyer", this.shopId, this.key);
-	},
 	"blur #serial" : function(event){
 		Meteor.call("shopModuleUpdator", this.shopId, this.key, {
 			serial : event.target.value
 		});
 		Session.set(Meteor.MODULE_OPEN, false);
-	},
-	"click .module button.removeModule" : function(){
-		Meteor.call("shopModuleDestroyer", this.shop._id, this.module._id, this.key);
 	}
 });
 

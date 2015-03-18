@@ -9,9 +9,9 @@
 								Type
 							</th>
 							<th>
-								N°Série
-							</th>
-							<th>
+								{{#if view}}
+									N°Série - 
+								{{/if}}
 								Nom
 							</th>
 						</tr>
@@ -43,9 +43,9 @@
 <template name="moduleitem">
 	<tr data-shop-id="{{_id}}">
 		<td class="td-lg">
-			{{serial}}
-		</td>
-		<td class="td-lg">
+			{{#if serial}}
+				{{serial}} - 
+			{{/if}}
 			{{name}}
 		</td>
 		{{#unless view}}

@@ -1,8 +1,17 @@
 <template name="shopaction">
-	<h3>Créer un Magasin/Client</h3>
+	<h3>Créer/Rechercher un Magasin/Client</h3>
 	<ul class="list-unstyled text-center">
 		<li>
 			<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='shop.new'}}">Créer</a>
 		</li>
+		<li>
+			<div class="input-group col-sm-12">
+				<label class="input-group-addon" for="reasearch" ><i class="fa fa-search"></i></label>
+				<input class="form-control input-lg" type="text" id="reasearch" name="reasearch" value="{{search}}">
+				<span class="input-group-btn">
+					<button class="btn btn-lg btn-default" data-target="input[name='reasearch']" data-action="clear" type="button"><i class="fa fa-times"></i></button>
+				</span>
+			</div>
+		</li>			
 	</ul>
 </template>

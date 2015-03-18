@@ -2,7 +2,12 @@
 /*global Meteor : false */
 /*global Template : false */
 
-Template["work-action"].helpers({
+
+
+Template.workeraction.helpers({
+	connected : function(){
+		return Meteor.status().connected ? "" : "disabled";
+	},
 	isWorker : function(){
 		return Meteor.isWorker();
 	},

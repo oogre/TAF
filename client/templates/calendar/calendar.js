@@ -12,23 +12,23 @@ var getWorks = function (start, end) {
 	start = start.subtract(1, "day").toISOString();
 	end = end.toISOString();
 	return Works.find({
-		rdv : {
-			$gte: start,
-			$lte: end
-		},
 		$or : [{
+				rdv : {
+					$gte: start,
+					$lte: end
+				}
+			},{
 				end : {
 					$exists: false
-				}	
+				}
 			},{
-				end : ""	
-			},
-			{
+				end : ""
+			},{
 				end : {
 					$gte: start,
 					$lte: end
 				}
-		}]
+			}]
 	})
 	.fetch();
 };

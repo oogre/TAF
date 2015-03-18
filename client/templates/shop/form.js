@@ -7,10 +7,12 @@
 /*global Router : false */
 
 
-
+Template.shopform.destroyed = function(){
+	Session.set(Meteor.CONTACT_LIST , [""]);
+};
 Template.shopform.helpers({
 	contacts : function(){
-		return (this.contacts||[]).concat(Session.get(Meteor.CONTACT_LIST));
+		return ((this.shop && this.shop.contacts)||[]).concat(Session.get(Meteor.CONTACT_LIST));
 	}	
 });
 
@@ -21,15 +23,17 @@ Template.shopform.events({
 	},
 	"blur input#tva" : function(event, template){
 		var TVA = $(event.target).val();
-		Meteor.call("checkTVA", TVA, function(error, data){
-			if(error)console.log(error);
-			template.find("#tva").value = data.TVA.toLowerCase();
-			template.find("#name").value = data.name.toLowerCase();
-			template.find("#address_street").value = data.address.street.toLowerCase();
-			template.find("#address_number").value = data.address.number.toLowerCase();
-			template.find("#address_city").value = data.address.city.toLowerCase();
-			template.find("#address_zipcode").value = data.address.zipcode.toLowerCase();
-		});
+		if(TVA){
+			Meteor.call("checkTVA", TVA, function(error, data){
+				if(error)console.log(error);
+				template.find("#tva").value = data.TVA.toLowerCase();
+				template.find("#name").value = data.name.toLowerCase();
+				template.find("#address_street").value = data.address.street.toLowerCase();
+				template.find("#address_number").value = data.address.number.toLowerCase();
+				template.find("#address_city").value = data.address.city.toLowerCase();
+				template.find("#address_zipcode").value = data.address.zipcode.toLowerCase();
+			});
+		}
 	},
 	"click button[type='submit']" : function(event, template){
 		
@@ -48,13 +52,6 @@ Template.shopform.events({
 		$(errors)
 		.removeClass("has-error");
 
-		var validation = function(){
-			return false;
-		};
-
-		if( validation(tva) || validation(brand) || validation(name) ||validation(address_street) || validation(address_number) || validation(address_zipcode) || validation(address_city) ){
-			return false;
-		}
 		var data = {
 			tva : tva.value.toLowerCase(),
 			brand : brand.value.toLowerCase(),

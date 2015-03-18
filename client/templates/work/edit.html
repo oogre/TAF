@@ -10,7 +10,7 @@
 			<fieldset class="row">
 				<label class="col-sm-2">Client/Magasin</label>
 				<div class="form-group col-sm-10">
-					<a href="{{pathFor route='shop.view' shopId=this.shop._id}}" class="btn btn-default btn-lg" >Voir</a>
+					<a href="{{pathFor route='shop.view' shopId=shop._id}}" class="btn btn-link btn-lg" >{{shop.name}} - {{shop.brand}}</a>
 				</div>
 			</fieldset>
 			
@@ -31,37 +31,43 @@
 			</fieldset>
 			
 			{{#if showModule}}
+				{{#if shop.modules}}
+					<hr/>
+					
+					<fieldset class="row modules">
+						<label class="col-sm-2">Tâches</label>
+						<div class="form-group col-sm-10">
+							{{#if addModule }}
+								{{>workmodules shop=shop work=this}}
+							{{else}}
+								{{>workmodules work=this}}
+							{{/if}}
+						</div>
+					</fieldset>
+					{{#if isChief }}
+						<fieldset class="row">
+							<div class="form-group col-sm-offset-2 col-sm-10">
+								{{#if addModule }}
+									<button class="btn btn-primary btn-lg moduleAdd" >Enregistrer</button>
+								{{else}}
+									<button class="btn btn-default btn-lg moduleAdd" >Modifier</button>
+								{{/if}}
+							</div>
+						</fieldset>
+					{{/if}}
+				{{/if}}
+			{{/if}}
+
+			{{#if shop.modules}}
 				<hr/>
-				
+
 				<fieldset class="row modules">
-					<label class="col-sm-2">Tâches</label>
+					<label class="col-sm-2">Matériel</label>
 					<div class="form-group col-sm-10">
-						{{#if addModule }}
-							{{>workmodules shop=shop work=this}}
-						{{else}}
-							{{>workmodules work=this}}
-						{{/if}}
-					</div>
-				</fieldset>
-				<fieldset class="row">
-					<div class="form-group col-sm-offset-2 col-sm-10">
-						{{#if addModule }}
-							<button class="btn btn-primary btn-lg moduleAdd" >Enregistrer</button>
-						{{else}}
-							<button class="btn btn-default btn-lg moduleAdd" >Modifier</button>
-						{{/if}}
+						{{>matterselector shop=shop work=this}}
 					</div>
 				</fieldset>
 			{{/if}}
-
-			<hr/>
-
-			<fieldset class="row modules">
-				<label class="col-sm-2">Matériels</label>
-				<div class="form-group col-sm-10">
-					{{>matterselector shop=shop work=this}}
-				</div>
-			</fieldset>
 
 			<hr/>
 

@@ -69,9 +69,10 @@
 		{{/if}}
 		
 		{{#if actions }}
-				<th>
+				<td>
 					<a class="btn btn-lg btn-default" href="{{pathFor route='user.edit' workerId=_id}}">Modifier</a>
-				</th>
+					{{>buttondestroy method="workerDestroyer" _id=_id}}
+				</td>
 		{{/if}}
 	</tr>
 </template>

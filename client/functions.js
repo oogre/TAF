@@ -1,4 +1,5 @@
 "use strict";
+/*global _ : false */
 /*global Meteor : false */
 /*global google : false */
 
@@ -61,4 +62,13 @@ Meteor.b64toBlob = function(b64, onsuccess, onerror) {
 		canvas.toBlob(onsuccess);
 	};
 	img.src = b64;
+};
+
+_.isJson = function(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
 };

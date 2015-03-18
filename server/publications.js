@@ -37,6 +37,8 @@ Meteor.startup(function () {
 								$exists: false
 							}
 						},{
+							end : ""
+						},{
 							end : {
 								$gte: start,
 								$lte: stop
@@ -58,28 +60,5 @@ Meteor.startup(function () {
 	});
 	Meteor.publish("modules", function() {
 		return Modules.find({});
-	});
-
-	Meteor.publish("works", function(date) {
-		var start = moment(date).subtract(1, "month").toISOString();
-		var stop = moment(date).add(1, "month").toISOString();
-
-		return	Works.find({
-					rdv : {
-						$gte: start,
-						$lte: stop
-					},
-					$or : [{
-							end : {
-								$exists: false
-							}	
-						},
-						{
-							end : {
-								$gte: start,
-								$lte: stop
-							}
-					}]
-				});
 	});
 });

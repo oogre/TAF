@@ -1,17 +1,15 @@
 <template name="work-action">
 	<h3>Nouvelle fiche de travail</h3>
 	<ul class="list-unstyled text-center">
-		{{#if depannageVisible }}
+		{{#if isWorker }}
 			<li>
 				<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='work.new' hash='dépannage'}}">Dépannage</a>
 			</li>
 		{{/if}}
-		{{#if installationVisible }}
+		{{#if isBoss }}
 			<li>
 				<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='work.new' hash='installation'}}">Installation</a>
 			</li>
-		{{/if}}
-		{{#if maintenanceVisible }}
 			<li>
 				<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='work.new' hash='maintenance'}}">Maintenance</a>
 			</li>

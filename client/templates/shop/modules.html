@@ -31,7 +31,7 @@
 					<label class="input-group-addon" for="serial" >Identifiant</label>
 					<input class="form-control input-lg" type="text" id="serial" name="serial" value="{{serial}}">
 					<span class="input-group-btn">
-						<button id="removeModule" class="btn btn-lg btn-danger"><i class="fa fa-trash"></i></button>
+						{{>buttondestroy method="shopModuleDestroyer" selector=selector}}
 					</span>
 				</div>
 			</section>

@@ -40,9 +40,7 @@
 <template name="taskitem">
 	<tr data-task-id="{{_id}}">
 		<td class="td-lg">
-			<a href="{{pathFor route='task.view' taskId=_id}}" class="btn btn-lg btn-link">
-				{{name}}
-			</a>
+			{{name}}
 		</td>
 		<td>
 			<a href="{{pathFor route='task.edit' taskId=_id}}" class="btn btn-lg btn-default">
