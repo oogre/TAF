@@ -42,9 +42,6 @@ Template.workEdit.helpers({
 				$nin : this.worker_ids||[]
 			}
 		}).fetch();
-	},
-	isChief : function(){
-		return Meteor.isChief();
 	}
 });
 

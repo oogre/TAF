@@ -70,7 +70,9 @@
 		
 		{{#if actions }}
 				<td>
-					<a class="btn btn-lg btn-default" href="{{pathFor route='user.edit' workerId=_id}}">Modifier</a>
+					{{#if isChief }}
+						<a class="btn btn-lg btn-default" href="{{pathFor route='user.edit' workerId=_id}}">Modifier</a>
+					{{/if}}
 					{{>buttondestroy method="workerDestroyer" _id=_id}}
 				</td>
 		{{/if}}

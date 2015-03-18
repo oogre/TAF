@@ -48,12 +48,14 @@
 			{{/if}}
 			{{name}}
 		</td>
-		{{#unless view}}
-			<td>
-				<a href="{{pathFor route='module.edit' moduleId=_id}}" class="btn btn-lg btn-default pull-right">
-					Modifier
-				</a>
-			</td>
-		{{/unless}}
+		<td>
+			{{#unless view}}
+				{{#if isChief }}
+					<a href="{{pathFor route='module.edit' moduleId=_id}}" class="btn btn-lg btn-default pull-right">
+						Modifier
+					</a>
+				{{/if}}
+			{{/unless}}
+		</td>
 	</tr>
 </template>

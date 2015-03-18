@@ -43,9 +43,11 @@
 			{{name}}
 		</td>
 		<td>
-			<a href="{{pathFor route='task.edit' taskId=_id}}" class="btn btn-lg btn-default">
-				Modifier
-			</a>
+			{{#if isChief }}
+				<a href="{{pathFor route='task.edit' taskId=_id}}" class="btn btn-lg btn-default">
+					Modifier
+				</a>
+			{{/if}}
 		</td>
 	</tr>
 </template>

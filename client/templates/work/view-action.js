@@ -10,9 +10,6 @@
 /*global Template : false */
 
 Template["work-viewaction"].helpers({
-	removeVisible : function(){
-		return Meteor.isBoss();
-	},
 	reopenable : function(){
 		if(Meteor.isChief()){
 			var work = Works.findOne(this._id);

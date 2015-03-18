@@ -4,20 +4,9 @@
 /*global Meteor : false */
 /*global Template : false */
 
-
-Template.buttondestroy.helpers({
-	isBoss : function(){
-		return Meteor.isBoss();
-	}
-});
-
 Template.buttondestroy.events({
 
 	"click button.btn-danger" : function(event){
-
-		//Meteor.call("shopModuleDestroyer", this.shopId, this.key);
-
-
 		if(window.prompt("Ecrivez \"SUPPRIMER\" : ")==="SUPPRIMER"){
 			var _id = $(event.target).attr("data-id");
 			var method = $(event.target).attr("data-method");

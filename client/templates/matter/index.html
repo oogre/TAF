@@ -30,9 +30,11 @@
 			{{name}}
 		</td>
 		<td>
-			<a href="{{pathFor route='matter.edit' matterId=_id}}" class="btn btn-lg btn-default">
-				Modifier
-			</a>
+			{{#if isChief }}
+				<a href="{{pathFor route='matter.edit' matterId=_id}}" class="btn btn-lg btn-default">
+					Modifier
+				</a>
+			{{/if}}
 			{{>buttondestroy method="matterDestroyer" _id=_id}}
 		</td>
 	</tr>
