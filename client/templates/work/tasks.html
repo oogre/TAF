@@ -1,6 +1,6 @@
 <template name="workmodules">
 	<div class="input-group col-sm-12">
-		<label class="input-group-addon" >Modules</label>
+		<label class="input-group-addon vertical-label" ><div>Meubles / Chambre</div></label>
 		<div class="modules form-control input-lg">
 			{{#each workModules}}
 				{{>workmodule}}
@@ -10,7 +10,7 @@
 </template>
 
 <template name="workmodule">
-	<div class="module {{moduleSelected}} {{taskCompleted}}">
+	<div id="{{this.key}}" class="module {{moduleSelected}} {{moduleOpened}} {{taskCompleted}}">
 		<header>
 			{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}&emsp;<i class="fa fa-caret-down"></i><i class="fa fa-caret-right"></i>
 		</header>
@@ -30,7 +30,7 @@
 							<div class="input-group col-sm-12">
 								<label class="input-group-addon" for="{{moduleKey}}_{{_id}}">{{name}}</label>
 								{{#if value}}
-									<input {{disabled}} class="form-control input-lg" type="text" id="{{moduleKey}}_{{_id}}" name="checkbox" value="{{checked moduleKey _id}}">
+									<input {{disabled}} class="form-control input-lg" type="number" id="{{moduleKey}}_{{_id}}" name="checkbox" value="{{checked moduleKey _id}}">
 								{{else}}
 									<button {{disabled}} id="{{moduleKey}}_{{_id}}" class="btn btn-lg btn-default btn-block checkbox {{checked moduleKey _id}}">
 										<i class="fa fa-2x fa-square-o"></i>

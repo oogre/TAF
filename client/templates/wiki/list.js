@@ -12,19 +12,24 @@ Template.wikilist.destroyed = function(){
 
 Template.wikilist.helpers({
 	wikiListOpen : function(){
-		return Session.get(Meteor.WIKI_OPEN_LIST);
+		return Session.equals(Meteor.WIKI_OPEN_LIST, true);
 	},
 	wikiCount : function(){
-		return Wikis.find({
-			_id : {
-				$in : _.without(this.wiki_id, Session.get(Meteor.WIKI_CURRENT_KEY))
-			}
-		}, {
-			sort :{
-				createdAt : -1
-			}
-		})
-		.count();
+		if(!this.wiki_id){
+			return 0;
+		}
+		
+		return 	Wikis
+				.find({
+					_id : {
+						$in : _.without(this.wiki_id, Session.get(Meteor.WIKI_CURRENT_KEY))
+					}
+				}, {
+					fields :{
+						_id : 1
+					}
+				})
+				.count();
 	},
 	showList : function(){
 		return Session.get(Meteor.WIKI_OPEN_LIST);

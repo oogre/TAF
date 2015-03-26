@@ -17,8 +17,11 @@ Template.workEdit.destroyed = function(){
 };
 
 Template.workEdit.helpers({
-	showModule : function(){
-		if(this && this.type === "maintenance") return true;
+	showTasks : function(){
+		if(this && this.type === "maintenance" && this.modules) return true;
+	},
+	showMatters : function(){
+		if(this && this.type !== "installation") return true;
 	},
 	shop : function(){
 		if(this && this.shop){
@@ -47,7 +50,7 @@ Template.workEdit.helpers({
 
 Template.workEdit.events({
 	"click .moduleAdd" : function(){
-		if(Session.get(Meteor.ADD_MODULE)){
+		if(Session.equals(Meteor.ADD_MODULE, true)){
 			var modules = Template.workmodule.modules();
 			Meteor.call("workModuleTaskUpdator", this._id, modules);
 			Session.set(Meteor.SHOP_ID, false);

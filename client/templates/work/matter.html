@@ -1,35 +1,43 @@
 <template name="matterselector">
-	<div class="input-group col-sm-12">
-		<label class="input-group-addon" >Modules</label>
-		<div class="modules form-control input-lg">
-			{{#each workModules}}
-				{{>mattermodule}}
-			{{/each}}
+	<div class="row">
+		<div class="form-group col-sm-12">
+			<div class="input-group col-sm-12">
+				<label class="input-group-addon" for="matter">
+					<input 	class="typeahead input-lg" name="matter" id="matter" type="text" 
+							placeholder="Matériel" autocomplete="off" spellcheck="off" 
+							data-source="matters" data-highlight="true" required/>
+				</label>
+				<input class="form-control input-lg input-xl" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">
+				<label class="input-group-addon">
+					<select class="form-control input-lg lowercase" id="unit" name="unit">
+						<option selected disabled>Unité</option>
+						<option value="">-</option>
+						{{#each units}}
+							<option value="{{this.shortname}}" selected="{{this.selected}}">{{this.shortname}}</option>
+						{{/each}}
+					</select>
+				</label>
+			</div>
 		</div>
 	</div>
+	{{inti}}
 </template>
 
-<template name="mattermodule">
-	<div class="module {{moduleOpened}}">
-		<header>
-			{{#if serial}}{{serial}} : {{/if}}{{type}} - {{name}}&emsp;<i class="fa fa-caret-down"></i><i class="fa fa-caret-right"></i>
-		</header>
-		{{#if moduleOpened}}
-			<section>
-				{{#each getMatters workId key matters}}
-					<fieldset class="row">
-						<div class="form-group col-sm-12">
-							<div class="input-group col-sm-12">
-								<label class="input-group-addon" for="{{_id}}_{{key}}_{{workId}}">{{name}}</label>
-								<input class="form-control input-lg" type="number" step="any" min="0" id="{{_id}}_{{key}}_{{workId}}" name="matter" value="{{value}}">
-								{{#if unit}}
-									<label class="input-group-addon lowercase" for="{{_id}}_{{key}}_{{workId}}">{{unit}}</label>
-								{{/if}}
-							</div>
-						</div>
-					</fieldset>
-				{{/each}}
-			</section>
-		{{/if}}
+
+<template name="matterlist">
+	{{#each work.matters}}
+	<div class="row">
+		<div class="form-group col-sm-12">
+			<div class="input-group col-sm-12">
+				<label class="input-group-addon">
+					{{this.name}}
+				</label>
+				<input class="form-control input-lg" type="text" disabled="disabled" value="{{this.quantity}}">
+				<label class="input-group-addon">
+					{{this.unit}}
+				</label>
+			</div>
+		</div>
 	</div>
-</template>	
+	{{/each}}
+</template>

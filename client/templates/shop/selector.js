@@ -14,6 +14,10 @@ Template.shopselector.rendered = function(){
 	// initializes all typeahead instances
 	Meteor.typeahead.inject();
 	$(".twitter-typeahead").addClass("form-control");
+	$(".typeahead")
+	.css("boxShadow","none")
+	.first()
+	.css("opacity", "0");
 	Session.set(Meteor.NEW_SHOP_KEY, false);
 };
 

@@ -22,7 +22,7 @@ hr{
 	margin-right: 5px;
 }
 ul.dropdown-menu li,
-.form-control:not([type="email"]){
+.form-control:not([type="email"]):not(select){
 	text-transform: capitalize;
 }
 .form-control[type="email"]{
@@ -132,17 +132,23 @@ address{
 .modules .module{
 	border: solid 1px #ccc;
 	border-radius: 5px;
-	padding: 10px 15px;
+	padding: 10px 15px 0;
 	background: #eee;
 	margin:5px; 
 	min-height: 46px;
 }
 .modules .module header{
 	cursor: pointer;
+	padding-bottom: 10px;
+}
+
+.modules .module.open header, 
+.modules .module.selected header{
+	font-weight: bold;
 }
 .modules .module section{
-	margin-top: 10px;
-	padding-top: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 	border-top: solid 1px #ccc;
 }
 .modules .module.open .fa-caret-right, 
@@ -169,4 +175,15 @@ button.checkbox.checked .fa-square-o{
 }
 button.checkbox:not(.checked) .fa-check-square-o{
 	display:none;
+}
+label.vertical-label{
+	max-width: 40px;
+}
+label.vertical-label>div{
+	 -ms-transform: rotate(-90deg); /* IE 9 */
+    -webkit-transform: rotate(-90deg); /* Chrome, Safari, Opera */
+    transform: rotate(-90deg);
+}
+.input-xl{
+	height: 60px;
 }

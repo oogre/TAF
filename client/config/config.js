@@ -24,3 +24,4 @@ Meteor.google = {
 
 Meteor.indexLimit = 10;
 Meteor.indexSkip = 0;
+

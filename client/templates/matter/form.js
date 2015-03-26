@@ -43,7 +43,6 @@ Template.matterform.events({
 		var _id = template.find("#_id");
 		var name = template.find("#name");
 		var unit = template.find("#unti");
-		var moduletype = template.find("#moduletype");
 		
 		$(errors)
 		.removeClass("has-error");
@@ -64,7 +63,6 @@ Template.matterform.events({
 		var data = {
 			name : name.value.toLowerCase(),
 			unit : unit.value,
-			moduletype : moduletype.value.toLowerCase()
 		};
 		var next = function(error){
 			if(error){

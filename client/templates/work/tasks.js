@@ -79,10 +79,10 @@ Template.workmodule.helpers({
 		return Session.get(Meteor.TASK_SELECTED)["module_"+this.key];
 	},
 	moduleSelected : function(){
-		return (this.shopId && _.contains((Session.get(Meteor.MODULE_SELECTED)||[]), ""+this.key)) ? "selected" : false;
+		return (this.shopId && Session.equals(Meteor.ADD_MODULE, true) && _.contains((Session.get(Meteor.MODULE_SELECTED)||[]), ""+this.key)) ? "selected" : false;
 	},
 	moduleOpened : function(){
-		return (this.workId && _.contains((Session.get(Meteor.MODULE_SELECTED)||[]), ""+this.key)) ? "open" : false;
+		return (this.workId && Session.equals(Meteor.ADD_MODULE, false) && Session.equals(Meteor.MODULE_SELECTED, ""+this.key)) ? "open" : false;
 	},
 	disabled : function(){
 		return this.abortUpdateTask ? "disabled" : "";
@@ -103,19 +103,40 @@ Template.workmodule.helpers({
 Template.workmodule.events({
 	"click .module header" : function(){
 		var tasks;
-		if(_.contains((Session.get(Meteor.MODULE_SELECTED)||[]), ""+this.key)){
-			Session.set(Meteor.MODULE_SELECTED, _.without(Session.get(Meteor.MODULE_SELECTED), ""+this.key));
-			
-			tasks = Session.get(Meteor.TASK_SELECTED);
-			delete tasks["module_"+this.key];
-			Session.set(Meteor.TASK_SELECTED, tasks);
+		if(Session.equals(Meteor.ADD_MODULE, true)){
+			if(_.contains((Session.get(Meteor.MODULE_SELECTED)||[]), ""+this.key)){
+				Session.set(Meteor.MODULE_SELECTED, _.without(Session.get(Meteor.MODULE_SELECTED), ""+this.key));
+				
+				tasks = Session.get(Meteor.TASK_SELECTED);
+				delete tasks["module_"+this.key];
+				Session.set(Meteor.TASK_SELECTED, tasks);
+			}else{
+				Session.set(Meteor.MODULE_SELECTED, (Session.get(Meteor.MODULE_SELECTED)||[]).concat(""+this.key));
+				
+				tasks = Session.get(Meteor.TASK_SELECTED);
+				tasks["module_"+this.key] = [];
+				Session.set(Meteor.TASK_SELECTED, tasks);
+			}
 		}else{
-			Session.set(Meteor.MODULE_SELECTED, (Session.get(Meteor.MODULE_SELECTED)||[]).concat(""+this.key));
-			
-			tasks = Session.get(Meteor.TASK_SELECTED);
-			tasks["module_"+this.key] = [];
-			Session.set(Meteor.TASK_SELECTED, tasks);
+			if(Session.equals(Meteor.MODULE_SELECTED, ""+this.key)){
+				Session.set(Meteor.MODULE_SELECTED, false);
+				tasks = Session.get(Meteor.TASK_SELECTED);
+				delete tasks["module_"+this.key];
+				Session.set(Meteor.TASK_SELECTED, tasks);
+			}else{
+				Session.set(Meteor.MODULE_SELECTED, ""+this.key);
+				
+				tasks = Session.get(Meteor.TASK_SELECTED);
+				tasks["module_"+this.key] = [];
+				Session.set(Meteor.TASK_SELECTED, tasks);
+
+				var hash = "#"+this.key;
+				setTimeout(function(){
+					location.hash = hash;
+				}, 200);
+			}
 		}
+		
 		return false;
 	},
 	"click .module button.checkbox" : function(event){

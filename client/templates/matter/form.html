@@ -28,22 +28,6 @@
 			</div>
 		</fieldset>
 
-		<hr/>
-
-		<fieldset class="row">
-			<label class="col-sm-2">Catégories</label>
-			<div class="form-group col-sm-10">
-				<div class="input-group col-sm-12">
-					<label class="input-group-addon" for="moduletype" >Catégories</label>
-					<select class="form-control input-lg" id="moduletype" name="moduletype">
-						<option selected value="">Aucune</option>
-						{{#each moduletypes}}
-							<option value="{{this.moduletype}}" selected="{{this.selected}}">{{this.moduletype}}</option>
-						{{/each}}
-					</select>
-				</div>
-			</div>
-		</fieldset>
 
 		<fieldset class="row">
 			<div class="form-group col-sm-offset-2 col-sm-10">

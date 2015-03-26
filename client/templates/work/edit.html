@@ -30,49 +30,46 @@
 					</div>
 			</fieldset>
 			
-			{{#if showModule}}
-				{{#if shop.modules}}
-					<hr/>
-					
-					<fieldset class="row modules">
-						<label class="col-sm-2">Tâches</label>
-						<div class="form-group col-sm-10">
+			{{#if showTasks}}
+				<hr/>
+				<fieldset class="row modules">
+					<label class="col-sm-2">Tâches</label>
+					<div class="form-group col-sm-10">
+						{{#if addModule }}
+							{{>workmodules shop=shop work=this}}
+						{{else}}
+							{{>workmodules work=this}}
+						{{/if}}
+					</div>
+				</fieldset>
+				{{#if isBoss }}
+					<fieldset class="row">
+						<div class="form-group col-sm-offset-2 col-sm-10">
 							{{#if addModule }}
-								{{>workmodules shop=shop work=this}}
+								<button class="btn btn-primary btn-lg moduleAdd" >Enregistrer</button>
 							{{else}}
-								{{>workmodules work=this}}
+								<button class="btn btn-default btn-lg moduleAdd" >Modifier</button>
 							{{/if}}
 						</div>
 					</fieldset>
-					{{#if isChief }}
-						<fieldset class="row">
-							<div class="form-group col-sm-offset-2 col-sm-10">
-								{{#if addModule }}
-									<button class="btn btn-primary btn-lg moduleAdd" >Enregistrer</button>
-								{{else}}
-									<button class="btn btn-default btn-lg moduleAdd" >Modifier</button>
-								{{/if}}
-							</div>
-						</fieldset>
-					{{/if}}
 				{{/if}}
 			{{/if}}
 
-			{{#if shop.modules}}
-				<hr/>
+			{{#if showMatters}}
+			<hr/>
 
-				<fieldset class="row modules">
-					<label class="col-sm-2">Matériel</label>
-					<div class="form-group col-sm-10">
-						{{>matterselector shop=shop work=this}}
-					</div>
-				</fieldset>
+			<fieldset class="row modules">
+				<label class="col-sm-2">Matériel</label>
+				<div class="form-group col-sm-10">
+					{{>matterlist work=this}}
+					{{>matterselector work=this}}
+				</div>
+			</fieldset>
 			{{/if}}
-
 			<hr/>
 
 			<fieldset class="row">
-				<label class="col-sm-2">Wiki</label>
+				<label class="col-sm-2">Description</label>
 				<div class="form-group col-sm-10">
 					{{>wikiform wiki_id=wiki_id}}
 					{{>wikilist wiki_id=wiki_id}}

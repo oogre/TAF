@@ -13,24 +13,6 @@ Template.wikiform.rendered = function(){
 };
 
 Template.wikiform.helpers({
-	wikiListOpen : function(){
-		return Session.get(Meteor.WIKI_OPEN_LIST);
-	},
-	wikiCount : function(){
-		return Wikis.find({
-			_id : {
-				$in : _.without(this.wiki_id, Session.get(Meteor.WIKI_CURRENT_KEY))
-			}
-		}, {
-			sort :{
-				createdAt : -1
-			}
-		})
-		.count();
-	},
-	wikiEdit : function(){
-		return Session.get(Meteor.WIKI_CURRENT_KEY);
-	},
 	photo: function () {
 		var wiki = Wikis.findOne(Session.get(Meteor.WIKI_CURRENT_KEY));
 		var photos = [];
@@ -43,17 +25,10 @@ Template.wikiform.helpers({
 						});
 		}
 		return photos;
-	},
-	mobile : function(){
-		return Meteor.isCordova;
 	}
 });
 
 Template.wikiform.events({
-	"click .wikiList" : function(){
-		Session.set(Meteor.WIKI_OPEN_LIST, !Session.get(Meteor.WIKI_OPEN_LIST));
-		return false;
-	},
 	"blur textarea" : function(event, template){
 		Meteor.call("wikiUpdator", Session.get(Meteor.WIKI_CURRENT_KEY), {
 			description : template.find("textarea").value

@@ -1,96 +1,88 @@
 "use strict";
 /*global _ : false */
 /*global $ : false */
-/*global Works : false */
+/*global Units : false */
 /*global Meteor : false */
-/*global Session : false */
 /*global Matters : false */
+/*global Tracker : false */
+/*global Session : false */
 /*global Template : false */
 
-
+var units = [];
+var matters = [];
 Template.matterselector.helpers({
-	workModules : function(){
-		if(this && this.work && this.shop){
-			var work = Works.findOne(this.work._id, {
-				fields: {
-					moduleMatters: 1
-				}
-			});
-			var shopId = this.shop._id;
-			var workId = this.work._id;
-			return 	(this
-					.shop
-					.modules || [])
-					.map(function(module, key){
-						module.matters =	(_.find(	work.moduleMatters||[], 
-												function(moduleMatter){
-													return moduleMatter.moduleKey === ""+key;
-												})||{}).matters;
-						module.key = key;
-						module.shopId = shopId;
-						module.workId = workId;
-						return module;
-					});
-		}
+	units : function(){
+		units = Units.find({}).fetch();
+		return units;
+	},
+	matters: function(query, callback){
+		matters =	Matters.find({
+						name : {
+							$regex : ".*"+query.toLowerCase()+".*"
+						}
+					}).fetch();
+
+		callback(	matters
+					.map(function(it){
+						return {
+							value: it.name
+						};
+					})
+		);
+	},
+	inti : function(){
+		var self = this;
+		Tracker.autorun(function () {
+			var matter = Session.get(Meteor.MATTER);
+			var inputReset = "select[name='unit'], input[name='quantity'], input[name='matter']";
+			if (matter && matter.quantity && matter.name && (matter.unit||matter.unit==="") && self && self.work){
+				Session.set(Meteor.MATTER, false);
+				Meteor.call("workMatter", self.work._id, matter, inputReset, function(){
+					$(inputReset).val("");
+				});
+			}
+		});
 	}
 });
 Template.matterselector.destroyed = function(){
-	Session.set(Meteor.MODULE_MATTER_SELECTED, false);
+Session.set(Meteor.MATTER, false);
 };
 Template.matterselector.rendered = function(){
-	
+	Meteor.typeahead.inject();
+	$(".twitter-typeahead").addClass("form-control");
+	$(".typeahead")
+	.css("boxShadow","none")
+	.first()
+	.css("opacity", "0");
 };
 
-Template.mattermodule.helpers({
-	getMatters : function(workId, key, matters){
-		return Matters.find({
-			$or : [{
-				moduletype : this.type	
-			},{
-				moduletype : ""
-			}]
-		})
-		.fetch()
-		.map(function(matter){
-			matter.value = (_.find(matters, function(_matter){
-								return _matter._id === matter._id;
-							})||{}).quantity;
-			matter.workId = workId;
-			matter.key = key;
-			return matter;
-		});
-	},
-	moduleOpened : function(){
-		return _.contains((Session.get(Meteor.MODULE_MATTER_SELECTED)||[]), ""+this.key) ? "open" : false;
-	},
-	disabled : function(){
-		return this.abortUpdateTask ? "disabled" : "";
-	}
-});
-
-Template.mattermodule.events({
-	"click .module header" : function(){
-		if(_.contains((Session.get(Meteor.MODULE_MATTER_SELECTED)||[]), ""+this.key)){
-			Session.set(Meteor.MODULE_MATTER_SELECTED, _.without(Session.get(Meteor.MODULE_MATTER_SELECTED), ""+this.key));
+Template.matterselector.events({
+	"blur input[name='matter']" : function(event){
+		var _matter, s_matter, _unit;
+		s_matter = Session.get(Meteor.MATTER)||{};
+		s_matter.name = event.target.value.toLowerCase();
+		_matter =	_
+					.find(matters, function(matter){
+						return s_matter.name === matter.name;
+					});
+		if(_matter && (_unit = $("select[name='unit'] option[value='"+_matter.unit+"']"))) {
+			_unit[0].selected = true;
+			_unit.parent().attr("disabled", "disabled");
+			Session.set(Meteor.MATTER, _matter);
 		}
 		else{
-			Session.set(Meteor.MODULE_MATTER_SELECTED, (Session.get(Meteor.MODULE_MATTER_SELECTED)||[]).concat(""+this.key));
+			Session.set(Meteor.MATTER, s_matter);
+			$("select[name='unit']").removeAttr("disabled");
 		}
-		return false;
 	},
-	"blur .module input[name='matter']" : function(event){
-
-		var value = $(event.target).val();
-		value = parseInt(value);
-		if(!_.isNumber(value)){
-			return false;
-		}
-		var matterId_moduleKey_workId = $(event.target).attr("id").split("_");
-		var workId = matterId_moduleKey_workId[2];
-		var moduleKey = matterId_moduleKey_workId[1];
-		var matterId = matterId_moduleKey_workId[0];
-
-		Meteor.call("workModuleUpdator", workId, moduleKey, matterId, value);
-		return false;
+	"blur input[name='quantity']" : function(event){
+		var matter = Session.get(Meteor.MATTER)||{};
+		matter.quantity = event.target.value.toLowerCase();
+		Session.set(Meteor.MATTER, matter);
+	},
+	"change select[name='unit']" : function(event){
+		var matter = Session.get(Meteor.MATTER)||{};
+		matter.unit = event.target.value.toLowerCase();
+		Session.set(Meteor.MATTER, matter);
 	}
 });
