@@ -1,18 +1,4 @@
 <template name="wikiform">
-	<fieldset>
-		<div class="form-group">
-			<div class="input-group col-sm-12">
-				{{#if isMobile}}
-					<button class="btn btn-primary btn-lg photoShoot btn-margin-bottom" >Photo</button>
-				{{else}}
-					<span class="btn btn-primary btn-lg btn-file photoLoad">Photo
-						<input type="file" multiple>
-					</span>
-				{{/if}}
-				{{>pictureList photo}}
-			</div>
-		</div>
-	</fieldset>
 	<fieldset class="margin-bottom">
 			<div class="input-group col-sm-12">
 				<label class="input-group-addon" for="{{wikiEdit}}" >Description</label>

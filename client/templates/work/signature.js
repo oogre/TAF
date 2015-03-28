@@ -15,7 +15,7 @@ Template.workSignature.destroyed = function(){
 Template.workSignature.rendered = function(){
 	var name = this.data.client ? "Client" : "ADF";
 
-	var canvas = $(this.firstNode).find("canvas.signature");
+	var canvas = $(this.lastNode).find("canvas.signature");
 	if(canvas[0]){
 		canvas[0].width = canvas.width();
 		canvas[0].height = 210;
@@ -31,23 +31,23 @@ Template.workSignature.rendered = function(){
 
 Template.workSignature.helpers({
 	name : function(){
-		return this.client ? "Client" : "ADF";
+		return this.client ? "Client" : "Atelier du froid";
 	},
 	drawn : function(){
 		var name = this.client ? "Client" : "ADF";
 		var signature = Session.get(Meteor.SIGNATURE);
 		if(this && this.work && this.work.signatures && this.work.signatures[name.toLowerCase()]){
 			var image = this.work.signatures[name.toLowerCase()];
-			if(_.isString(image) || image.path) return false;
+			if(_.isString(image) || image.path) return "disabled";
 		}
-		return signature[name];
+		return signature[name] ? "" : "disabled";
 	},
 	saved : function(){
 		var name = this.client ? "Client" : "ADF";
 		if(this && this.work && this.work.signatures && this.work.signatures[name.toLowerCase()]){
 			var image = this.work.signatures[name.toLowerCase()];
 			if(_.isString(image)) return image;
-			if(image.path) return Meteor.serverIP+"/upload/"+image.path;
+			if(image.path) return "/upload/"+image.path;
 		}
 		return false;
 	}
@@ -85,7 +85,7 @@ function uploadImage(workId, prefix, photo){
 	Meteor.b64toBlob(photo, function success(blob) {
 		formData.append("file[]", blob);
 		$.ajax({
-			url: Meteor.serverIP+"/upload",
+			url: "/upload",
 			type: "POST",
 			data: formData,
 			cache: false,

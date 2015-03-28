@@ -1,0 +1,9 @@
+<template name="buttonpicture">
+	{{#if isMobile}}
+		<button class="btn btn-default btn-lg photoShoot btn-margin-bottom" >Prendre une photo</button>
+	{{else}}
+		<span class="btn btn-default btn-lg btn-file photoLoad">Ajouter images
+			<input type="file" multiple>
+		</span>
+	{{/if}}
+</template>

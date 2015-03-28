@@ -2,13 +2,7 @@
 /*global Meteor : false */
 
 Meteor.startup(function () {
-	Meteor.call("getServerIp", function(err, data){
-		if(err || !data){
-			Meteor.serverIP = "";	
-		}else{
-			Meteor.serverIP = "http://"+data+":3000";
-		}
-	});
+	Meteor.mobileServer = "http://ogre.local:3000";
 });
 
 Meteor.QG = {

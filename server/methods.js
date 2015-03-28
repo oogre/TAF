@@ -11,6 +11,8 @@
 /*global process : false */
 
 
+// meteor run android-device --mobile-server http://ogre.local:3000
+
 Meteor.methods({
 	getServerIp : function(){
 		var Future = Npm.require("fibers/future");

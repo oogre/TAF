@@ -1,6 +1,16 @@
 <template name="workSignature">
+	
+	<div class="btn-margin-bottom btn-margin-top">
+		<button class="btn btn-lg btn-danger reset" {{drawn}}>
+			Effacer
+		</button>
+		<button class="btn btn-lg btn-primary save" {{drawn}}>
+			Valider
+		</button>
+	</div>
+
 	<div class="input-group col-sm-12">
-		<label class="input-group-addon" >{{name}}</label>
+		<label class="input-group-addon vertical-label" ><div>{{name}}</div></label>
 		<div class="modules form-control input-lg no-padding">
 			{{#if saved}}
 				<img src="{{saved}}" />
@@ -9,14 +19,5 @@
 			{{/if}}
 		</div>
 	</div>
-	{{#if drawn}}
-		<div class="btn-margin-bottom btn-margin-top">
-			<button class="btn btn-lg btn-default reset">
-				Effacer
-			</button>
-			<button class="btn btn-lg btn-primary save">
-				Valider
-			</button>
-		</div>
-	{{/if}}
+	
 </template>

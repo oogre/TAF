@@ -6,6 +6,7 @@
 /*global Roles : false */
 /*global Tasks : false */
 /*global Units : false */
+/*global Picts : false */
 /*global Meteor : false */
 /*global moment : false */
 /*global Matters : false */
@@ -15,6 +16,9 @@
 Meteor.startup(function () {
 	Meteor.publish("shops", function() {
 		return Shops.find({});
+	});
+	Meteor.publish("picts", function() {
+		return Picts.find({});
 	});
 	Meteor.publish("matters&units", function() {
 		return [Matters.find({}), Units.find({})];
@@ -47,7 +51,12 @@ Meteor.startup(function () {
 					});
 		var wikis = Wikis.find({
 						_id : {
-							$in : _.flatten(_.pluck(works.fetch(), "wiki_id"))
+							$in : 	_(works.fetch())
+									.chain()
+									.pluck("wikis")
+									.flatten()
+									.without(undefined, null)
+									.value()
 						}
 					});
 		return [works, wikis];

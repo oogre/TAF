@@ -4,6 +4,9 @@
 /*global Tasks : false */
 /*global Wikis : false */
 /*global Units : false */
+/*global Works : false */
+/*global Picts : false */
+/*global Matters : false */
 /*global Modules : false */
 /*global process : false */
 /*global UploadServer : false */
@@ -32,7 +35,10 @@ var uploadServerInit = function(){
 				if(formData.next === "workSignature"){
 					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo);
 				}else{
-					Meteor.call("wikiUploadUpdator", formData._id, fileInfo);	
+					Meteor.call("pictureCreator", fileInfo, {
+						collection : formData.collection,
+						_id : formData._id,
+					});
 				}
 			}
 		}
@@ -91,6 +97,9 @@ var unitsInit = function(){
 
 var clean = function(){
 	Modules.remove({});
+	Matters.remove({});
+	Works.remove({});
+	Picts.remove({});
 	Tasks.remove({});
 	Wikis.remove({});
 };

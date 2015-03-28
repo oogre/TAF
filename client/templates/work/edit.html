@@ -71,10 +71,22 @@
 			<fieldset class="row">
 				<label class="col-sm-2">Description</label>
 				<div class="form-group col-sm-10">
-					{{>wikiform wiki_id=wiki_id}}
-					{{>wikilist wiki_id=wiki_id}}
+					{{>wikilist wikis=wikis}}
+					{{>wikiform workId=this._id}}
 				</div>
 			</fieldset>
+			<hr/>
+
+			<fieldset class="row">
+				<label class="col-sm-2">Photos</label>
+				<div class="form-group col-sm-10">
+					{{>buttonpicture selector=pictureSelector}}
+					{{>pictureList pictures}}
+				</div>
+			</fieldset>
+
+			<hr/>
+			
 		</form>
 	</div>
 </template>

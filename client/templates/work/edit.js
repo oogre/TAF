@@ -1,6 +1,8 @@
 "use strict";
+/*global _ : false */
 /*global $ : false */
 /*global Shops : false */
+/*global Picts : false */
 /*global Router : false */
 /*global Meteor : false */
 /*global moment : false */
@@ -45,6 +47,12 @@ Template.workEdit.helpers({
 				$nin : this.worker_ids||[]
 			}
 		}).fetch();
+	},
+	pictureSelector : function(){
+		return {
+			collection : "Works",
+			_id : this._id
+		};
 	}
 });
 

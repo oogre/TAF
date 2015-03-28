@@ -47,6 +47,35 @@
 				</fieldset>
 			{{/if}}
 
+			{{#if showMatters}}
+
+				<hr/>
+
+				<fieldset class="row modules">
+					<label class="col-sm-2">Matériel</label>
+					<div class="form-group col-sm-10">
+						{{>matterlist work=this}}
+					</div>
+				</fieldset>
+			{{/if}}
+			
+			<hr/>
+
+			<fieldset class="row">
+				<label class="col-sm-2">Description</label>
+				<div class="form-group col-sm-10">
+					{{>wikilist wikis=wikis view=true}}
+				</div>
+			</fieldset>
+			<hr/>
+
+			<fieldset class="row">
+				<label class="col-sm-2">Photos</label>
+				<div class="form-group col-sm-10">
+					{{>pictureList pictures}}
+				</div>
+			</fieldset>
+
 			<hr/>
 
 			<fieldset class="row">
@@ -61,12 +90,6 @@
 
 			<hr/>
 
-			<fieldset class="row">
-				<label class="col-sm-2">Wiki</label>
-				<div class="form-group col-sm-10">
-					{{>wikilist label=false wiki_id=wiki_id}}
-				</div>
-			</fieldset>
 		</form>
 	</div>
 </template>

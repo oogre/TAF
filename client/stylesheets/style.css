@@ -68,6 +68,7 @@ body .btn.active:focus{
 }
 .list-inline>li{
 	max-width: 150px;
+	margin: 5px 0px;
 }
 .btn-file {
 	position: relative;

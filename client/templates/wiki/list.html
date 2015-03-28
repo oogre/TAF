@@ -1,42 +1,30 @@
 <template name="wikilist">
-	{{#if wikiCount}}
-		<button class="btn btn-default btn-lg wikiList">
-			{{#if wikiListOpen}}
-				Cacher
-			{{else}}
-				Voir - {{wikiCount}}
-			{{/if}}
-		</button>
-	{{/if}}
-	{{#if wikiListOpen}}
-		<fieldset class="margin-top">
-			<div class="input-group col-sm-12">
-				<ul class="list-unstyled wikilist">
-					{{#each wikis}}
-						<li>
-							<fieldset class="row">
-								<div class="form-group col-sm-offset-2 col-sm-5">
-									<div class="input-group col-sm-12">
-										<div class="wiki-created">
-											{{createdAt}}
-										</div>							
-										<div class="wiki-desc">
-											{{description}}
+	<fieldset class="margin-top">
+		<div class="input-group col-sm-12">
+			<ul class="list-unstyled wikilist">
+				{{#each wikis}}
+					<li>
+						<fieldset class="row">
+							<div class="form-group col-sm-12">
+								<div class="input-group col-sm-12">
+									{{#if removable}}
+										<div class="pull-right">
+											{{>buttondestroy method="wikiDestroyer" _id=_id}}
 										</div>
+									{{/if}}
+									<div class="wiki-created">
+										{{createdAt}}
+									</div>							
+									<div class="wiki-desc">
+										{{description}}
 									</div>
+									
 								</div>
-							</fieldset>	
-							<fieldset class="row">
-								<div class="form-group col-sm-offset-2 col-md-7 col-sm-offset-0 col-sm-5">
-									<div class="input-group col-sm-12">
-										{{>pictureList uploads}}
-									</div>
-								</div>
-							</fieldset>
-						</li>
-					{{/each}}
-				</ul>
-			</div>
-		</fieldset>
-	{{/if}}
+							</div>
+						</fieldset>	
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</fieldset>
 </template>

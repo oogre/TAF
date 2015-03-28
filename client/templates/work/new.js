@@ -4,7 +4,6 @@
 /*global Meteor : false */
 /*global Router : false */
 /*global moment : false */
-/*global Modules : false */
 /*global Session : false */
 /*global console : false */
 /*global Template : false */
@@ -47,20 +46,16 @@ Template["work-new"].events({
 
 			Template.workerselector.workers(template, function(error){
 				if(error) return console.log(error);
-			}),
-
-			Template.wikiform.wiki(template, function(error){
-				if(error) return console.log(error);
 			})
 		)
-		.done(function(shop, rdvPicker, rdvPlanner, workers, wiki){
+		.done(function(shop, rdvPicker, rdvPlanner, workers){
 			var rdv = rdvPicker ? rdvPicker : rdvPlanner;
 			rdv = rdv || moment().toISOString();
 			Session.set(Meteor.WIKI_CURRENT_KEY, false);
 
 			var modules = Template.workmodule.modules();
 
-			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, modules, wiki, function(error, workId){
+			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, modules, function(error, workId){
 				if(error) return console.log(error);
 				Router.go("work.show", {workId : workId});
 			});
