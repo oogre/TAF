@@ -2,6 +2,7 @@
 /*global Meteor : false */
 /*global Roles : false */
 /*global Tasks : false */
+/*global Shops : false */
 /*global Wikis : false */
 /*global Units : false */
 /*global Works : false */
@@ -93,6 +94,22 @@ var unitsInit = function(){
 			shortname : "m"
 		});
 	}	
+};
+
+var expandItmModuleToAllITMShop = function(){
+	var modules = Shops.findOne("ifhkrkmHQaY47e4iW").modules;
+	Shops.find({
+		name:/.*itm.*/
+	})
+	.fetch()
+	.map(function(shop){
+		if(shop._id === "ifhkrkmHQaY47e4iW")return ;
+		Shops.update(shop._id, {
+			$set : {
+				modules : modules
+			}
+		});
+	});
 };
 
 var clean = function(){

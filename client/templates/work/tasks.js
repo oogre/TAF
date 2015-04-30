@@ -10,9 +10,10 @@
 
 Template.workmodules.helpers({
 	workModules : function(){
+
 		if(this.shop && this.shop.modules){
 			var shopId = this.shop._id;
-			return 	(this
+			return (this
 					.shop
 					.modules || [])
 					.map(function(module, key){

@@ -8,6 +8,14 @@
 /*global console : false */
 /*global Template : false */
 
+Template["work-new"].rendered = function(){
+	Session.set(Meteor.ADD_MODULE, true);
+};
+
+Template["work-new"].destroyed = function(){
+	Session.set(Meteor.ADD_MODULE, false);
+};
+
 Template["work-new"].helpers({
 	rendezvous : function(){
 		if(this.hash === "installation" ) return true;

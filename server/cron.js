@@ -2,28 +2,16 @@
 /*global _ : false */
 /*global Npm : false */
 /*global Works : false */
-/*global Wikis : false */
+/*global Picts : false */
 /*global Meteor : false */
 /*global Buffer : false */
 /*global process : false */
 /*global SyncedCron : false */
 
 Meteor.startup(function () {
+	
 	SyncedCron.add({
-		name: "Clean empty wikis",
-		schedule: function(parser) {
-			return parser.recur().on("03:00:00").time();
-		}, 
-		job: function() {
-			Wikis.remove({
-				description : "",
-				uploads : []
-			});
-		}
-	});
-
-	SyncedCron.add({
-		name: "Turn Base64 Wiki pictures to files",
+		name: "Turn Base64 Picts to files",
 		schedule: function(parser) {
 			return parser.recur().on("03:05:00").time();
 		}, 
@@ -40,34 +28,30 @@ Meteor.startup(function () {
 				return view;
 			}
 			var fs = Npm.require("fs");
-			Wikis
+			Picts
 			.find({
 				raw : true
 			})
 			.fetch()
-			.map(function(wiki){
-				var updates = {};
-				wiki
-				.uploads
-				.map(function(upload, key){
-					if(_.isString(upload)){
-						var arrayBuffer = b64toArrayBuffer(upload);
-						var data = upload.split(";")[0];
-						var ext = data.split("/")[1];
-						var filename = wiki._id + "-" + (new Date()).getTime() + "." + ext;
-						fs.writeFileSync(process.env.PWD+"/.uploads/images/"+filename, new Buffer(arrayBuffer), {encoding : "binary"});
-						updates["uploads."+key] = {
-							type : data.split(":")[1],
-							size : arrayBuffer.length,
-							name : filename,
-							path : "images/"+filename
-						};
-					}
-				});
-				updates.raw=false;
-				Wikis.update(wiki._id, {
-					$set : updates
-				});
+			.map(function(pict){
+				if(_.isString(pict.data)){
+					var arrayBuffer = b64toArrayBuffer(pict.data);
+					var data = pict.data.split(";")[0];
+					var ext = data.split("/")[1];
+					var filename = pict._id + "-" + (new Date()).getTime() + "." + ext;
+					fs.writeFileSync(process.env.PWD+"/.uploads/images/"+filename, new Buffer(arrayBuffer), {encoding : "binary"});
+					Picts.update(pict._id, {
+						$set : {
+							data : {
+								type : data.split(":")[1],
+								size : arrayBuffer.length,
+								name : filename,
+								path : "images/"+filename
+							},
+							raw : false
+						}
+					});
+				}
 			});
 		}
 	});
