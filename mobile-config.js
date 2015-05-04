@@ -5,9 +5,9 @@
 // This section sets up some basic app metadata,
 // the entire section is optional.
 App.info({
-	id: "com.example.GDUTAF",
+	id: "be.ogre.TAF",
 	name: "TAF",
-	description: "Gestion DU Travail à l'Atelier du Froid",
+	description: "Gestion du Travail à l'Atelier du Froid",
 	author: "Vincent Evrard",
 	email: "vincent@ogre.be",
 	website: "http://ogre.be"

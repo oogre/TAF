@@ -47,7 +47,7 @@ Template.workSignature.helpers({
 		if(this && this.work && this.work.signatures && this.work.signatures[name.toLowerCase()]){
 			var image = this.work.signatures[name.toLowerCase()];
 			if(_.isString(image)) return image;
-			if(image.path) return "/upload/"+image.path;
+			if(image.path) return Meteor.pictureServer+"/"+image.path;
 		}
 		return false;
 	}

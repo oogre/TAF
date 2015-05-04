@@ -14,8 +14,8 @@
 
 var uploadServerInit = function(){
 	UploadServer.init({
-		tmpDir : process.env.PWD + "/.uploads/tmp",
-		uploadDir : process.env.PWD + "/.uploads/",
+		tmpDir : process.env.ROOT_FILE + "/.uploads/tmp",
+		uploadDir : process.env.ROOT_FILE + "/.uploads/",
 		minFileSize : 20,
 		checkCreateDirectories : true, //create the directories for you
 		getDirectory: function(fileInfo, formData) {

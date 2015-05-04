@@ -2,7 +2,7 @@
 /*global Meteor : false */
 
 Meteor.startup(function () {
-	Meteor.mobileServer = "http://ogre.local:3000";
+	Meteor.pictureServer = "http://tafpict.ogre.be";
 });
 
 Meteor.QG = {
