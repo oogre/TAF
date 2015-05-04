@@ -14,8 +14,8 @@
 
 var uploadServerInit = function(){
 	UploadServer.init({
-		tmpDir : process.env.ROOT_FILE + "/.uploads/tmp",
-		uploadDir : process.env.ROOT_FILE + "/.uploads/",
+		tmpDir : process.env.PWD + "/.uploads/tmp",
+		uploadDir : process.env.PWD + "/.uploads/",
 		minFileSize : 20,
 		checkCreateDirectories : true, //create the directories for you
 		getDirectory: function(fileInfo, formData) {
@@ -36,6 +36,8 @@ var uploadServerInit = function(){
 				if(formData.next === "workSignature"){
 					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo);
 				}else{
+					console.log(formData);
+
 					Meteor.call("pictureCreator", fileInfo, {
 						collection : formData.collection,
 						_id : formData._id,

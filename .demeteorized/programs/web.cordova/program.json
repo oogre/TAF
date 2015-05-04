@@ -2,22 +2,22 @@
   "format": "web-program-pre1",
   "manifest": [
     {
-      "path": "71b3a6453ecb563762134182efdda73a8998993a.js",
+      "path": "288f9f25399769d481f4339d0450732e6bf42ee8.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/71b3a6453ecb563762134182efdda73a8998993a.js",
-      "size": 1535984,
-      "hash": "71b3a6453ecb563762134182efdda73a8998993a"
+      "url": "/288f9f25399769d481f4339d0450732e6bf42ee8.js",
+      "size": 1536004,
+      "hash": "288f9f25399769d481f4339d0450732e6bf42ee8"
     },
     {
-      "path": "e740520c0bd47f1854e3869642fce1951392af6d.css",
+      "path": "82367a460bbbd858cf9a0ba59e2e84435e02be73.css",
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/e740520c0bd47f1854e3869642fce1951392af6d.css?meteor_css_resource=true",
-      "size": 179455,
-      "hash": "e740520c0bd47f1854e3869642fce1951392af6d"
+      "url": "/82367a460bbbd858cf9a0ba59e2e84435e02be73.css?meteor_css_resource=true",
+      "size": 179495,
+      "hash": "82367a460bbbd858cf9a0ba59e2e84435e02be73"
     },
     {
       "path": "app/fonts/FontAwesome.otf",

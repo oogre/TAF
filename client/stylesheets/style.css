@@ -188,3 +188,6 @@ label.vertical-label>div{
 .input-xl{
 	height: 60px;
 }
+.input-group-addon.autowidth{
+	width: auto;
+}
