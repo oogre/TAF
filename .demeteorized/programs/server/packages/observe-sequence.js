@@ -217,132 +217,157 @@ var diffArray = function (lastSeqArray, seqArray, callbacks) {                  
         before);                                                                 // 195
     },                                                                           // 196
     movedBefore: function (id, before) {                                         // 197
-      var prevPosition = posCur[idStringify(id)];                                // 198
-      var position = before ? posCur[idStringify(before)] : lengthCur - 1;       // 199
+      if (id === before)                                                         // 198
+        return;                                                                  // 199
                                                                                  // 200
-      _.each(posCur, function (pos, id) {                                        // 201
-        if (pos >= prevPosition && pos <= position)                              // 202
-          posCur[id]--;                                                          // 203
-        else if (pos <= prevPosition && pos >= position)                         // 204
-          posCur[id]++;                                                          // 205
-      });                                                                        // 206
-                                                                                 // 207
-      posCur[idStringify(id)] = position;                                        // 208
-                                                                                 // 209
-      callbacks.movedTo(                                                         // 210
-        id,                                                                      // 211
-        seqArray[posNew[idStringify(id)]].item,                                  // 212
-        prevPosition,                                                            // 213
-        position,                                                                // 214
-        before);                                                                 // 215
-    },                                                                           // 216
-    removed: function (id) {                                                     // 217
-      var prevPosition = posCur[idStringify(id)];                                // 218
-                                                                                 // 219
-      _.each(posCur, function (pos, id) {                                        // 220
-        if (pos >= prevPosition)                                                 // 221
-          posCur[id]--;                                                          // 222
-      });                                                                        // 223
-                                                                                 // 224
-      delete posCur[idStringify(id)];                                            // 225
-      lengthCur--;                                                               // 226
-                                                                                 // 227
-      callbacks.removedAt(                                                       // 228
-        id,                                                                      // 229
-        lastSeqArray[posOld[idStringify(id)]].item,                              // 230
-        prevPosition);                                                           // 231
-    }                                                                            // 232
-  });                                                                            // 233
+      var oldPosition = posCur[idStringify(id)];                                 // 201
+      var newPosition = before ? posCur[idStringify(before)] : lengthCur;        // 202
+                                                                                 // 203
+      // Moving the item forward. The new element is losing one position as it   // 204
+      // was removed from the old position before being inserted at the new      // 205
+      // position.                                                               // 206
+      // Ex.:   0  *1*  2   3   4                                                // 207
+      //        0   2   3  *1*  4                                                // 208
+      // The original issued callback is "1" before "4".                         // 209
+      // The position of "1" is 1, the position of "4" is 4.                     // 210
+      // The generated move is (1) -> (3)                                        // 211
+      if (newPosition > oldPosition) {                                           // 212
+        newPosition--;                                                           // 213
+      }                                                                          // 214
+                                                                                 // 215
+      // Fix up the positions of elements between the old and the new positions  // 216
+      // of the moved element.                                                   // 217
+      //                                                                         // 218
+      // There are two cases:                                                    // 219
+      //   1. The element is moved forward. Then all the positions in between    // 220
+      //   are moved back.                                                       // 221
+      //   2. The element is moved back. Then the positions in between *and* the // 222
+      //   element that is currently standing on the moved element's future      // 223
+      //   position are moved forward.                                           // 224
+      _.each(posCur, function (elCurPosition, id) {                              // 225
+        if (oldPosition < elCurPosition && elCurPosition < newPosition)          // 226
+          posCur[id]--;                                                          // 227
+        else if (newPosition <= elCurPosition && elCurPosition < oldPosition)    // 228
+          posCur[id]++;                                                          // 229
+      });                                                                        // 230
+                                                                                 // 231
+      // Finally, update the position of the moved element.                      // 232
+      posCur[idStringify(id)] = newPosition;                                     // 233
                                                                                  // 234
-  _.each(posNew, function (pos, idString) {                                      // 235
-    var id = idParse(idString);                                                  // 236
-    if (_.has(posOld, idString)) {                                               // 237
-      // specifically for primitive types, compare equality before               // 238
-      // firing the 'changedAt' callback. otherwise, always fire it              // 239
-      // because doing a deep EJSON comparison is not guaranteed to              // 240
-      // work (an array can contain arbitrary objects, and 'transform'           // 241
-      // can be used on cursors). also, deep diffing is not                      // 242
-      // necessarily the most efficient (if only a specific subfield             // 243
-      // of the object is later accessed).                                       // 244
-      var newItem = seqArray[pos].item;                                          // 245
-      var oldItem = lastSeqArray[posOld[idString]].item;                         // 246
-                                                                                 // 247
-      if (typeof newItem === 'object' || newItem !== oldItem)                    // 248
-          callbacks.changedAt(id, newItem, oldItem, pos);                        // 249
-      }                                                                          // 250
-  });                                                                            // 251
-};                                                                               // 252
-                                                                                 // 253
-seqChangedToEmpty = function (lastSeqArray, callbacks) {                         // 254
-  return [];                                                                     // 255
-};                                                                               // 256
-                                                                                 // 257
-seqChangedToArray = function (lastSeqArray, array, callbacks) {                  // 258
-  var idsUsed = {};                                                              // 259
-  var seqArray = _.map(array, function (item, index) {                           // 260
-    var id;                                                                      // 261
-    if (typeof item === 'string') {                                              // 262
-      // ensure not empty, since other layers (eg DomRange) assume this as well  // 263
-      id = "-" + item;                                                           // 264
-    } else if (typeof item === 'number' ||                                       // 265
-               typeof item === 'boolean' ||                                      // 266
-               item === undefined) {                                             // 267
-      id = item;                                                                 // 268
-    } else if (typeof item === 'object') {                                       // 269
-      id = (item && item._id) || index;                                          // 270
-    } else {                                                                     // 271
-      throw new Error("{{#each}} doesn't support arrays with " +                 // 272
-                      "elements of type " + typeof item);                        // 273
-    }                                                                            // 274
-                                                                                 // 275
-    var idString = idStringify(id);                                              // 276
-    if (idsUsed[idString]) {                                                     // 277
-      if (typeof item === 'object' && '_id' in item)                             // 278
-        warn("duplicate id " + id + " in", array);                               // 279
-      id = Random.id();                                                          // 280
-    } else {                                                                     // 281
-      idsUsed[idString] = true;                                                  // 282
-    }                                                                            // 283
-                                                                                 // 284
-    return { _id: id, item: item };                                              // 285
-  });                                                                            // 286
-                                                                                 // 287
-  return seqArray;                                                               // 288
-};                                                                               // 289
-                                                                                 // 290
-seqChangedToCursor = function (lastSeqArray, cursor, callbacks) {                // 291
-  var initial = true; // are we observing initial data from cursor?              // 292
-  var seqArray = [];                                                             // 293
-                                                                                 // 294
-  var observeHandle = cursor.observe({                                           // 295
-    addedAt: function (document, atIndex, before) {                              // 296
-      if (initial) {                                                             // 297
-        // keep track of initial data so that we can diff once                   // 298
-        // we exit `observe`.                                                    // 299
-        if (before !== null)                                                     // 300
-          throw new Error("Expected initial data from observe in order");        // 301
-        seqArray.push({ _id: document._id, item: document });                    // 302
-      } else {                                                                   // 303
-        callbacks.addedAt(document._id, document, atIndex, before);              // 304
-      }                                                                          // 305
-    },                                                                           // 306
-    changedAt: function (newDocument, oldDocument, atIndex) {                    // 307
-      callbacks.changedAt(newDocument._id, newDocument, oldDocument,             // 308
-                          atIndex);                                              // 309
-    },                                                                           // 310
-    removedAt: function (oldDocument, atIndex) {                                 // 311
-      callbacks.removedAt(oldDocument._id, oldDocument, atIndex);                // 312
-    },                                                                           // 313
-    movedTo: function (document, fromIndex, toIndex, before) {                   // 314
-      callbacks.movedTo(                                                         // 315
-        document._id, document, fromIndex, toIndex, before);                     // 316
-    }                                                                            // 317
-  });                                                                            // 318
-  initial = false;                                                               // 319
-                                                                                 // 320
-  return [seqArray, observeHandle];                                              // 321
-};                                                                               // 322
-                                                                                 // 323
+      callbacks.movedTo(                                                         // 235
+        id,                                                                      // 236
+        seqArray[posNew[idStringify(id)]].item,                                  // 237
+        oldPosition,                                                             // 238
+        newPosition,                                                             // 239
+        before);                                                                 // 240
+    },                                                                           // 241
+    removed: function (id) {                                                     // 242
+      var prevPosition = posCur[idStringify(id)];                                // 243
+                                                                                 // 244
+      _.each(posCur, function (pos, id) {                                        // 245
+        if (pos >= prevPosition)                                                 // 246
+          posCur[id]--;                                                          // 247
+      });                                                                        // 248
+                                                                                 // 249
+      delete posCur[idStringify(id)];                                            // 250
+      lengthCur--;                                                               // 251
+                                                                                 // 252
+      callbacks.removedAt(                                                       // 253
+        id,                                                                      // 254
+        lastSeqArray[posOld[idStringify(id)]].item,                              // 255
+        prevPosition);                                                           // 256
+    }                                                                            // 257
+  });                                                                            // 258
+                                                                                 // 259
+  _.each(posNew, function (pos, idString) {                                      // 260
+    var id = idParse(idString);                                                  // 261
+    if (_.has(posOld, idString)) {                                               // 262
+      // specifically for primitive types, compare equality before               // 263
+      // firing the 'changedAt' callback. otherwise, always fire it              // 264
+      // because doing a deep EJSON comparison is not guaranteed to              // 265
+      // work (an array can contain arbitrary objects, and 'transform'           // 266
+      // can be used on cursors). also, deep diffing is not                      // 267
+      // necessarily the most efficient (if only a specific subfield             // 268
+      // of the object is later accessed).                                       // 269
+      var newItem = seqArray[pos].item;                                          // 270
+      var oldItem = lastSeqArray[posOld[idString]].item;                         // 271
+                                                                                 // 272
+      if (typeof newItem === 'object' || newItem !== oldItem)                    // 273
+          callbacks.changedAt(id, newItem, oldItem, pos);                        // 274
+      }                                                                          // 275
+  });                                                                            // 276
+};                                                                               // 277
+                                                                                 // 278
+seqChangedToEmpty = function (lastSeqArray, callbacks) {                         // 279
+  return [];                                                                     // 280
+};                                                                               // 281
+                                                                                 // 282
+seqChangedToArray = function (lastSeqArray, array, callbacks) {                  // 283
+  var idsUsed = {};                                                              // 284
+  var seqArray = _.map(array, function (item, index) {                           // 285
+    var id;                                                                      // 286
+    if (typeof item === 'string') {                                              // 287
+      // ensure not empty, since other layers (eg DomRange) assume this as well  // 288
+      id = "-" + item;                                                           // 289
+    } else if (typeof item === 'number' ||                                       // 290
+               typeof item === 'boolean' ||                                      // 291
+               item === undefined) {                                             // 292
+      id = item;                                                                 // 293
+    } else if (typeof item === 'object') {                                       // 294
+      id = (item && item._id) || index;                                          // 295
+    } else {                                                                     // 296
+      throw new Error("{{#each}} doesn't support arrays with " +                 // 297
+                      "elements of type " + typeof item);                        // 298
+    }                                                                            // 299
+                                                                                 // 300
+    var idString = idStringify(id);                                              // 301
+    if (idsUsed[idString]) {                                                     // 302
+      if (typeof item === 'object' && '_id' in item)                             // 303
+        warn("duplicate id " + id + " in", array);                               // 304
+      id = Random.id();                                                          // 305
+    } else {                                                                     // 306
+      idsUsed[idString] = true;                                                  // 307
+    }                                                                            // 308
+                                                                                 // 309
+    return { _id: id, item: item };                                              // 310
+  });                                                                            // 311
+                                                                                 // 312
+  return seqArray;                                                               // 313
+};                                                                               // 314
+                                                                                 // 315
+seqChangedToCursor = function (lastSeqArray, cursor, callbacks) {                // 316
+  var initial = true; // are we observing initial data from cursor?              // 317
+  var seqArray = [];                                                             // 318
+                                                                                 // 319
+  var observeHandle = cursor.observe({                                           // 320
+    addedAt: function (document, atIndex, before) {                              // 321
+      if (initial) {                                                             // 322
+        // keep track of initial data so that we can diff once                   // 323
+        // we exit `observe`.                                                    // 324
+        if (before !== null)                                                     // 325
+          throw new Error("Expected initial data from observe in order");        // 326
+        seqArray.push({ _id: document._id, item: document });                    // 327
+      } else {                                                                   // 328
+        callbacks.addedAt(document._id, document, atIndex, before);              // 329
+      }                                                                          // 330
+    },                                                                           // 331
+    changedAt: function (newDocument, oldDocument, atIndex) {                    // 332
+      callbacks.changedAt(newDocument._id, newDocument, oldDocument,             // 333
+                          atIndex);                                              // 334
+    },                                                                           // 335
+    removedAt: function (oldDocument, atIndex) {                                 // 336
+      callbacks.removedAt(oldDocument._id, oldDocument, atIndex);                // 337
+    },                                                                           // 338
+    movedTo: function (document, fromIndex, toIndex, before) {                   // 339
+      callbacks.movedTo(                                                         // 340
+        document._id, document, fromIndex, toIndex, before);                     // 341
+    }                                                                            // 342
+  });                                                                            // 343
+  initial = false;                                                               // 344
+                                                                                 // 345
+  return [seqArray, observeHandle];                                              // 346
+};                                                                               // 347
+                                                                                 // 348
 ///////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

@@ -46,6 +46,7 @@ function uploadImage(photo, selector){
 	formData.append("_id", selector._id);
 	formData.append("collection", selector.collection);
 
+
 	if(!Meteor.status().connected){
 		Meteor.call("pictureCreator", {
 			photo : photo,
@@ -57,7 +58,7 @@ function uploadImage(photo, selector){
 	Meteor.b64toBlob(photo, function success(blob) {
 		formData.append("file[]", blob);
 		$.ajax({
-			url: "/upload",
+			url: Meteor.server+"/upload",
 			type: "POST",
 			data: formData,
 			cache: false,

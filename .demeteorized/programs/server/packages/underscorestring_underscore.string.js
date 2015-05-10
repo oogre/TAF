@@ -3,6 +3,33 @@
 /* Imports */
 var Meteor = Package.meteor.Meteor;
 
+/* Package-scope variables */
+var s, module, exports;
+
+(function () {
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                          //
+// packages/underscorestring:underscore.string/meteor-pre.js                                                //
+//                                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                            //
+// Defining this will trick dist/underscore.string.js into putting its exports into module.exports          // 1
+// Credit to Tim Heckel for this trick - see https://github.com/TimHeckel/meteor-underscore-string          // 2
+module = {};                                                                                                // 3
+                                                                                                            // 4
+// This also needed, otherwise above doesn't work???                                                        // 5
+exports = {};                                                                                               // 6
+                                                                                                            // 7
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}).call(this);
+
+
+
+
+
+
 (function () {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1029,9 +1056,31 @@ module.exports = function words(str, delimiter) {                               
 }).call(this);
 
 
+
+
+
+
+(function () {
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                          //
+// packages/underscorestring:underscore.string/meteor-post.js                                               //
+//                                                                                                          //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                            //
+// s will be picked up by Meteor and exported                                                               // 1
+s = module.exports;                                                                                         // 2
+                                                                                                            // 3
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}).call(this);
+
+
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['underscorestring:underscore.string'] = {};
+Package['underscorestring:underscore.string'] = {
+  s: s
+};
 
 })();
 

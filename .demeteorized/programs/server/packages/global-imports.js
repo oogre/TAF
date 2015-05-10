@@ -4,6 +4,7 @@ Router = Package['iron:router'].Router;
 RouteController = Package['iron:router'].RouteController;
 moment = Package['momentjs:moment'].moment;
 UploadServer = Package['tomi:upload-server'].UploadServer;
+s = Package['underscorestring:underscore.string'].s;
 HTTP = Package.http.HTTP;
 HTTPInternals = Package.http.HTTPInternals;
 MeteorCamera = Package['mdg:camera'].MeteorCamera;

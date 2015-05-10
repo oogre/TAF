@@ -185,156 +185,167 @@ SyncedCron.remove = function(jobName) {                                         
   }                                                                                // 163
 }                                                                                  // 164
                                                                                    // 165
-// Stop processing and remove ALL jobs                                             // 166
-SyncedCron.stop = function() {                                                     // 167
-  _.each(this._entries, function(entry, name) {                                    // 168
-    SyncedCron.remove(name);                                                       // 169
-  });                                                                              // 170
-  this.running = false;                                                            // 171
-}                                                                                  // 172
-                                                                                   // 173
-// The meat of our logic. Checks if the specified has already run. If not,         // 174
-// records that it's running the job, runs it, and records the output              // 175
-SyncedCron._entryWrapper = function(entry) {                                       // 176
-  var self = this;                                                                 // 177
-                                                                                   // 178
-  return function(intendedAt) {                                                    // 179
-    var jobHistory = {                                                             // 180
-      intendedAt: intendedAt,                                                      // 181
-      name: entry.name,                                                            // 182
-      startedAt: new Date()                                                        // 183
-    };                                                                             // 184
-                                                                                   // 185
-    // If we have a dup key error, another instance has already tried to run       // 186
-    // this job.                                                                   // 187
-    try {                                                                          // 188
-      jobHistory._id = self._collection.insert(jobHistory);                        // 189
-    } catch(e) {                                                                   // 190
-      // http://www.mongodb.org/about/contributors/error-codes/                    // 191
-      // 11000 == duplicate key error                                              // 192
-      if (e.name === 'MongoError' && e.code === 11000) {                           // 193
-        log.info('Not running "' + entry.name + '" again.');                       // 194
-        return;                                                                    // 195
-      }                                                                            // 196
-                                                                                   // 197
-      throw e;                                                                     // 198
-    };                                                                             // 199
-                                                                                   // 200
-    // run and record the job                                                      // 201
-    try {                                                                          // 202
-      log.info('Starting "' + entry.name + '".');                                  // 203
-      var output = entry.job(intendedAt); // <- Run the actual job                 // 204
-                                                                                   // 205
-      log.info('Finished "' + entry.name + '".');                                  // 206
-      self._collection.update({_id: jobHistory._id}, {                             // 207
-        $set: {                                                                    // 208
-          finishedAt: new Date(),                                                  // 209
-          result: output                                                           // 210
-        }                                                                          // 211
-      });                                                                          // 212
-    } catch(e) {                                                                   // 213
-      log.info('Exception "' + entry.name +'" ' + e.stack);                        // 214
-      self._collection.update({_id: jobHistory._id}, {                             // 215
-        $set: {                                                                    // 216
-          finishedAt: new Date(),                                                  // 217
-          error: e.stack                                                           // 218
-        }                                                                          // 219
-      });                                                                          // 220
-    }                                                                              // 221
-  };                                                                               // 222
-}                                                                                  // 223
-                                                                                   // 224
-// for tests                                                                       // 225
-SyncedCron._reset = function() {                                                   // 226
-  this._entries = {};                                                              // 227
-  this._collection.remove({});                                                     // 228
-  this.running = false;                                                            // 229
-}                                                                                  // 230
-                                                                                   // 231
-// ---------------------------------------------------------------------------     // 232
-// The following two functions are lifted from the later.js package, however       // 233
-// I've made the following changes:                                                // 234
-// - Use Meteor.setTimeout and Meteor.clearTimeout                                 // 235
-// - Added an 'intendedAt' parameter to the callback fn that specifies the precise // 236
-//   time the callback function *should* be run (so we can co-ordinate jobs)       // 237
-//   between multiple, potentially laggy and unsynced machines                     // 238
-                                                                                   // 239
-// From: https://github.com/bunkat/later/blob/master/src/core/setinterval.js       // 240
-SyncedCron._laterSetInterval = function(fn, sched) {                               // 241
+// Pause processing, but do not remove jobs so that the start method will          // 166
+// restart existing jobs                                                           // 167
+SyncedCron.pause = function() {                                                    // 168
+  if (this.running) {                                                              // 169
+    _.each(this._entries, function(entry) {                                        // 170
+      entry._timer.clear();                                                        // 171
+    });                                                                            // 172
+    this.running = false;                                                          // 173
+  }                                                                                // 174
+}                                                                                  // 175
+                                                                                   // 176
+// Stop processing and remove ALL jobs                                             // 177
+SyncedCron.stop = function() {                                                     // 178
+  _.each(this._entries, function(entry, name) {                                    // 179
+    SyncedCron.remove(name);                                                       // 180
+  });                                                                              // 181
+  this.running = false;                                                            // 182
+}                                                                                  // 183
+                                                                                   // 184
+// The meat of our logic. Checks if the specified has already run. If not,         // 185
+// records that it's running the job, runs it, and records the output              // 186
+SyncedCron._entryWrapper = function(entry) {                                       // 187
+  var self = this;                                                                 // 188
+                                                                                   // 189
+  return function(intendedAt) {                                                    // 190
+    var jobHistory = {                                                             // 191
+      intendedAt: intendedAt,                                                      // 192
+      name: entry.name,                                                            // 193
+      startedAt: new Date()                                                        // 194
+    };                                                                             // 195
+                                                                                   // 196
+    // If we have a dup key error, another instance has already tried to run       // 197
+    // this job.                                                                   // 198
+    try {                                                                          // 199
+      jobHistory._id = self._collection.insert(jobHistory);                        // 200
+    } catch(e) {                                                                   // 201
+      // http://www.mongodb.org/about/contributors/error-codes/                    // 202
+      // 11000 == duplicate key error                                              // 203
+      if (e.name === 'MongoError' && e.code === 11000) {                           // 204
+        log.info('Not running "' + entry.name + '" again.');                       // 205
+        return;                                                                    // 206
+      }                                                                            // 207
+                                                                                   // 208
+      throw e;                                                                     // 209
+    };                                                                             // 210
+                                                                                   // 211
+    // run and record the job                                                      // 212
+    try {                                                                          // 213
+      log.info('Starting "' + entry.name + '".');                                  // 214
+      var output = entry.job(intendedAt); // <- Run the actual job                 // 215
+                                                                                   // 216
+      log.info('Finished "' + entry.name + '".');                                  // 217
+      self._collection.update({_id: jobHistory._id}, {                             // 218
+        $set: {                                                                    // 219
+          finishedAt: new Date(),                                                  // 220
+          result: output                                                           // 221
+        }                                                                          // 222
+      });                                                                          // 223
+    } catch(e) {                                                                   // 224
+      log.info('Exception "' + entry.name +'" ' + e.stack);                        // 225
+      self._collection.update({_id: jobHistory._id}, {                             // 226
+        $set: {                                                                    // 227
+          finishedAt: new Date(),                                                  // 228
+          error: e.stack                                                           // 229
+        }                                                                          // 230
+      });                                                                          // 231
+    }                                                                              // 232
+  };                                                                               // 233
+}                                                                                  // 234
+                                                                                   // 235
+// for tests                                                                       // 236
+SyncedCron._reset = function() {                                                   // 237
+  this._entries = {};                                                              // 238
+  this._collection.remove({});                                                     // 239
+  this.running = false;                                                            // 240
+}                                                                                  // 241
                                                                                    // 242
-  var t = SyncedCron._laterSetTimeout(scheduleTimeout, sched),                     // 243
-      done = false;                                                                // 244
-                                                                                   // 245
-  /**                                                                              // 246
-  * Executes the specified function and then sets the timeout for the next         // 247
-  * interval.                                                                      // 248
-  */                                                                               // 249
-  function scheduleTimeout(intendedAt) {                                           // 250
-    if(!done) {                                                                    // 251
-      fn(intendedAt);                                                              // 252
-      t = SyncedCron._laterSetTimeout(scheduleTimeout, sched);                     // 253
-    }                                                                              // 254
-  }                                                                                // 255
+// ---------------------------------------------------------------------------     // 243
+// The following two functions are lifted from the later.js package, however       // 244
+// I've made the following changes:                                                // 245
+// - Use Meteor.setTimeout and Meteor.clearTimeout                                 // 246
+// - Added an 'intendedAt' parameter to the callback fn that specifies the precise // 247
+//   time the callback function *should* be run (so we can co-ordinate jobs)       // 248
+//   between multiple, potentially laggy and unsynced machines                     // 249
+                                                                                   // 250
+// From: https://github.com/bunkat/later/blob/master/src/core/setinterval.js       // 251
+SyncedCron._laterSetInterval = function(fn, sched) {                               // 252
+                                                                                   // 253
+  var t = SyncedCron._laterSetTimeout(scheduleTimeout, sched),                     // 254
+      done = false;                                                                // 255
                                                                                    // 256
-  return {                                                                         // 257
-                                                                                   // 258
-    /**                                                                            // 259
-    * Clears the timeout.                                                          // 260
-    */                                                                             // 261
-    clear: function() {                                                            // 262
-      done = true;                                                                 // 263
-      t.clear();                                                                   // 264
+  /**                                                                              // 257
+  * Executes the specified function and then sets the timeout for the next         // 258
+  * interval.                                                                      // 259
+  */                                                                               // 260
+  function scheduleTimeout(intendedAt) {                                           // 261
+    if(!done) {                                                                    // 262
+      fn(intendedAt);                                                              // 263
+      t = SyncedCron._laterSetTimeout(scheduleTimeout, sched);                     // 264
     }                                                                              // 265
-                                                                                   // 266
-  };                                                                               // 267
-                                                                                   // 268
-};                                                                                 // 269
-                                                                                   // 270
-// From: https://github.com/bunkat/later/blob/master/src/core/settimeout.js        // 271
-SyncedCron._laterSetTimeout = function(fn, sched) {                                // 272
-                                                                                   // 273
-  var s = Later.schedule(sched), t;                                                // 274
-  scheduleTimeout();                                                               // 275
-                                                                                   // 276
-  /**                                                                              // 277
-  * Schedules the timeout to occur. If the next occurrence is greater than the     // 278
-  * max supported delay (2147483647 ms) than we delay for that amount before       // 279
-  * attempting to schedule the timeout again.                                      // 280
-  */                                                                               // 281
-  function scheduleTimeout() {                                                     // 282
-    var now = Date.now(),                                                          // 283
-        next = s.next(2, now),                                                     // 284
-        diff = next[0].getTime() - now,                                            // 285
-        intendedAt = next[0];                                                      // 286
+  }                                                                                // 266
+                                                                                   // 267
+  return {                                                                         // 268
+                                                                                   // 269
+    /**                                                                            // 270
+    * Clears the timeout.                                                          // 271
+    */                                                                             // 272
+    clear: function() {                                                            // 273
+      done = true;                                                                 // 274
+      t.clear();                                                                   // 275
+    }                                                                              // 276
+                                                                                   // 277
+  };                                                                               // 278
+                                                                                   // 279
+};                                                                                 // 280
+                                                                                   // 281
+// From: https://github.com/bunkat/later/blob/master/src/core/settimeout.js        // 282
+SyncedCron._laterSetTimeout = function(fn, sched) {                                // 283
+                                                                                   // 284
+  var s = Later.schedule(sched), t;                                                // 285
+  scheduleTimeout();                                                               // 286
                                                                                    // 287
-    // minimum time to fire is one second, use next occurrence instead             // 288
-    if(diff < 1000) {                                                              // 289
-      diff = next[1].getTime() - now;                                              // 290
-      intendedAt = next[1];                                                        // 291
-    }                                                                              // 292
-                                                                                   // 293
-    if(diff < 2147483647) {                                                        // 294
-      t = Meteor.setTimeout(function() { fn(intendedAt); }, diff);                 // 295
-    }                                                                              // 296
-    else {                                                                         // 297
-      t = Meteor.setTimeout(scheduleTimeout, 2147483647);                          // 298
-    }                                                                              // 299
-  }                                                                                // 300
-                                                                                   // 301
-  return {                                                                         // 302
-                                                                                   // 303
-    /**                                                                            // 304
-    * Clears the timeout.                                                          // 305
-    */                                                                             // 306
-    clear: function() {                                                            // 307
-      Meteor.clearTimeout(t);                                                      // 308
-    }                                                                              // 309
-                                                                                   // 310
-  };                                                                               // 311
+  /**                                                                              // 288
+  * Schedules the timeout to occur. If the next occurrence is greater than the     // 289
+  * max supported delay (2147483647 ms) than we delay for that amount before       // 290
+  * attempting to schedule the timeout again.                                      // 291
+  */                                                                               // 292
+  function scheduleTimeout() {                                                     // 293
+    var now = Date.now(),                                                          // 294
+        next = s.next(2, now),                                                     // 295
+        diff = next[0].getTime() - now,                                            // 296
+        intendedAt = next[0];                                                      // 297
+                                                                                   // 298
+    // minimum time to fire is one second, use next occurrence instead             // 299
+    if(diff < 1000) {                                                              // 300
+      diff = next[1].getTime() - now;                                              // 301
+      intendedAt = next[1];                                                        // 302
+    }                                                                              // 303
+                                                                                   // 304
+    if(diff < 2147483647) {                                                        // 305
+      t = Meteor.setTimeout(function() { fn(intendedAt); }, diff);                 // 306
+    }                                                                              // 307
+    else {                                                                         // 308
+      t = Meteor.setTimeout(scheduleTimeout, 2147483647);                          // 309
+    }                                                                              // 310
+  }                                                                                // 311
                                                                                    // 312
-};                                                                                 // 313
-// ---------------------------------------------------------------------------     // 314
-                                                                                   // 315
+  return {                                                                         // 313
+                                                                                   // 314
+    /**                                                                            // 315
+    * Clears the timeout.                                                          // 316
+    */                                                                             // 317
+    clear: function() {                                                            // 318
+      Meteor.clearTimeout(t);                                                      // 319
+    }                                                                              // 320
+                                                                                   // 321
+  };                                                                               // 322
+                                                                                   // 323
+};                                                                                 // 324
+// ---------------------------------------------------------------------------     // 325
+                                                                                   // 326
 /////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

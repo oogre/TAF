@@ -909,6 +909,11 @@ Meteor._suppress_log = function (count) {                                       
   suppress += count;                                                                                      // 61
 };                                                                                                        // 62
                                                                                                           // 63
+Meteor._supressed_log_expected = function () {                                                            // 64
+  return suppress !== 0;                                                                                  // 65
+};                                                                                                        // 66
+                                                                                                          // 67
+                                                                                                          // 68
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

@@ -1,6 +1,6 @@
 {
   "format": "site-archive-pre1",
-  "builtBy": "Meteor METEOR@1.0.5",
+  "builtBy": "Meteor METEOR@1.1.0.2",
   "programs": [
     {
       "name": "web.browser",
@@ -32,5 +32,5 @@
       "nodePath": []
     }
   ],
-  "meteorRelease": "METEOR@1.0.5"
+  "meteorRelease": "METEOR@1.1.0.2"
 }
