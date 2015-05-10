@@ -58,7 +58,7 @@ function uploadImage(photo, selector){
 	Meteor.b64toBlob(photo, function success(blob) {
 		formData.append("file[]", blob);
 		$.ajax({
-			url: Meteor.server+"/upload",
+			url: Meteor.pictureUploadServer,
 			type: "POST",
 			data: formData,
 			cache: false,

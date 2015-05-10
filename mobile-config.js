@@ -7,6 +7,7 @@
 App.info({
 	id: "be.ogre.TAF",
 	name: "TAF",
+	version: "0.0.2",
 	description: "Gestion du Travail à l'Atelier du Froid",
 	author: "Vincent Evrard",
 	email: "vincent@ogre.be",
