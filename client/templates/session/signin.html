@@ -1,21 +1,29 @@
 <template name="signin">
 	<form class="form-inline">
 		<fieldset>
-			<div class="input-group">
+			<div class="input-group {{userErr}}">
 				<label for="login-email" class="input-group-addon"><i class="fa fa-2x fa-user"></i></label>
 				<input type="email" id="login-email" class="input-lg form-control" placeholder="email">
+				{{#if userErr}}
+					<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+  					<span id="inputError2Status" class="sr-only">(error)</span>
+  				{{/if}}
 			</div>
 		</fieldset>
 		<br/>
 		<fieldset>
-			<div class="input-group">
+			<div class="input-group {{pwdErr}}">
 				<label for="login-password" class="input-group-addon"><i class="fa fa-2x fa-eye-slash"></i></label>
 				<input type="password" id="login-password" class="input-lg form-control" placeholder="mot de passe">
+				{{#if pwdErr}}
+					<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+  					<span id="inputError2Status" class="sr-only">(error)</span>
+  				{{/if}}
 			</div>
 		</fieldset>
 		<br/>
 		<fieldset>
-			<button type="submit" class="btn btn-lg btn-primary">Connection</button><a class="btn btn-link btn-lg" href="{{pathFor route='user.signup'}}" >Créer un compte</a>
+			<button type="submit" class="btn btn-lg btn-primary">Connection</button>
 		</fieldset>
 	</form>
 </template>

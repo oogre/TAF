@@ -75,7 +75,8 @@ Meteor.pdfkitConfig = {
 					doc
 					.fill(doc.param.fill.black)
 					.fontSize(8);
-					data.text.map(function(txt){
+					(data.text || [])
+					.map(function(txt){
 						if(txt.folio){
 							doc.oogre.setGet("folio", {
 								position : {
@@ -120,6 +121,10 @@ Meteor.pdfkitConfig = {
 								doc.x -= doc.param.line.padding;
 							});
 						}
+					});
+					(data.image || [])
+					.map(function(image){
+						console.log(image); //\\// TOOOOODOOOOOO
 					});
 					var line = Math.ceil((doc.y-_tmpY)/(doc.param.line.height+doc.param.line.padding));
 					if(data.border!==false){

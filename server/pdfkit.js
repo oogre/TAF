@@ -48,13 +48,13 @@ Meteor.pdfkit = function(param){
 	param = _.extend(_param, param);
 	param.dest += param.filename;
 	var fs = Npm.require("fs");
-	var PDFKit = Npm.require("pdfkit");//PDFDocument
-	var doc = new PDFKit({
+	//var PDFKit = Npm.require("pdfkit");//PDFDocument
+	var doc = new PDFDocument({
 		bufferPages: true,
 		size : param.page.size
 	});
 
-	doc.pipe(fs.createWriteStream(param.dest));
+	//doc.pipe(fs.createWriteStream(param.dest));
 
 	param.fonts.map(function(font){
 		doc.font(font.file, font.name);
@@ -96,7 +96,8 @@ Meteor.pdfkit = function(param){
 			return doc;
 		},
 		end : function(next){
-			doc.end();
+			//doc.end();
+			doc.writeSync(param.dest);
 			return _.isFunction(next) ? next(this) : this;
 		},
 		getUrl : function(){

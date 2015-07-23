@@ -31,17 +31,25 @@ Meteor.methods({
 		return myFuture.wait();
 	},
 	workToPdf : function(workId){
-
+		var currentUser = Meteor.user();
 		var work = Works.findOne(workId);
 		if(!work){
 			return false;
 		}
 		var wikis = Wikis.find({
 			_id : {
-				$in : work.wiki_id
+				$in : (work.wikis || [])
 			}
-		});
+		}).fetch();
 		
+		
+		var pictures = Picts.find({
+			_id : {
+				$in : (work.pictures || [])
+			}
+		}).fetch();
+
+
 		var shop = Shops.findOne(work.shop._id);
 		if(!shop){
 			return false;
@@ -50,7 +58,7 @@ Meteor.methods({
 			_id : {
 				$in : _.keys(work.schedular)
 			}
-		});
+		}).fetch();
 		
 
 		work.workers = work.workers.map(function(worker){
@@ -60,6 +68,7 @@ Meteor.methods({
 
 		this.unblock();
 		var pdf = new Meteor.pdfkit(Meteor.pdfkitConfig.param);
+
 		pdf = Meteor.pdfkitConfig.templates(pdf);
 		pdf
 		.template("header", process.env.PWD+"/public/images/adf-logo.png")
@@ -169,7 +178,7 @@ Meteor.methods({
 						value : "Nom technicien : "
 					},{
 						align : "center",
-						value : work.workers[0] ? s(work.workers[0].firstname + " " + work.workers[0].lastname).titleize() : " - "
+						value : s(currentUser.profile.firstname + " " + currentUser.profile.lastname).titleize()
 					}]
 				}
 			]
@@ -220,14 +229,14 @@ Meteor.methods({
 			]
 		});
 
-		work.workers.map(function(worker){
+		work.workers && work.workers.map(function(worker){
 			worker.schedular.map(function(schedule, k ){
 				pdf.template("row", {
 					content : [{
 						size :3, 
 						text : [{
 							align : "center",
-							value : k === 0 ? s(worker.firstname +" "+worker.lastname).titleize().value() : " - "
+							value : k === 0 ? s(worker.profile.firstname +" "+worker.profile.lastname).titleize().value() : " - "
 						}]
 					},{
 						size : 1, 
@@ -289,7 +298,7 @@ Meteor.methods({
 				}
 			]
 		});
-		work.moduleMatters.map(function(module){
+		work.moduleMatters && work.moduleMatters.map(function(module){
 			module.matters.map(function(matter){
 				pdf.template("row", {
 					content : [{
@@ -320,6 +329,7 @@ Meteor.methods({
 				}
 			]
 		});
+
 		wikis.map(function(wiki){
 			pdf
 			.template("row", {
@@ -329,20 +339,24 @@ Meteor.methods({
 						align : "center",
 						value : wiki.description
 					}]
-					.concat(wiki.uploads.map(function(upload){
-						return {
-							align : "center",
-							value : {
-								src : _.isString(upload) ? upload : ("/upload/"+upload.path),
-								param : {
-									fit : [100, 100]
-								}
-							}
-						};
-					}))
 				}]
 			});
 		});
+
+		pictures.map(function(picture){
+			pdf
+			.template("row", {
+				content : [{
+					align : "center",
+					image : {
+						src : _.isString(picture) ? picture : ("/upload/"+picture.data.path),
+						param : {
+							fit : [100, 100]
+						}
+					}
+				}]
+		});
+
 		pdf
 		.end(function(){
 			console.log("finish");

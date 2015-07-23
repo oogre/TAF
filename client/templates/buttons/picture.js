@@ -48,10 +48,11 @@ function uploadImage(photo, selector){
 
 
 	if(!Meteor.status().connected){
-		Meteor.call("pictureCreator", {
-			photo : photo,
-			linkTo : selector
+		Meteor.call("pictureCreator", photo, {
+			collection : formData.collection,
+			_id : formData._id,
 		});
+		
 		return ;
 	}
 	
@@ -66,9 +67,9 @@ function uploadImage(photo, selector){
 			processData: false
 		})
 		.fail(function(){
-			Meteor.call("pictureCreator", {
-				photo : photo,
-				linkTo : selector
+			Meteor.call("pictureCreator", photo, {
+				collection : formData.collection,
+				_id : formData._id,
 			});
 		});
 	}, function error(err){

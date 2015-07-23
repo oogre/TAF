@@ -2,6 +2,9 @@
 /*global _ : false */
 /*global Template : false */
 
+Template.shopindex.destroyed = function(){
+	Session.set(Meteor.CONTEXT_MENU_KEY, false);
+};
 
 Template.shopindex.helpers({
 	pager : function(){

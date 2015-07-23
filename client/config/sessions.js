@@ -30,6 +30,8 @@ Meteor.ADD_MODULE				= "addModule";
 Meteor.CALENDAR_CONF			= "currentDate";
 Meteor.SIGNATURE				= "signature";
 Meteor.MATTER					= "matter";
+Meteor.PWD_ERROR				= "pwdError";
+Meteor.USER_ERROR				= "userError";
 
 
 Session.setDefault(Meteor.PAGE_TITLE, false);
@@ -56,6 +58,8 @@ Session.setDefault(Meteor.MODULE_SELECTED, false);
 Session.setDefault(Meteor.TASK_SELECTED, {});
 Session.setDefault(Meteor.ADD_MODULE, false);
 Session.setDefault(Meteor.MATTER, false);
+Session.setDefault(Meteor.PWD_ERROR, false);
+Session.setDefault(Meteor.USER_ERROR, false);
 Session.setDefault(Meteor.SIGNATURE, {});
 Session.setDefault(Meteor.CALENDAR_CONF, {
 	defaultDate : moment().toISOString(),

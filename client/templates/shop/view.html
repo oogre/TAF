@@ -49,4 +49,27 @@
 		</div>
 	</div>
 
+	<hr/>
+	
+	<div class="row">
+		<label class="col-sm-2">Travaux</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				Travaux en cours : <br/>
+				{{#each works.unfinished}}
+					<a href="{{pathFor route='work.show' workId=_id}}" >{{rdv}} : {{type}} </a><br/>
+				{{/each}}
+				<br/>
+				Travaux à venir : <br/> 
+				{{#each works.torun}}
+					<a href="{{pathFor route='work.show' workId=_id}}" >{{rdv}} : {{type}} </a><br/>
+				{{/each}}
+				<br/>
+				Travaux cloturés : <br/> 
+				{{#each works.finished}}
+					<a href="{{pathFor route='work.show' workId=_id}}" >{{rdv}} : {{type}} </a><br/>
+				{{/each}}
+			</div>
+		</div>
+	</div>
 </template>
