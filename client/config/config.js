@@ -4,6 +4,7 @@
 Meteor.startup(function () {
 	Meteor.pictureUploadServer = "http://localhost:3000/upload";//"http://192.168.1.42:3000";//"http://taf.ogre.be";taf.ogre.be
 	Meteor.pictureServer = "http://localhost:3000/upload" ;//Meteor.server+"/upload";//"";http://tafpict.ogre.be/"
+	moment.locale('fr');
 });
 
 Meteor.QG = {
