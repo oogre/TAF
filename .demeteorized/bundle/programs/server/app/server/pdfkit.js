@@ -101,6 +101,7 @@ Meteor.pdfkit = function(param){
 			var dirpath  = param.dest.split("/");
 			dirpath.pop();
 			dirpath = dirpath.join("/");
+			console.log(dirpath);
 			try{
 				fs.mkdirSync(dirpath, "0777");
 			}catch(e){
