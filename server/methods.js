@@ -15,6 +15,7 @@
 
 Meteor.methods({
 	getServerIp : function(){
+		this.unblock();
 		var Future = Npm.require("fibers/future");
 		var myFuture = new Future();
 		var exec = Npm.require("child_process").exec;
@@ -30,7 +31,83 @@ Meteor.methods({
 		});
 		return myFuture.wait();
 	},
+
+	maintenanceToPdf : function(workId){
+		this.unblock();
+
+		var Future = Npm.require("fibers/future");
+		var myFuture = new Future();
+
+		var currentUser = Meteor.user();
+		var work = Works.findOne(workId);
+		if(!work){
+			console.log("BUG_1");
+			return false;
+		}
+		var shop = Shops.findOne(work.shop._id);
+		if(!shop){
+			console.log("BUG_2");
+			return false;
+		}
+
+		var filename = shop.brand.replace(" ", "-") + "/" + moment().format("YYYY-MM-DD") + "-maintenance-" + workId + ".pdf";
+
+		var dest = process.env.PWD + "/.uploads/pdf/";
+
+		var tasks =	_(work.modules||[]).chain()
+					.map(function(module){
+						return (module.tasks||[]).map(function(task){
+							return task.name;
+						})
+					})
+					.flatten()
+					.unique()
+					.sort()
+					.value();
+		var modules = 	_(work.modules||[]).chain()
+						.map(function(module){
+							return _([
+								module.serial||"noSerial",
+								tasks
+								.map(function(task){
+									task = _(module.tasks).chain().where({name: task}).first().value();
+									if(_.isObject(task)){
+										if(task.checked === true) return "V";
+										else if(task.checked == null || task.checked == "") return ".";
+										else return task.checked
+									}
+									else return "";
+								})
+							]).flatten();
+						})
+						.value();
+		
+		HTTP.call("GET", "http://pdftaf.ogre.be/maintenane.php",  {
+			params: {
+				filename : filename,
+				dest : dest,
+				tasks : JSON.stringify(tasks),
+				modules : JSON.stringify(modules)
+			}
+		}, function (error, result) {
+			if(error) myFuture.throw(error);
+			if(result.statusCode != 200) myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
+			try{
+				myFuture.return(result.data);
+			}catch(e){
+				myFuture.throw(new Meteor.Error("non_valid_VAT"));
+			}
+		});
+
+		
+		return myFuture.wait();
+	},
 	workToPdf : function(workId){
+		this.unblock();
+
+		var Future = Npm.require("fibers/future");
+		var myFuture = new Future();
+
 		var currentUser = Meteor.user();
 		var work = Works.findOne(workId);
 		if(!work){
@@ -66,12 +143,12 @@ Meteor.methods({
 			return worker;
 		});
 
-		this.unblock();
+		Meteor.pdfkitConfig.param.filename = shop.brand.replace(" ", "-") + "/" + moment().format("YYYY-MM-DD") + "-" + workId + ".pdf"; 
 		var pdf = new Meteor.pdfkit(Meteor.pdfkitConfig.param);
 
 		pdf = Meteor.pdfkitConfig.templates(pdf);
 		pdf
-		.template("header", process.env.PWD+"/public/images/adf-logo.png")
+		.template("header", process.env.PWD+"/programs/web.browser/app/images/adf-logo.png")
 		.template("footer", [{
 			size : 1.75,
 				text : [{
@@ -154,8 +231,16 @@ Meteor.methods({
 						align : "center",
 						value : s(shop.address.street+" "+shop.address.number+", " + shop.address.zipcode + " " + shop.address.city).titleize()
 					}]
-				}
-			]
+				},{
+					size :3, 
+					text : [{ 
+						align : "left",
+						value : "Heures déplacement : "
+					},{
+						align : "center",
+						value : moment.duration(shop.timeDist, "seconds").humanize()
+					}]
+				}]
 		})
 		.template("row", {
 			content : [{
@@ -172,17 +257,35 @@ Meteor.methods({
 		})
 		.template("row", {
 			content : [{
-					size :4, 
-					text : [{ 
-						align : "left",
-						value : "Nom technicien : "
-					},{
+					size :7, 
+					text : [{
 						align : "center",
-						value : s(currentUser.profile.firstname + " " + currentUser.profile.lastname).titleize()
-					}]
-				}
-			]
+						value : " "
+					}],
+					border : false
+				}]
 		})
+		.template("row", {
+			content : [{
+					size :7, 
+					text : [{
+						align : "center",
+						value : " "
+					}],
+					border : false
+				}]
+		})
+		.template("row", {
+			content : [{
+					size :7, 
+					text : [{
+						align : "center",
+						value : " "
+					}],
+					border : false
+				}]
+		})
+		
 		.template("newSection", {})
 		.template("row", {
 			content : [{
@@ -199,38 +302,28 @@ Meteor.methods({
 					size :3, 
 					text : [{
 						align : "center",
-						value : "Nom technicien"
+						value : "<b>Nom technicien</b>"
 					}]
 				},{
-					size :1, 
+					size :2, 
 					text : [{
 						align : "center",
-						value : "Heure arrivée"
+						value : "<b>Heure arrivée</b>"
 					}]
 				},{
-					size :1, 
+					size :2, 
 					text : [{
 						align : "center",
-						value : "Heure départ"
-					}]
-				},{
-					size :1, 
-					text : [{
-						align : "center",
-						value : "Temps déplac."
-					}]
-				},{
-					size :1, 
-					text : [{
-						align : "center",
-						value : "Heure prest."
+						value : "<b>Heure départ</b>"
 					}]
 				}
 			]
 		});
-
+		
+		var scheduleLineCpt = 0;
 		work.workers && work.workers.map(function(worker){
 			worker.schedular.map(function(schedule, k ){
+				scheduleLineCpt++;
 				pdf.template("row", {
 					content : [{
 						size :3, 
@@ -239,38 +332,55 @@ Meteor.methods({
 							value : k === 0 ? s(worker.profile.firstname +" "+worker.profile.lastname).titleize().value() : " - "
 						}]
 					},{
-						size : 1, 
+						size : 2, 
 						text : [{
 							align : "center",
-							value : moment(schedule.start).format("HH:mm")
+							value : moment(schedule.start).format("DD/MM HH:mm")
 						}]
 					},{
-						size : 1, 
+						size : 2, 
 						text : [{
 							align : "center",
-							value : moment(schedule.stop).format("HH:mm")
-						}]
-					},{
-						size : 1, 
-						text : [{
-							align : "center",
-							value : " - "
-						}]
-					},{
-						size : 1, 
-						text : [{
-							align : "center",
-							value : function(){
-								var duration =	moment.duration();
-								duration.add(moment(schedule.stop).subtract(moment(schedule.start)));
-								return s.pad(Math.floor(duration.asHours()), 2, "0")+":"+s.pad(duration.minutes(), 2, "0");					
-							}()
+							value : moment(schedule.stop).format("DD/MM HH:mm")
 						}]
 					}]
 				});
 			});
 		});
+		for( ; scheduleLineCpt < 7 ; scheduleLineCpt ++){
+			pdf.template("row", {
+				content : [{
+					size :3, 
+					text : [{
+						align : "center",
+						value : " "
+					}]
+				},{
+					size : 2, 
+					text : [{
+						align : "center",
+						value : " "
+					}]
+				},{
+					size : 2, 
+					text : [{
+						align : "center",
+						value : " "
+					}]
+				}]
+			});
+		}
 		pdf
+		.template("row", {
+			content : [{
+					size :7, 
+					text : [{
+						align : "center",
+						value : " "
+					}],
+					border : false
+				}]
+		})
 		.template("newSection", {})
 		.template("row", {
 			content : [{
@@ -286,38 +396,70 @@ Meteor.methods({
 			content : [{
 					size : 6, 
 					text : [{
+						bold : true,
 						align : "center",
-						value : "Description"
+						value : "<b>Description</b>"
 					}]
 				},{
 					size : 1, 
 					text : [{
 						align : "center",
-						value : "Quantité"
+						value : "<b>Quantité</b>"
 					}]
 				}
 			]
 		});
-		work.moduleMatters && work.moduleMatters.map(function(module){
-			module.matters.map(function(matter){
-				pdf.template("row", {
-					content : [{
-						size : 6, 
-						text : [{
-							align : "center",
-							value : s(module.serial +" - "+module.type+" - "+module.name+" : "+matter.name).titleize().value()
-						}]
-					},{
-						size : 1, 
-						text : [{
-							align : "center",
-							value : matter.quantity+" "+matter.unit
-						}]
+
+		var mattersLineCpt = 0;
+		work.matters && work.matters.map(function(matter){
+			mattersLineCpt ++;
+			pdf.template("row", {
+				content : [{
+					size : 6, 
+					text : [{
+						align : "center",
+						value : s(matter.name).titleize().value()
 					}]
-				});
+				},{
+					size : 1, 
+					text : [{
+						align : "center",
+						value : matter.quantity+" "+matter.unit
+					}]
+				}]
 			});
 		});
+		for( ; mattersLineCpt < 7 ; mattersLineCpt ++){
+			pdf.template("row", {
+				content : [{
+					size : 6, 
+					text : [{
+						align : "center",
+						value : " "
+					}]
+				},{
+					size : 1, 
+					text : [{
+						align : "center",
+						value : " "
+					}]
+				}]
+			});
+		}
+
+
 		pdf
+		.template("row", {
+			content : [{
+					size :7, 
+					text : [{
+						align : "center",
+						value : " "
+					}],
+					border : false
+				}]
+		})
+		
 		.template("newSection", {})
 		.template("row", {
 			content : [{
@@ -330,37 +472,140 @@ Meteor.methods({
 			]
 		});
 
+
+		var wikisLineCpt = 0;
 		wikis.map(function(wiki){
+			wikisLineCpt++;
+			pdf
+			.template("row", {
+				content : [{
+					size : 7, 
+					text : [{
+						align : "left",
+						value : wiki.description
+					}]
+				}]
+			});
+		});
+		for( ; wikisLineCpt < 8 ; wikisLineCpt ++){
 			pdf
 			.template("row", {
 				content : [{
 					size : 7, 
 					text : [{
 						align : "center",
-						value : wiki.description
+						value : " "
 					}]
 				}]
 			});
-		});
+		}
+/*
+		var pictPerLine = 7 ; 
+		var lines = pictures.length / pictPerLine;
 
-		pictures.map(function(picture){
+		for(var y = 0 ; y < lines ; y ++){
 			pdf
 			.template("row", {
 				content : [{
 					align : "center",
-					image : {
-						src : _.isString(picture) ? picture : ("/upload/"+picture.data.path),
-						param : {
-							fit : [100, 100]
-						}
-					}
+					size : 1, 
+					image : ( function(){
+								var images = []
+								for(var x = 0 ; x < pictPerLine ; x ++){
+									var id = x+(y*pictPerLine);
+									if(id >=pictures.length )return images;
+									var src = pictures[id]
+									images.push({
+										src : _.isString(src) ? src : (process.env.PWD + "/.uploads/"+src.data.path)
+									});
+								}
+								return images;
+
+							})()
 				}]
+			})
+		}*/
+
+		pdf
+		.template("row", {
+			content : [{
+					size :7, 
+					text : [{
+						align : "center",
+						value : " "
+					}],
+					border : false
+				}]
+		})
+		
+		.template("newSection", {})
+		.template("row", {
+			content : [{
+					size :7, 
+					text : [{
+						align : "center",
+						value : "Signature pour accord heures, matériaux, outillage"
+					}]
+				}
+			]
+		}).template("row", {
+			content : [{
+					size :3, 
+					text : [{
+						align : "left",
+						value : "Client : "
+					},{
+						align : "center",
+						value : "Nom + Signature"
+					}]
+				},{
+					size :2, 
+					text : [{
+						align : "center",
+						value : "Atelier du froid"
+					}]
+				},{
+					size :2, 
+					text : [{
+						align : "center",
+						value : "Contrôle Management"
+					}]
+				}
+			]
+		})
+		.template("row", {
+			content : [{
+				align : "center",
+				size : 3, 
+				image : [{
+					src : process.env.PWD + "/.uploads/"+work.signatures.client.path
+				}]
+			},{
+				align : "center",
+				size : 2, 
+				image : [{
+					src : process.env.PWD + "/.uploads/"+work.signatures.adf.path
+				}]
+			},{
+				align : "center",
+				size : 2, 
+				image : [{
+					src : process.env.PWD+"/web.browser/app/images/ADF-management.png"
+				}]
+			}]
 		});
 
 		pdf
-		.end(function(){
-			console.log("finish");
+		.end(function(file){
+			Works.update({
+				_id:workId
+			}, {
+				$set : {
+					summary : file
+				}
+			})
+			myFuture.return(file);
 		});
-		return false;
+		return myFuture.wait();
 	}
 });

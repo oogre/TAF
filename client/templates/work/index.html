@@ -1,10 +1,76 @@
-<template name="work-index">
+<template name="workIndex">
 	{{#if listView}}
-		<ul class="list-unstyled">
-			{{#each works}}
-				<li data-work-id="{{_id}}">{{>workItem this}}</li>
-			{{/each}}
-		</ul>
+		<table class="table" data-db-table-name="worker" >
+				<thead>
+					<tr>
+						<th data-db-row-name="work_rdv">
+							RDV
+						</th>
+						<th data-db-row-name="work_type">
+							Type
+						</th>
+						{{#if isConnected isChief}}
+						<th>
+							Actions
+						</th>
+						{{/if}}
+					</tr>
+				</thead>
+				<tbody>
+					{{#if works.unfinished}}
+						<tr>
+							<th colspan="3">Travaux en cours :</th>
+						</tr>
+					{{/if}}
+					{{#each works.unfinished}}
+						<tr>
+							<td>{{rdv}}</td>
+							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
+							{{#if isConnected isChief}}
+							<td></td>
+							{{/if}}
+						</tr>
+					{{/each}}
+					{{#if works.torun}}
+						<tr>
+							<th colspan="3">Travaux à venir :</th>
+						</tr>
+					{{/if}}
+					{{#each works.torun}}
+						<tr>
+							<td>{{rdv}}</td>
+							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
+							{{#if isConnected isChief}}
+							<td>{{>buttondestroy method="workDestructor" _id=_id}}</td>
+							{{/if}}
+						</tr>
+					{{/each}}
+					{{#if works.finished}}
+						<tr>
+							<th colspan="3">Travaux cloturés :</th>
+						</tr>
+					{{/if}}
+					{{#each works.finished}}
+						<tr>
+							<td>{{rdv}}</td>
+							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
+							{{#if isConnected isChief}}
+							<td>
+								{{#if depannage}}
+										<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-default">Fiche de travail</button>
+									{{#if summary}}
+										<a href="{{summary}}" target="_blank" class="btn btn-md btn-primary"><i class="fa fa-file-pdf-o"></i></a>
+									{{/if}}
+								{{/if}}
+								{{#if entretien}}
+									<button data-work-id="{{_id}}" class="maintenanceToPdf btn btn-md btn-default">Fiche d'entretien</button>
+								{{/if}}
+							</td>
+							{{/if}}
+						</tr>
+					{{/each}}
+				</tbody>
+			</table>
 	{{else}}
 		{{> calendar works}}
 	{{/if}}

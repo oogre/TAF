@@ -179,6 +179,7 @@ button.checkbox:not(.checked) .fa-check-square-o{
 }
 label.vertical-label{
 	max-width: 40px;
+	padding: 0;
 }
 label.vertical-label>div{
 	 -ms-transform: rotate(-90deg); /* IE 9 */

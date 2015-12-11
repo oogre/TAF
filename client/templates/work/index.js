@@ -5,16 +5,16 @@
 /*global Template : false */
 
 
-Template["work-index"].helpers({
+Template.workIndex.helpers({
 	works : function(){
-		return Works.find();
+		return Session.equals(Meteor.LIST_CALENDAR_SWITCHER, true) ? this.works : Works.find();
 	},
 	listView : function(){
-		return Session.get(Meteor.LIST_CALENDAR_SWITCHER);
+		return Session.equals(Meteor.LIST_CALENDAR_SWITCHER, true);
 	}
 });
 
-Template["work-index"].events({
+Template.workIndex.events({
 	"click .listCalSwitcher" : function(){
 		Session.set(Meteor.LIST_CALENDAR_SWITCHER, !Session.get(Meteor.LIST_CALENDAR_SWITCHER));
 		return false;

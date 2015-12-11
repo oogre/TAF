@@ -3,6 +3,35 @@
 /*global Modules : false */
 /*global Template : false */
 
+
+Template.shopview.created = function(){
+	Session.set(Meteor.LIST_CALENDAR_SWITCHER, true);
+}
+Template.shopview.rendered = function(){
+	
+}
+Template.shopview.destroyed = function(){
+	Session.set(Meteor.LIST_CALENDAR_SWITCHER, false);	
+}
+
+Template.shopview.events({
+	"click .workToPdf" : function(event){
+		var workId = $(event.target).attr("data-work-id");
+
+		Meteor.call("workToPdf", workId, function(err, file){
+			if(err)console.error(err);
+			window.open(file);
+		});
+	},
+	"click .maintenanceToPdf" : function(event){
+		var workId = $(event.target).attr("data-work-id");
+
+		Meteor.call("maintenanceToPdf", workId, function(err, file){
+			if(err)console.error(err);
+			window.open(file);
+		});
+	},
+})
 Template.shopview.helpers({
 	location : function(){
 		return this.location;
@@ -48,15 +77,14 @@ Template.shopview.helpers({
 					.fetch()
 				)
 				.map(function(work){
-					work.rdv = moment(work.rdv).format("DD/MM/YY");
+					work.rdv = moment(work.rdv).format("DD/MM/YY HH:mm");
 					return work;
 				})
 				.groupBy(function(work){
 					return work.end;
 				})
 				.value();
-				var unfinished = tmp.undefined;
-
+				var unfinished = tmp.undefined || [];
 				var torun = [];
 				unfinished = 	unfinished
 								.map(function(work){
@@ -82,7 +110,17 @@ Template.shopview.helpers({
 		return{
 			torun : torun,
 			unfinished : unfinished,
-			finished : _.chain(tmp).values().flatten().value()
+			finished : 	_
+						.chain(tmp)
+						.values()
+						.flatten()
+						.map(function(work){
+							work.depannage = work.type == "dépannage";
+							work.installation = work.type == "installation";
+							work.entretien = work.type == "maintenance";
+							return work;
+						})
+						.value()
 		};
 		
 		

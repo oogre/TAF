@@ -47,7 +47,8 @@ Meteor.pdfkit = function(param){
 	};
 	param = _.extend(_param, param);
 	param.dest += param.filename;
-	var fs = Npm.require("fs");
+
+
 	//var PDFKit = Npm.require("pdfkit");//PDFDocument
 	var doc = new PDFDocument({
 		bufferPages: true,
@@ -96,9 +97,18 @@ Meteor.pdfkit = function(param){
 			return doc;
 		},
 		end : function(next){
-			//doc.end();
+			var fs = Npm.require("fs");
+			var dirpath  = param.dest.split("/");
+			dirpath.pop();
+			dirpath = dirpath.join("/");
+			try{
+				fs.mkdirSync(dirpath, "0777");
+			}catch(e){
+				if(e.code == "EEXIST");
+			}
 			doc.writeSync(param.dest);
-			return _.isFunction(next) ? next(this) : this;
+			var url = "/upload/pdf/"+param.filename;
+			return _.isFunction(next) ? next(url) : url;
 		},
 		getUrl : function(){
 			return param.dest;

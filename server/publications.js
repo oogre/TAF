@@ -15,7 +15,7 @@
 
 Meteor.startup(function () {
 	Meteor.publish("shops", function() {
-		return Shops.find({});
+		return(Shops.find({}));
 	});
 	Meteor.publish("picts", function() {
 		return Picts.find({});

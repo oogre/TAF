@@ -5,9 +5,9 @@
 // This section sets up some basic app metadata,
 // the entire section is optional.
 App.info({
-	id: "be.ogre.TAF",
-	name: "TAF",
-	version: "0.0.2",
+	id: "be.ogre.GduTAF",
+	name: "GduTAF",
+	version: "0.0.3",
 	description: "Gestion du Travail à l'Atelier du Froid",
 	author: "Vincent Evrard",
 	email: "vincent@ogre.be",
@@ -23,8 +23,10 @@ App.icons({
 });
 
 App.launchScreens({
-	"android_hdpi_portrait": "public/splash/splash-480x800.jpg",
-	"android_xhdpi_portrait": "public/splash/splash-720x1280.jpg"
+	"android_ldpi_portrait": "public/splash/splash-320x426.png",
+	"android_mdpi_portrait": "public/splash/splash-320x470.png",
+	"android_hdpi_portrait": "public/splash/splash-480x800.png",
+	"android_xhdpi_portrait": "public/splash/splash-720x1280.png"
 });
 
 // Set PhoneGap/Cordova preferences

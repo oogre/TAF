@@ -52,6 +52,7 @@ Meteor.geocode = function(addres, next){
 	getGeocodeUrl = getGeocodeUrl
 					.replace("[ADDRES]", addres)
 					.replace("[APIKEY]", process.env.KEY_GOOGLE);
+					
 	HTTP.get(getGeocodeUrl, {
 		followRedirects : true
 	}, function (error, result) {

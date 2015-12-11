@@ -17,7 +17,6 @@ Template.signin.events({
 				if(err.reason.match("User")){
 					Session.set(Meteor.USER_ERROR, true);
 				}
-					
 				if(err.reason.match("password"))
 					Session.set(Meteor.PWD_ERROR, true);
 				

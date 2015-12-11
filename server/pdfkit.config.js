@@ -30,16 +30,16 @@ Meteor.pdfkitConfig = {
 		},
 		fonts : [{
 				name : "DejaVuSans",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSans.ttf"
+				file : process.env.PWD + "/programs/web.browser/app/fonts/dejavu/DejaVuSans.ttf"
 			},{
 				name : "DejaVuSans-Bold",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSans-Bold.ttf"
+				file : process.env.PWD + "/programs/web.browser/app/fonts/dejavu/DejaVuSans-Bold.ttf"
 			},{
 				name : "DejaVuSansMono",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSansMono.ttf"
+				file : process.env.PWD + "/programs/web.browser/app/fonts/dejavu/DejaVuSansMono.ttf"
 			},{
 				name : "DejaVuSansMono-Bold",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSansMono-Bold.ttf"
+				file : process.env.PWD + "/programs/web.browser/app/fonts/dejavu/DejaVuSansMono-Bold.ttf"
 			}]
 	},
 	templates : function(pdf){
@@ -62,7 +62,9 @@ Meteor.pdfkitConfig = {
 					(data.content||[]).map(function(content){
 						doc.x = data.x + (prev * doc.oogre.colWidth);
 						doc.y = data.y;
+						
 						pdf.template("cel", content);
+
 						prev += content.size;
 					});
 					var line = Math.ceil((doc.y-data.y)/(doc.param.line.height+doc.param.line.padding));
@@ -122,10 +124,27 @@ Meteor.pdfkitConfig = {
 							});
 						}
 					});
-					(data.image || [])
-					.map(function(image){
-						console.log(image); //\\// TOOOOODOOOOOO
-					});
+					if(data.image){
+						var _tmpX = doc.x;
+						_tmpY = doc.y;
+						(data.image || [])
+						.map(function(image){
+							if(data.size){
+								doc.image(image.src, doc.x, doc.y, {fit:[150, 100]});
+								doc.x += (_width + 5);
+							}
+							else{
+								doc.image(image.src, doc.x, doc.y, {fit:[100, 100]});
+								doc.x += 110;
+							}
+							
+							
+							doc.y = _tmpY;
+						});
+						doc.x = _tmpX;
+						doc.y += 110;
+					}
+
 					var line = Math.ceil((doc.y-_tmpY)/(doc.param.line.height+doc.param.line.padding));
 					if(data.border!==false){
 						doc
@@ -136,6 +155,11 @@ Meteor.pdfkitConfig = {
 								line * (doc.param.line.height+doc.param.line.padding))
 						.stroke();
 					}
+				})
+				.template("table", function(doc, data){
+					console.log("TABLE");
+					console.log(data);
+					
 				})
 				.template("footer", function(doc, data){
 					data = {

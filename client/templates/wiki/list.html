@@ -1,12 +1,12 @@
 <template name="wikilist">
 	<fieldset class="margin-top">
-		<div class="input-group col-sm-12">
+		<div class="input-group col-xs-12">
 			<ul class="list-unstyled wikilist">
 				{{#each wikis}}
 					<li>
 						<fieldset class="row">
-							<div class="form-group col-sm-12">
-								<div class="input-group col-sm-12">
+							<div class="form-group col-xs-12">
+								<div class="input-group col-xs-12">
 									{{#if removable}}
 										<div class="pull-right">
 											{{>buttondestroy method="wikiDestroyer" _id=_id}}

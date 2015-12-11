@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+  <meta name="msapplication-tap-highlight" content="no">
+
+  <link rel="stylesheet" type="text/css" class="__meteor-css__" href="/merged-stylesheets.css?70b009a86b79349fe3e523cdd56840ad72767d90">
+
+  <script type="text/javascript">
+    __meteor_runtime_config__ = JSON.parse(decodeURIComponent("%7B%22meteorRelease%22%3A%22METEOR%401.2.0.2%22%2C%22ROOT_URL%22%3A%22http%3A%2F%2Flocalhost%2F%22%2C%22ROOT_URL_PATH_PREFIX%22%3A%22%22%2C%22DDP_DEFAULT_CONNECTION_URL%22%3A%22http%3A%2F%2Flocalhost%22%2C%22autoupdateVersionCordova%22%3A%22465b6dbcc71620993c78fc67ff974cb3068bb9c1%22%2C%22appId%22%3A%22rz2cc0jgepnv17846df%22%7D"));
+
+    if (/Android/i.test(navigator.userAgent)) {
+      // When Android app is emulated, it cannot connect to localhost,
+      // instead it should connect to 10.0.2.2
+      // (unless we're using an http proxy; then it works!)
+      if (!__meteor_runtime_config__.httpProxyPort) {
+        __meteor_runtime_config__.ROOT_URL = (__meteor_runtime_config__.ROOT_URL || '').replace(/localhost/i, '10.0.2.2');
+        __meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL = (__meteor_runtime_config__.DDP_DEFAULT_CONNECTION_URL || '').replace(/localhost/i, '10.0.2.2');
+      }
+    }
+  </script>
+
+  <script type="text/javascript" src="/cordova.js"></script>
+  <script type="text/javascript" src="/packages/underscore.js?46eaedbdeb6e71c82af1b16f51c7da4127d6f285"></script>
+  <script type="text/javascript" src="/packages/meteor.js?9418708e9519b747d9d631d85ea85b90c0b5c70c"></script>
+  <script type="text/javascript" src="/packages/insecure.js?e7411f6cee07c76688e26c3b20767e857b42ad9f"></script>
+  <script type="text/javascript" src="/packages/tracker.js?7776276660c988c38fed448d8262b925dffb5bc3"></script>
+  <script type="text/javascript" src="/packages/deps.js?a0f1fc18309813a3aac8954f76d0c73e4c5d46f4"></script>
+  <script type="text/javascript" src="/packages/jquery.js?1015953f785c9b76503e2ecb391507dce965f357"></script>
+  <script type="text/javascript" src="/packages/base64.js?6b407c3b106cfc043cc07a07a111a2443d789bd4"></script>
+  <script type="text/javascript" src="/packages/ejson.js?5e95dd4b5971d96cb2d3287c54b14d9002f83ab7"></script>
+  <script type="text/javascript" src="/packages/check.js?cfa4250d2aae369fa666098adc27266de8e26aea"></script>
+  <script type="text/javascript" src="/packages/htmljs.js?fd1566f5a5a4b277eb93f0a636a84a07ab9a83db"></script>
+  <script type="text/javascript" src="/packages/id-map.js?c9a0833f370b91bbc3fd76d54f21d6ce1850af49"></script>
+  <script type="text/javascript" src="/packages/random.js?f390084b611992ee4c5bd9d83b86877f3797289c"></script>
+  <script type="text/javascript" src="/packages/mongo-id.js?3c6c0f6ceace5f42b7dfee0fcafe19ae1b711909"></script>
+  <script type="text/javascript" src="/packages/diff-sequence.js?f4337773c8aaf9bcaa5f5f22865660cbdd471eaa"></script>
+  <script type="text/javascript" src="/packages/observe-sequence.js?cd318009bd759e1458173f84a537c5dd315b4f86"></script>
+  <script type="text/javascript" src="/packages/reactive-var.js?975c4d5513ecf8c3a212b5aa160a9ea4447f3079"></script>
+  <script type="text/javascript" src="/packages/blaze.js?9391df93ba5076c2cfc61ee68724eb79b65f00d9"></script>
+  <script type="text/javascript" src="/packages/ui.js?6aa94fb4743be2472f799f928674607edae2afdf"></script>
+  <script type="text/javascript" src="/packages/spacebars.js?1aedcc2aa3ae9ff5d860d73516110cedd77c033e"></script>
+  <script type="text/javascript" src="/packages/templating.js?142b64439619ddabba8ad16a798ed8349de73bae"></script>
+  <script type="text/javascript" src="/packages/iron_core.js?b2f68eb0ae5bdc20eb7fd90373d995fe1908b980"></script>
+  <script type="text/javascript" src="/packages/iron_dynamic-template.js?ebc5266f87a0be7618b1f690df32f1aa90ec89d7"></script>
+  <script type="text/javascript" src="/packages/iron_layout.js?9b12927a3224ccc6cd071e832e37aa4f11b83992"></script>
+  <script type="text/javascript" src="/packages/iron_url.js?410da9bf2fb4b7ccf789a68539abfc6f1b8bd55a"></script>
+  <script type="text/javascript" src="/packages/iron_middleware-stack.js?3370bd57ef7b310cca3f5dddb11b77fafdcfc1eb"></script>
+  <script type="text/javascript" src="/packages/iron_location.js?a504b662036fee426fee61c89a00913fec9a3ef4"></script>
+  <script type="text/javascript" src="/packages/ordered-dict.js?18a4254f3dd5f8c97946dadb60e33c91efab39c1"></script>
+  <script type="text/javascript" src="/packages/geojson-utils.js?bfbab9d995bbbb19fa1b11a3cfdb9da5f5f328ba"></script>
+  <script type="text/javascript" src="/packages/minimongo.js?cdf1a26cf7719fa9471a8017c3defd5aea812727"></script>
+  <script type="text/javascript" src="/packages/retry.js?acb5f93adc31a57311c18af4ce21068297f00f37"></script>
+  <script type="text/javascript" src="/packages/ddp-common.js?407f25963eff34d975e0ca121f51d819c7c8d364"></script>
+  <script type="text/javascript" src="/packages/reload.js?234f78ebae6ce49cbb0da4705afaec398706283b"></script>
+  <script type="text/javascript" src="/packages/ddp-client.js?250b63e6c919c5383a0511ee4efbf42bb70a650f"></script>
+  <script type="text/javascript" src="/packages/ddp.js?1c935134013739ed5ece46880dea800b6319bd67"></script>
+  <script type="text/javascript" src="/packages/ddp-server.js?1057b33d71942bc01fd0167e2b2a5f49f5545d11"></script>
+  <script type="text/javascript" src="/packages/mongo.js?5dcfbae63393ea63b330ea0c46d7b41eb1b4c3ae"></script>
+  <script type="text/javascript" src="/packages/reactive-dict.js?e43655c138a9184c40228ef4dd2da3f65f1bd8bb"></script>
+  <script type="text/javascript" src="/packages/iron_controller.js?20327f0adf618028f4e33ee2fc6d6af85b26fc9f"></script>
+  <script type="text/javascript" src="/packages/iron_router.js?c564289eeaa191561eba900052037432ebfcbe4a"></script>
+  <script type="text/javascript" src="/packages/babel-compiler.js?b72b25550ee1619b0eaddf5e0c1541e8c264ccf0"></script>
+  <script type="text/javascript" src="/packages/ecmascript.js?9c79b20dd3f3a6da85828defdd8585b8436af75d"></script>
+  <script type="text/javascript" src="/packages/rate-limit.js?1cbc4d8a96b20fbcf6376e96a09189bffb571050"></script>
+  <script type="text/javascript" src="/packages/ddp-rate-limiter.js?57ec3ab3391710187844397b2105593ab2ad8e01"></script>
+  <script type="text/javascript" src="/packages/localstorage.js?c9dab65641bca0463e02de20ea9d56feacf13aba"></script>
+  <script type="text/javascript" src="/packages/callback-hook.js?f5eea425e2802257907f21606b9e996a7087dab7"></script>
+  <script type="text/javascript" src="/packages/babel-runtime.js?b0359ff15b87202234ffb6a78f85b70175b412af"></script>
+  <script type="text/javascript" src="/packages/promise.js?c18eac25a2117745aa5b372e139bae2fce4a84fe"></script>
+  <script type="text/javascript" src="/packages/ecmascript-collections.js?f40db97e12a9f8e6be41cace4209f022d24ec40e"></script>
+  <script type="text/javascript" src="/packages/accounts-base.js?37ee275552e2b0b0f518492f393eb55f395001ce"></script>
+  <script type="text/javascript" src="/packages/service-configuration.js?4940b1e4138b53dafd1a46ae719ad64bec87e957"></script>
+  <script type="text/javascript" src="/packages/session.js?9a40cf46e8dc125a3486dc33b2a965c1e9f8ff2b"></script>
+  <script type="text/javascript" src="/packages/npm-bcrypt.js?339fbff12a6703226e44b2e1f9d42612d7f2d1e1"></script>
+  <script type="text/javascript" src="/packages/sha.js?8d3df110f526e457248524a1acbdb13b6e05179c"></script>
+  <script type="text/javascript" src="/packages/srp.js?efa91019a74800ae4a7521f5dca598e4b872bc0b"></script>
+  <script type="text/javascript" src="/packages/accounts-password.js?6b77823b5615d402d0dd2cabb57afa1df3468e2f"></script>
+  <script type="text/javascript" src="/packages/less.js?8d7e8cbf4562932bef6e158fb7a76c832c71b2b7"></script>
+  <script type="text/javascript" src="/packages/accounts-ui-unstyled.js?5a28e986a6136d4d3cf72be762c1964b126ab7a2"></script>
+  <script type="text/javascript" src="/packages/accounts-ui.js?7a61fa32f38b551bb67c465c16c8eaa58a52b50a"></script>
+  <script type="text/javascript" src="/packages/momentjs_moment.js?4e38cbc4dc376eb002e586682f309a2b2d58561c"></script>
+  <script type="text/javascript" src="/packages/rzymek_fullcalendar.js?4e797658d40beed48e971aa1f97f0bbfb3848e57"></script>
+  <script type="text/javascript" src="/packages/sergeyt_typeahead.js?fc0a5a7450962254a00e8b738bf08266d1bdd7be"></script>
+  <script type="text/javascript" src="/packages/tomi_upload-server.js?b7ff4fa8455b8e62ba7365b7b360a3c4a3962704"></script>
+  <script type="text/javascript" src="/packages/tomi_upload-jquery.js?fe027e55b5280b82f2975e61cb309b614b284c84"></script>
+  <script type="text/javascript" src="/packages/underscorestring_underscore.string.js?11d8f30cc70315e8e43923f800f22a6d1c88de17"></script>
+  <script type="text/javascript" src="/packages/url.js?8c4d6df291ec5bafdb89c7be74de61e08741b10f"></script>
+  <script type="text/javascript" src="/packages/http.js?40d307fefc00445c189ac03f4ba12bc9ccf50635"></script>
+  <script type="text/javascript" src="/packages/mdg_camera.js?eb379bfe9d40263664bfb25b3d1b93762556e18f"></script>
+  <script type="text/javascript" src="/packages/percolate_synced-cron.js?e3c240b997680b518533baf8accf58193bd87c6d"></script>
+  <script type="text/javascript" src="/packages/email.js?b341feff203db3b3721a997c4449cf20fb695094"></script>
+  <script type="text/javascript" src="/packages/googlemaps.js?3988dd2648cf6ff5e8b7366844725d95fe720d78"></script>
+  <script type="text/javascript" src="/packages/mdg_geolocation.js?eb36591b0ff75b4a46cc9b85da7ce8b4ad46b42e"></script>
+  <script type="text/javascript" src="/packages/hammer.js?de48a20789420dc28b1fef4ace09921c003224a2"></script>
+  <script type="text/javascript" src="/packages/pascoual_pdfkit.js?3907b0fffa947a56566ec8d472ee89cb752125fb"></script>
+  <script type="text/javascript" src="/packages/ground_dictionary.js?9897a115a707bafb45215eca6d75fded4214d4e9"></script>
+  <script type="text/javascript" src="/packages/ground_minimax.js?47a6e685db85c98ad90b4338a0047089cd0ebb73"></script>
+  <script type="text/javascript" src="/packages/ground_util.js?90a31f4db659e944de31836f481b97eb92ae46ed"></script>
+  <script type="text/javascript" src="/packages/ground_store.js?99d7bf7543be581f3db97b2d1e9e0e1d7beb3fc1"></script>
+  <script type="text/javascript" src="/packages/raix_eventemitter.js?9dbc8f21550d5b0e800bfa809850f28136f1deb6"></script>
+  <script type="text/javascript" src="/packages/ground_localstorage.js?89b38571d614dd46fea10ebc05d0ad97d4ae3c2e"></script>
+  <script type="text/javascript" src="/packages/ground_servertime.js?ad312a453a46679d4e87effafb76b705a41d7cda"></script>
+  <script type="text/javascript" src="/packages/raix_stubfence.js?c21ef205f1a9abdb7017f81e3d264d153d4ec916"></script>
+  <script type="text/javascript" src="/packages/raix_onetimeout.js?a84de6105a0eceb91eebc747af9cac6273a58afc"></script>
+  <script type="text/javascript" src="/packages/dispatch_request-animation-frame.js?d31096e5ec268b4e5a3f6eed620365d495b3fcd7"></script>
+  <script type="text/javascript" src="/packages/dispatch_kernel.js?579950952e425341d8190d119e9f2ae046a5bdc1"></script>
+  <script type="text/javascript" src="/packages/ground_db.js?04a81d36d3ec255367d52a6cc18983233c5992d4"></script>
+  <script type="text/javascript" src="/packages/standard-minifiers.js?b02a7937678c6058031ee7b2f45b5a617518335d"></script>
+  <script type="text/javascript" src="/packages/meteor-base.js?f0836ed3757e6217fff6e2710a1293407a6d9b09"></script>
+  <script type="text/javascript" src="/packages/mobile-experience.js?674f55574f9947b91bb5f92f9ea9be098479b649"></script>
+  <script type="text/javascript" src="/packages/blaze-html-templates.js?31453f3129c01ec6fabaa5b791f6572e8c4464a2"></script>
+  <script type="text/javascript" src="/packages/logging.js?43678cf365e00025aac2fb1f4b9e65a193c27fc4"></script>
+  <script type="text/javascript" src="/packages/webapp.js?1b9f36d855fc5c8399abf2579ac1e1512060cc95"></script>
+  <script type="text/javascript" src="/packages/livedata.js?93f27626c1702ea8af804d6170ffbf8968626718"></script>
+  <script type="text/javascript" src="/packages/hot-code-push.js?3916ae26c3ca4928e61dc2da7e7b3f93e4164c0c"></script>
+  <script type="text/javascript" src="/packages/fastclick.js?3226c1cc5431061e8dd6a68a8bdeee10e867eb2b"></script>
+  <script type="text/javascript" src="/packages/mobile-status-bar.js?93ea41a7f26014b58108322969c0d57188fb9418"></script>
+  <script type="text/javascript" src="/packages/launch-screen.js?b50bb1bd905d2cc3d6182ee28c096df0cc24a725"></script>
+  <script type="text/javascript" src="/packages/autoupdate.js?7ba7397dfae956e59d6c5e331bd706f8701b196b"></script>
+  <script type="text/javascript" src="/packages/global-imports.js?a8e2438383a8b8ab725091d5dbbef06419514f97"></script>
+  <script type="text/javascript" src="/app/client/templates/buttons/template.destroy.js?11db84ff5b6eecb5cfd0e836a5e44dd8fff13742"></script>
+  <script type="text/javascript" src="/app/client/templates/buttons/template.picture.js?ac6ce1ffc4b8f43fc3f2af8f3cef2f4b49bdf8a9"></script>
+  <script type="text/javascript" src="/app/client/templates/calendar/template.calendar.js?b8b88753e253273871b33d37f9cb697800c26ffa"></script>
+  <script type="text/javascript" src="/app/client/templates/dateTimePicker/template.rdvPicker.js?45f3683964bcf9c0f5d5eed0ee6a0644a93b0a79"></script>
+  <script type="text/javascript" src="/app/client/templates/dateTimePicker/template.rdvPlanner.js?75119b5627facc92c5ca5e51ac292772493ee38b"></script>
+  <script type="text/javascript" src="/app/client/templates/layout/template.layout.js?31e5580e8552778dfc4b273faa489e280619e223"></script>
+  <script type="text/javascript" src="/app/client/templates/layout/template.loadingTemplate.js?ab04759a16fd247a7f0aa675db2cae4c5836ef74"></script>
+  <script type="text/javascript" src="/app/client/templates/map/template.position.js?7776d1cfc4d3f899362eb10d27587ffe5de8950e"></script>
+  <script type="text/javascript" src="/app/client/templates/matter/template.action.js?9b82b666f76d2b9129eed1dba1c9b026c483a9a9"></script>
+  <script type="text/javascript" src="/app/client/templates/matter/template.edit.js?1470121c9ae77707dd2fb0fe0be5f90f3461743e"></script>
+  <script type="text/javascript" src="/app/client/templates/matter/template.form.js?8003ce1df6e67869c25b8b69daaf986ae8c67bae"></script>
+  <script type="text/javascript" src="/app/client/templates/matter/template.index.js?0e06383b09075d778bff2d8f04d38dca9c227023"></script>
+  <script type="text/javascript" src="/app/client/templates/matter/template.new.js?914d89f8fa9d82d24f75005d832bd88ec09a6437"></script>
+  <script type="text/javascript" src="/app/client/templates/menu/template.context.js?6e38ec7ade14d58fca6ee8735b436ce10b03865d"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.action.js?4a3f4beda71b22a356e5ef3308b0d29b0190c28f"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.edit.js?104bc6e66710f4f5a9cbaf217b0bf185b34d9ba3"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.form.js?ff7d3be9921c3fb5827921e41025410297b3588b"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.index.js?4b11a7654062aef786578b803b1664cd5ba67fe2"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.module.js?95b54ceec45ab102443b974b74adb013061c4e09"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.new.js?1f094497e9a152972aa30b2c4c6a176f50b6531a"></script>
+  <script type="text/javascript" src="/app/client/templates/module/template.selector.js?0f7ee77d8556812d28f15f723bca4d70e075b159"></script>
+  <script type="text/javascript" src="/app/client/templates/picture/template.list.js?f407a5a1cb13bcf39eef1f8d7c3ae2d05da560a6"></script>
+  <script type="text/javascript" src="/app/client/templates/role/template.selector.js?7414de7eabe34a713e013524eb9bea1f6725312a"></script>
+  <script type="text/javascript" src="/app/client/templates/session/template.signin.js?5c504b1e5dfcc42dad2235f4f36589eba17f2006"></script>
+  <script type="text/javascript" src="/app/client/templates/session/template.signup.js?81233816588e65ba69ae7b3597755028bded9c70"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.action.js?8f4322e9703058b79ed6323096a239e44f464f62"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.contact.js?e4f3a600ea335c293b46432402ce0d8e6290c500"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.edit-action.js?df30f4105c9ba8dc15db70580ca53d2ea924f912"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.edit.js?3b14ebb210db34e2441ae409fb73e8cc46ceeaa8"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.form.js?1aabda434d4eb0db26a493ca941dfcbeff3afe2d"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.index.js?9aed6c10ac2a9738e38d1d12e159379db5d57f06"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.modules.js?c39dedd6e1eba969af630757276987823ce36a77"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.new.js?667e16b83a1a11f63e3c9195d5b0b615ff6c92f4"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.selector.js?4f28b0d1c9aa93e8eeec77279aa9d8229046ac15"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/template.view.js?f5c8b49a9352eda38701fb0d6c9c269640640768"></script>
+  <script type="text/javascript" src="/app/client/templates/task/template.action.js?8ac5b29ac696392ef1aaf0c0fcf203e06e489fbd"></script>
+  <script type="text/javascript" src="/app/client/templates/task/template.edit.js?c4929243ea92d77cdc9298ace91518e196e39c6a"></script>
+  <script type="text/javascript" src="/app/client/templates/task/template.form.js?715b763b5ba3235cfc0fceb6b323aa25ec7d9091"></script>
+  <script type="text/javascript" src="/app/client/templates/task/template.index.js?aba6b66bc55d1b66dff760846f2a856e44d40e98"></script>
+  <script type="text/javascript" src="/app/client/templates/task/template.new.js?3bdb9598058d688ec5d528cc87088e55dce81b2b"></script>
+  <script type="text/javascript" src="/app/client/templates/task/template.selector.js?9ca7727aaac20c7da86bd0c115f67f5b2bb9afed"></script>
+  <script type="text/javascript" src="/app/client/templates/wiki/template.edit.js?d2d630d5d36c4d702fdc8ed6b7c60038a21da35e"></script>
+  <script type="text/javascript" src="/app/client/templates/wiki/template.list.js?492007a03300f325aabc4650509c5b75fea70e63"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.action.js?f8ff07e807ec52856e3b3c1bc9d993b7d253b2f6"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.edit.js?7582b02e8395e4477fc4ed1340879e9051224e94"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.index.js?b64e2f6b88bb2d1c12d67d85211ef36b6042c8df"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.matter.js?7f7fa4f0d7ff7918f650879cedf69318b4aa58d2"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.new.js?e576b0f1b6f99e3df0375f258c5cd0a6c300196b"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.signature.js?8aee0f6e298e530225546fe167cfe7c61bc15a34"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.summary.js?06f5f5784d1f71d48bfb0df2dbf8294611b6694a"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.tasks.js?0f4f3bd7ac3fdac242de863d0bde1b8d35c159af"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.view-action.js?9bbe4dac4a21adb508116333ca254f6b9dfc1e7c"></script>
+  <script type="text/javascript" src="/app/client/templates/work/template.view.js?d98527a527120c0e97b4b41033918413f2adbd79"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/template.action.js?bd8af0e58cd3aa2c9eba7cadfd3e83503911a122"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/template.edit.js?eefc00fb34a76d1fc0f4cdc0b8cd4dc24d8c2106"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/template.index.js?ebc536a9db49f443b53fa51f2c478eb1ae09e6e4"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/template.new.js?6006cc867fc25054d3c095e3524f86bebf1b0e51"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/template.selector.js?65ad224ac84dc2fb981e9500d7df6c079600c89c"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/template.view.js?53f9e2a105ff4b93b9747039cd65ebe893ee302f"></script>
+  <script type="text/javascript" src="/app/client/templates/menu/template.main.js?ce34ec74727cde8399c524268f2fe1657436bffc"></script>
+  <script type="text/javascript" src="/app/client/lib/bootstrap/js/4.bootstrap.1.transition.js?b12fe5933d624e132d25d985bb644aab57081eee"></script>
+  <script type="text/javascript" src="/app/client/lib/bootstrap/js/4.bootstrap.2.collapse.js?1a306f993bdc946947c1c82fe967da5f73812a86"></script>
+  <script type="text/javascript" src="/app/client/lib/bootstrap/js/4.bootstrap.min.js?66f0d3e6525deeaa75bf1ae1ca811d7dcf820e32"></script>
+  <script type="text/javascript" src="/app/client/lib/bootstrap/js/5.bootstrap-tooltip.js?337da7a30c56863876b08452cd6e044d04a342ff"></script>
+  <script type="text/javascript" src="/app/client/lib/bootstrap/js/7.bootstrap-datetimepicker.js?574d20d2d7a175ccf48c199b33dbba35d7da4de5"></script>
+  <script type="text/javascript" src="/app/client/lib/bootstrap/js/7.bootstrap-multiselect.js?51428768851289892ceb9a1f26ebce9a700c89fc"></script>
+  <script type="text/javascript" src="/app/client/lib/fullcalendar-2.2.6/fullcalendar.min.js?87e367716dae63034f92bdde7233500fedf45d15"></script>
+  <script type="text/javascript" src="/app/client/lib/fullcalendar-2.2.6/jquery-ui.custom.min.js?8b84417d5b0dee7ed02b16c82760fbc8c26dbb19"></script>
+  <script type="text/javascript" src="/app/client/lib/fullcalendar-2.2.6/lang-all.js?b8375e87f3751eb8d5a3207fd3abe820654ab79a"></script>
+  <script type="text/javascript" src="/app/client/lib/canvas-to-blob.min.js?60bc7527702bc19d73db88a20206bf274e2778e4"></script>
+  <script type="text/javascript" src="/app/client/lib/jquery.autosize.js?a3d2fac1fe3ceae6ca42f9f4f3de824def49637d"></script>
+  <script type="text/javascript" src="/app/client/lib/jquery.autosize.min.js?d923ce3c46cc212bc7cc7136e2f12fcf96a830f4"></script>
+  <script type="text/javascript" src="/app/client/lib/signaturepad.js?645cfa356d56b333e356130fabb550feea89c744"></script>
+  <script type="text/javascript" src="/app/lib/methods/matter.js?1d1eb5725da2dbfece49595b715de2a046951c69"></script>
+  <script type="text/javascript" src="/app/lib/methods/module.js?88b54fde6793363047b3575edda02081e8970da7"></script>
+  <script type="text/javascript" src="/app/lib/methods/picture.js?07ef73778271be0e148e79554b5bd732e300aaac"></script>
+  <script type="text/javascript" src="/app/lib/methods/shops.js?21145cb5acf4fc80fd160a6fff887d8b74f32fea"></script>
+  <script type="text/javascript" src="/app/lib/methods/task.js?cbc034d42cb13a9826e9f215b38f66aa5204220d"></script>
+  <script type="text/javascript" src="/app/lib/methods/wiki.js?044bb22e062c4e69470688da9125aa93205241f8"></script>
+  <script type="text/javascript" src="/app/lib/methods/work.js?75529041d89c1c2fa5583c35ab197345b7c50d4b"></script>
+  <script type="text/javascript" src="/app/lib/methods/workers.js?6682a756c244349bd93466989b693dd3b8deb5c8"></script>
+  <script type="text/javascript" src="/app/lib/collections.js?f10f927bd9010d9574b6fc1300a2f26cf6e45fac"></script>
+  <script type="text/javascript" src="/app/lib/config.js?f62cc58b9721018b2d767b6a17d80e7a2e96eeba"></script>
+  <script type="text/javascript" src="/app/lib/rights.js?dc788774dd37ee15a168b85c19a0d332ddf952ea"></script>
+  <script type="text/javascript" src="/app/lib/router.js?5e4626c8495e310e97cd6d506d829f99545d264d"></script>
+  <script type="text/javascript" src="/app/client/templates/buttons/destroy.js?75b86028fa16d8c1438286fb65aaec6eb5835da5"></script>
+  <script type="text/javascript" src="/app/client/templates/buttons/picture.js?38153b781ece05faa72e15574aa0688e09222557"></script>
+  <script type="text/javascript" src="/app/client/templates/calendar/calendar.js?254fc74e7ad6c683c850cbc474c424361b254983"></script>
+  <script type="text/javascript" src="/app/client/templates/dateTimePicker/rdvPicker.js?f6defd7d08ec17cc396f6e78790917851c3dcc6a"></script>
+  <script type="text/javascript" src="/app/client/templates/dateTimePicker/rdvPlanner.js?0d2e2faf12615016ffb89961079c4b4b6a73b8ba"></script>
+  <script type="text/javascript" src="/app/client/templates/layout/layout.js?75fa80e1e648adfc644b96800fe63db4521dc9c4"></script>
+  <script type="text/javascript" src="/app/client/templates/layout/loadingTemplate.js?0b42a21584414c69eb37be072ac9338f5708f175"></script>
+  <script type="text/javascript" src="/app/client/templates/map/position.js?fc80840000bbe7f01ff3a1fc19e927783444dd4a"></script>
+  <script type="text/javascript" src="/app/client/templates/matter/form.js?2ee0e25c57b3351b052547bfc4388fb8b5f12894"></script>
+  <script type="text/javascript" src="/app/client/templates/menu/context.js?a832c13754e6bdffb0544aa92bd8aab24a4d7cc9"></script>
+  <script type="text/javascript" src="/app/client/templates/module/form.js?7960446f6b2ea383dd8dfcf910b6322d54a0b66c"></script>
+  <script type="text/javascript" src="/app/client/templates/module/index.js?0d3068c38b40ca2abc7dcefaea4e3226acbc8227"></script>
+  <script type="text/javascript" src="/app/client/templates/module/module.js?bf345c22fdc8a41f421f935bdfd9201c57b6de68"></script>
+  <script type="text/javascript" src="/app/client/templates/module/selector.js?a552b157fc083612f393272c4d044834e6b5c992"></script>
+  <script type="text/javascript" src="/app/client/templates/role/selector.js?43b88d411b9e0b69dce02bf66c09cc6925badc8b"></script>
+  <script type="text/javascript" src="/app/client/templates/session/signin.js?27380be56d42834c01baa42b1bfb883699d9d719"></script>
+  <script type="text/javascript" src="/app/client/templates/session/signup.js?ba2d85e88cb79430fff98c67612cdc91f011d071"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/action.js?42d7beff53c64eb5c134728ee5cc55b7744b2142"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/form.js?5587f493516fa017ef184368ca7338b63ea84dd8"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/index.js?920188037b29ceb863cf445332eade6524a5aa16"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/modules.js?029795b241881c9f8842a190635e35a27c1042f9"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/selector.js?4e9aa0e8a5bcb18e843c158d220e7a8a8b2f5852"></script>
+  <script type="text/javascript" src="/app/client/templates/shop/view.js?e45b79f826189ec1d1f30157ea7d4064450bac2a"></script>
+  <script type="text/javascript" src="/app/client/templates/task/form.js?5512cf25eb48282fe2a4f6eb78eec4e0e1a22a96"></script>
+  <script type="text/javascript" src="/app/client/templates/task/selector.js?46afb7f048681c5ae15c12fafa9af3b19518775e"></script>
+  <script type="text/javascript" src="/app/client/templates/wiki/edit.js?67726c7e20f9baa2a089fe3da409c39edf19b2e3"></script>
+  <script type="text/javascript" src="/app/client/templates/wiki/list.js?14a5fc5c8e574d527cef29487e40d7e4041e0729"></script>
+  <script type="text/javascript" src="/app/client/templates/work/edit.js?4fd392555d594b9704ee1319e2c4b58c8d507205"></script>
+  <script type="text/javascript" src="/app/client/templates/work/index.js?46520184b47362c7b52f9d54a74d0918668c4dbd"></script>
+  <script type="text/javascript" src="/app/client/templates/work/matter.js?8d8a7165ae0d0ca68b080a6df41692401281e1fe"></script>
+  <script type="text/javascript" src="/app/client/templates/work/new.js?7fd835ca7bbf2ca80da6dfb8e1cdea74058a8ac2"></script>
+  <script type="text/javascript" src="/app/client/templates/work/signature.js?7177ef731b93f6cf503dc45d67e2540228ab9f93"></script>
+  <script type="text/javascript" src="/app/client/templates/work/summary.js?2855070faac764c848dc72892efec375cf358a02"></script>
+  <script type="text/javascript" src="/app/client/templates/work/tasks.js?0f92ef146815ddb21c0326f75ccfe3d05e39fc5d"></script>
+  <script type="text/javascript" src="/app/client/templates/work/view-action.js?a4d7c57d26670402a503b12a5b4d1ab0579b22e8"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/action.js?0a49ad33c5cd372cad2feb423a48b019932609f1"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/edit.js?443e796ab5eabec06c4a5fa8caac5906f27d5fa4"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/index.js?6297f13eeaf0508c5d6fbb789262596951e7cec9"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/new.js?86b2e29c3a70eeea8be1b389b2dca920c61fd10c"></script>
+  <script type="text/javascript" src="/app/client/templates/worker/selector.js?fb9870619d5684229f134b343dd57567eea3046a"></script>
+  <script type="text/javascript" src="/app/client/config/accounts-config.js?4f9b6feb891b15482d35de94c545e4a98476110c"></script>
+  <script type="text/javascript" src="/app/client/config/config.js?0cdbc5095a6d747687a86cd0fb8af9263bf18cf9"></script>
+  <script type="text/javascript" src="/app/client/config/sessions.js?c35d926f7e783671289aec454a150adca741ab08"></script>
+  <script type="text/javascript" src="/app/client/functions.js?b91162a6dd89a67c62cf4db1824d77eaca48d596"></script>
+  <script type="text/javascript" src="/app/client/subscription.js?8eaed9838db0a3a9a351673ae3fde70fbc97f49a"></script>
+  <script type="text/javascript" src="/app/client/templates/menu/main.js?02a4c7c848f66743282ac5433724637c9fbef1af"></script>
+
+
+  <meta charset="utf-8">
+  <title>TAF - Travail à l'Atelier du Froid</title>
+  <meta name="description" content="TAF is open source and powered by Meteor.">
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+  <link rel="shortcut icon" href="/icons/icons-36x36.png" />
+</head>
+
+<body>
+  
+</body>
+</html>

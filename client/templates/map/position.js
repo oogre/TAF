@@ -73,7 +73,8 @@ Template.position.destroyed = function(){
 };
 
 Template.position.rendered = function(){
-	center = this.data;
+	var shop = this.data;
+	center = shop.location;
 	zoom = 15;
 	if(_.isObject(center)){
 		GoogleMaps.init(
@@ -124,6 +125,14 @@ Template.position.rendered = function(){
 			$(window).resize(function() {
 				resize(Session.get(Meteor.MAP_LARGE), Session.get(Meteor.MAP_FOLLOW_CENTER));
 			});
+
+			console.log(shop.location);
+			if(!shop.timeDist){
+				Meteor.routing(Meteor.QG.location, shop.location, function(error, route){
+					if(error) return console.log(error);
+					Meteor.call("shopUpdateTimeDist", shop._id, route.routes[0].legs[0].duration.value);
+				});	
+			}
 		});
 	}
 };
