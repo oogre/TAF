@@ -101,14 +101,11 @@ Meteor.pdfkit = function(param){
 			var dirpath  = param.dest.split("/");
 			dirpath.pop();
 			dirpath = dirpath.join("/");
-			console.log(dirpath);
+			console.log(fs);
 			try{
 				fs.mkdirSync(dirpath, "0777");
 			}catch(e){
-				if(e.code == "EEXIST"){
-				
-				};
-				console.error(e.code);
+				if(e.code == "EEXIST");
 			}
 			doc.writeSync(param.dest);
 			var url = "/upload/pdf/"+param.filename;
