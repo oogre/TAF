@@ -590,7 +590,7 @@ Meteor.methods({
 				align : "center",
 				size : 2, 
 				image : [{
-					src : process.env.PWD+"/web.browser/app/images/ADF-management.png"
+					src : process.env.PWD+"/programs/web.browser/app/images/ADF-management.png"
 				}]
 			}]
 		});
