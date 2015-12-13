@@ -105,7 +105,7 @@ Meteor.pdfkit = function(param){
 			var checkDir = fs.statSync(process.env.PWD);
 			console.log(dirpath);
 			try{
-				fs.mkdirSync(dirpath, checkDir.mode);
+				fs.mkdirSync(dirpath, checkDir.mode, true);
 			}catch(e){
 				if(e.code == "EEXIST");
 			}
