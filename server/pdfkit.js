@@ -46,8 +46,6 @@ Meteor.pdfkit = function(param){
 			}]
 	};
 	param = _.extend(_param, param);
-	param.dest += param.filename;
-
 
 	//var PDFKit = Npm.require("pdfkit");//PDFDocument
 	var doc = new PDFDocument({
@@ -82,8 +80,12 @@ Meteor.pdfkit = function(param){
 		footer : false
 	};
 
-
-
+	String.prototype.sub = function(a) {
+		if (this.startsWith(a)) {
+			return this.substring(a.length);
+		}
+		return "";
+	}
 	/*
 		var maxDocY = doc.page.height - doc.page.margins.bottom;
 		var _dataTitle = false;
@@ -103,7 +105,11 @@ Meteor.pdfkit = function(param){
 			dirpath = dirpath.join("/");
 			
 			var checkDir = fs.statSync(process.env.PWD);
-			console.log(dirpath);
+			
+			console.log(dirpath.sub(process.env.PWD))
+
+
+
 			try{
 				fs.mkdirSync(dirpath, checkDir.mode, true);
 			}catch(e){
