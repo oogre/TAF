@@ -80,12 +80,6 @@ Meteor.pdfkit = function(param){
 		footer : false
 	};
 
-	String.prototype.sub = function(a) {
-		if (this.startsWith(a)) {
-			return this.substring(a.length);
-		}
-		return "";
-	}
 	/*
 		var maxDocY = doc.page.height - doc.page.margins.bottom;
 		var _dataTitle = false;
@@ -102,19 +96,25 @@ Meteor.pdfkit = function(param){
 			var fs = Npm.require("fs");
 			var dirpath  = param.dest.split("/");
 			dirpath.pop();
-			dirpath = dirpath.join("/");
-			
+			//dirpath = dirpath.join("/");
+			var path = "";
 			var checkDir = fs.statSync(process.env.PWD);
 			
-			console.log(dirpath.sub(process.env.PWD))
+			dirpath.map(function(elem){
+				path += "/"+elem; 
+				if (!fs.existsSync(path)) {
+					try{
+						console.log(path);
+						fs.mkdirSync(path, checkDir.mode, true);
+					}catch(e){
+						console.log("ERROR");
+						if(e.code == "EEXIST");
+					}
+				}
+			});
 
 
-
-			try{
-				fs.mkdirSync(dirpath, checkDir.mode, true);
-			}catch(e){
-				if(e.code == "EEXIST");
-			}
+			
 			doc.writeSync(param.dest);
 			var url = "/upload/pdf/"+param.filename;
 			return _.isFunction(next) ? next(url) : url;
