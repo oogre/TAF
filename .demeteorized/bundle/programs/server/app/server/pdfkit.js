@@ -97,13 +97,13 @@ Meteor.pdfkit = function(param){
 			return doc;
 		},
 		end : function(next){
-			var fs = require("fs");
+			var fs = Npm.require("fs");
 			var dirpath  = param.dest.split("/");
 			dirpath.pop();
 			dirpath = dirpath.join("/");
 			
 			var checkDir = fs.statSync(dirpath+"/../../");
-			console.log(dirpath);
+			console.log(dirpath)
 			try{
 				fs.mkdirSync(dirpath, checkDir.mode);
 			}catch(e){
