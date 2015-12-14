@@ -102,7 +102,6 @@ Meteor.pdfkit = function(param){
 			var checkDir = fs.statSync(process.env.PWD);
 			
 			dirpath.map(function(elem){
-				console.log(elem);
 				path += "/"+elem; 
 				if (!fs.existsSync(path)) {
 					try{
@@ -115,9 +114,6 @@ Meteor.pdfkit = function(param){
 				}
 			});
 
-			
-			console.log(path);
-			
 			doc.writeSync(param.dest);
 			var url = "/upload/pdf/"+param.filename;
 			return _.isFunction(next) ? next(url) : url;
