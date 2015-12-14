@@ -94,7 +94,10 @@ Meteor.pdfkit = function(param){
 		},
 		end : function(next){
 			var fs = Npm.require("fs");
+			param.dest += "/"+ param.filename;
+			param.dest = param.dest.replace("//", "/");
 			var dirpath  = param.dest.split("/");
+			dirpath.pop();
 			var path = "";
 			var checkDir = fs.statSync(process.env.PWD);
 			
@@ -112,8 +115,7 @@ Meteor.pdfkit = function(param){
 				}
 			});
 
-			path += "/"+ param.filename;
-
+			
 			console.log(path);
 			
 			doc.writeSync(param.dest);
