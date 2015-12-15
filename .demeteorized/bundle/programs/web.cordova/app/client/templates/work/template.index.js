@@ -104,19 +104,7 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
               return Spacebars.mustache(view.lookup("_id"));
             },
             "class": "workToPdf btn btn-md btn-default"
-          }, "Fiche de travail"), "\n									", Blaze.If(function() {
-            return Spacebars.call(view.lookup("summary"));
-          }, function() {
-            return [ "\n										", HTML.A({
-              href: function() {
-                return Spacebars.mustache(view.lookup("summary"));
-              },
-              target: "_blank",
-              "class": "btn btn-md btn-primary"
-            }, HTML.I({
-              "class": "fa fa-file-pdf-o"
-            })), "\n									" ];
-          }), "\n								" ];
+          }, "Fiche de travail"), "\n								" ];
         }), "\n								", Blaze.If(function() {
           return Spacebars.call(view.lookup("entretien"));
         }, function() {
@@ -126,6 +114,18 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
             },
             "class": "maintenanceToPdf btn btn-md btn-default"
           }, "Fiche d'entretien"), "\n								" ];
+        }), "\n								", Blaze.If(function() {
+          return Spacebars.call(view.lookup("summary"));
+        }, function() {
+          return [ "\n									", HTML.A({
+            href: function() {
+              return Spacebars.mustache(view.lookup("summary"));
+            },
+            target: "_blank",
+            "class": "btn btn-md btn-primary"
+          }, HTML.I({
+            "class": "fa fa-file-pdf-o"
+          })), "\n								" ];
         }), "\n							"), "\n							" ];
       }), "\n						"), "\n					" ];
     }), "\n				"), "\n			"), "\n	" ];

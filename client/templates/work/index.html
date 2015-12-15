@@ -58,12 +58,12 @@
 							<td>
 								{{#if depannage}}
 										<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-default">Fiche de travail</button>
-									{{#if summary}}
-										<a href="{{summary}}" target="_blank" class="btn btn-md btn-primary"><i class="fa fa-file-pdf-o"></i></a>
-									{{/if}}
 								{{/if}}
 								{{#if entretien}}
 									<button data-work-id="{{_id}}" class="maintenanceToPdf btn btn-md btn-default">Fiche d'entretien</button>
+								{{/if}}
+								{{#if summary}}
+									<a href="{{summary}}" target="_blank" class="btn btn-md btn-primary"><i class="fa fa-file-pdf-o"></i></a>
 								{{/if}}
 							</td>
 							{{/if}}
