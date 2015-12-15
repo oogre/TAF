@@ -138,6 +138,7 @@ $pdf->StopTransform();
 //Close and output PDF document
 $pdf->Output($_GET["dest"].$_GET["filename"], 'F');
 
+echo $_GET["dest"].$_GET["filename"];
 
 header('Cache-Control: no-cache, must-revalidate');
 header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
