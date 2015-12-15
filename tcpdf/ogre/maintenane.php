@@ -102,9 +102,11 @@ $tasks = json_decode($_GET["tasks"]);
 
 
 // add a page
-$pdf->AddPage();
 $pdf->setSourceFile($_GET["dest"].$_GET["filename"]);
-$pdf->lastPage();
+$tplIdx = $pdf->importPage(1);
+
+$pdf->addPage();
+$pdf->useTemplate($tplIdx, 10, 10, 90);
 
 
 // Start Transformation
