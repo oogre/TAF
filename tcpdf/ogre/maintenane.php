@@ -98,8 +98,13 @@ $modules = json_decode($_GET["modules"]);
 $tasks = json_decode($_GET["tasks"]);
 
 
+
+
 // add a page
 $pdf->AddPage();
+$pdf->importPDF($_GET["dest"].$_GET["filename"]);
+$pdf->AddPage();
+$pdf->lastPage();
 
 
 // Start Transformation
