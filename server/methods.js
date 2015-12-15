@@ -97,7 +97,7 @@ Meteor.methods({
 					_id:workId
 				}, {
 					$set : {
-						summary : result.data
+						maintenance : result.data
 					}
 				});
 				myFuture.return(result.data);

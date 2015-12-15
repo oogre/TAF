@@ -1577,11 +1577,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/work/template.index.js?4700a77cc67b00286f39a541bceb96a295fb9a25",
+      "url": "/app/client/templates/work/template.index.js?3d3b9c88141627f76348d560499b2c4e0422250a",
       "sourceMap": "app/client/templates/work/template.index.js.map",
-      "sourceMapUrl": "/app/client/templates/work/4700a77cc67b00286f39a541bceb96a295fb9a25.map",
-      "size": 6752,
-      "hash": "4700a77cc67b00286f39a541bceb96a295fb9a25"
+      "sourceMapUrl": "/app/client/templates/work/3d3b9c88141627f76348d560499b2c4e0422250a.map",
+      "size": 7150,
+      "hash": "3d3b9c88141627f76348d560499b2c4e0422250a"
     },
     {
       "path": "app/client/templates/work/template.matter.js",

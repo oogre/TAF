@@ -29,7 +29,7 @@ require_once('tcpdf_include.php');
 require_once('fpdi/fpdi.php');
 
 // Extend the TCPDF class to create custom Header and Footer
-class MYPDF extends FPDI {
+class MYPDF extends TCPDF {
 
 	//Page header
 	public function Header() {
@@ -102,11 +102,11 @@ $tasks = json_decode($_GET["tasks"]);
 
 
 // add a page
-$pdf->setSourceFile($_GET["dest"].$_GET["filename"]);
-$tplIdx = $pdf->importPage(1);
+//$pdf->setSourceFile($_GET["dest"].$_GET["filename"]);
+//$tplIdx = $pdf->importPage(1);
 $pdf->addPage();
-$pdf->useTemplate($tplIdx);
-$pdf->addPage();
+//$pdf->useTemplate($tplIdx);
+//$pdf->addPage();
 
 
 // Start Transformation

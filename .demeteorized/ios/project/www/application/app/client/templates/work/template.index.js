@@ -96,25 +96,12 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
       })), HTML.BR()), "\n							", Blaze.If(function() {
         return Spacebars.dataMustache(view.lookup("isConnected"), view.lookup("isChief"));
       }, function() {
-        return [ "\n							", HTML.TD("\n								", Blaze.If(function() {
-          return Spacebars.call(view.lookup("depannage"));
-        }, function() {
-          return [ "\n										", HTML.BUTTON({
-            "data-work-id": function() {
-              return Spacebars.mustache(view.lookup("_id"));
-            },
-            "class": "workToPdf btn btn-md btn-default"
-          }, "Fiche de travail"), "\n								" ];
-        }), "\n								", Blaze.If(function() {
-          return Spacebars.call(view.lookup("entretien"));
-        }, function() {
-          return [ "\n									", HTML.BUTTON({
-            "data-work-id": function() {
-              return Spacebars.mustache(view.lookup("_id"));
-            },
-            "class": "maintenanceToPdf btn btn-md btn-default"
-          }, "Fiche d'entretien"), "\n								" ];
-        }), "\n								", Blaze.If(function() {
+        return [ "\n							", HTML.TD("\n								", HTML.BUTTON({
+          "data-work-id": function() {
+            return Spacebars.mustache(view.lookup("_id"));
+          },
+          "class": "workToPdf btn btn-md btn-default"
+        }, "\n									Fiche de travail\n								"), "\n								", Blaze.If(function() {
           return Spacebars.call(view.lookup("summary"));
         }, function() {
           return [ "\n									", HTML.A({
@@ -123,10 +110,31 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
             },
             target: "_blank",
             "class": "btn btn-md btn-primary"
-          }, HTML.I({
+          }, "\n										", HTML.I({
             "class": "fa fa-file-pdf-o"
-          })), "\n								" ];
-        }), "\n							"), "\n							" ];
+          }), "\n									"), "\n								" ];
+        }), "\n								", Blaze.If(function() {
+          return Spacebars.call(view.lookup("entretien"));
+        }, function() {
+          return [ "\n									", HTML.BUTTON({
+            "data-work-id": function() {
+              return Spacebars.mustache(view.lookup("_id"));
+            },
+            "class": "maintenanceToPdf btn btn-md btn-default"
+          }, "\n										Fiche d'entretien\n									"), "\n								" ];
+        }), "\n								", Blaze.If(function() {
+          return Spacebars.call(view.lookup("maintenance"));
+        }, function() {
+          return [ "\n									", HTML.A({
+            href: function() {
+              return Spacebars.mustache(view.lookup("maintenance"));
+            },
+            target: "_blank",
+            "class": "btn btn-md btn-danger	"
+          }, "\n										", HTML.I({
+            "class": "fa fa-file-pdf-o"
+          }), "\n									"), "\n								" ];
+        }), "\n								\n							"), "\n							" ];
       }), "\n						"), "\n					" ];
     }), "\n				"), "\n			"), "\n	" ];
   }, function() {
