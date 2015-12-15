@@ -51,7 +51,7 @@ Meteor.methods({
 		}
 
 		var filename = shop.brand.replace(" ", "-") + "/" + moment().format("YYYY-MM-DD") + "-maintenance-" + workId + ".pdf";
-
+					
 		var dest = process.env.PWD + "/.uploads/pdf/";
 
 		var tasks =	_(work.modules||[]).chain()
@@ -93,6 +93,13 @@ Meteor.methods({
 			if(error) myFuture.throw(error);
 			if(result.statusCode != 200) myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
 			try{
+				Works.update({
+					_id:workId
+				}, {
+					$set : {
+						summary : file
+					}
+				});
 				myFuture.return(result.data);
 			}catch(e){
 				myFuture.throw(new Meteor.Error("non_valid_VAT"));

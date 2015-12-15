@@ -136,8 +136,6 @@ $pdf->StartTransform();
 $pdf->StopTransform();
 
 
-error_log($_GET["dest"].$_GET["filename"]);
-
 //Close and output PDF document
 $pdf->Output($_GET["dest"].$_GET["filename"], 'F');
 
