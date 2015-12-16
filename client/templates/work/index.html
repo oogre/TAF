@@ -56,25 +56,14 @@
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
 							{{#if isConnected isChief}}
 							<td>
-								<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-default">
-									Fiche de travail
+								<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-primary">
+									<i class="fa fa-file-pdf-o"></i>
 								</button>
-								{{#if summary}}
-									<a href="{{summary}}" target="_blank" class="btn btn-md btn-primary">
-										<i class="fa fa-file-pdf-o"></i>
-									</a>
-								{{/if}}
 								{{#if entretien}}
-									<button data-work-id="{{_id}}" class="maintenanceToPdf btn btn-md btn-default">
-										Fiche d'entretien
+									<button data-work-id="{{_id}}" class="maintenanceToPdf btn btn-md btn-danger">
+										<i class="fa fa-file-pdf-o"></i>
 									</button>
 								{{/if}}
-								{{#if maintenance}}
-									<a href="{{maintenance}}" target="_blank" class="btn btn-md btn-danger	">
-										<i class="fa fa-file-pdf-o"></i>
-									</a>
-								{{/if}}
-								
 							</td>
 							{{/if}}
 						</tr>

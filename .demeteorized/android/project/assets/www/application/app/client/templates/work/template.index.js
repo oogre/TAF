@@ -100,41 +100,21 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
           "data-work-id": function() {
             return Spacebars.mustache(view.lookup("_id"));
           },
-          "class": "workToPdf btn btn-md btn-default"
-        }, "\n									Fiche de travail\n								"), "\n								", Blaze.If(function() {
-          return Spacebars.call(view.lookup("summary"));
-        }, function() {
-          return [ "\n									", HTML.A({
-            href: function() {
-              return Spacebars.mustache(view.lookup("summary"));
-            },
-            target: "_blank",
-            "class": "btn btn-md btn-primary"
-          }, "\n										", HTML.I({
-            "class": "fa fa-file-pdf-o"
-          }), "\n									"), "\n								" ];
-        }), "\n								", Blaze.If(function() {
+          "class": "workToPdf btn btn-md btn-primary"
+        }, "\n									", HTML.I({
+          "class": "fa fa-file-pdf-o"
+        }), "\n								"), "\n								", Blaze.If(function() {
           return Spacebars.call(view.lookup("entretien"));
         }, function() {
           return [ "\n									", HTML.BUTTON({
             "data-work-id": function() {
               return Spacebars.mustache(view.lookup("_id"));
             },
-            "class": "maintenanceToPdf btn btn-md btn-default"
-          }, "\n										Fiche d'entretien\n									"), "\n								" ];
-        }), "\n								", Blaze.If(function() {
-          return Spacebars.call(view.lookup("maintenance"));
-        }, function() {
-          return [ "\n									", HTML.A({
-            href: function() {
-              return Spacebars.mustache(view.lookup("maintenance"));
-            },
-            target: "_blank",
-            "class": "btn btn-md btn-danger	"
+            "class": "maintenanceToPdf btn btn-md btn-danger"
           }, "\n										", HTML.I({
             "class": "fa fa-file-pdf-o"
           }), "\n									"), "\n								" ];
-        }), "\n								\n							"), "\n							" ];
+        }), "\n							"), "\n							" ];
       }), "\n						"), "\n					" ];
     }), "\n				"), "\n			"), "\n	" ];
   }, function() {
