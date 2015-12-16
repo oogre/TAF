@@ -196,12 +196,95 @@ Router.configure({
 		controller : "ApplicationController",
 		name: "shop.view",
 		data : function(){
-			return Shops.findOne(this.params.shopId);
+			var date = this.params.query.date || moment();
+			var start = moment(date).subtract(1, "month").toISOString();
+			var stop = moment(date).add(1, "month").toISOString();
+			where = {
+				"shop._id" : this.params.shopId, 
+				$or : [{
+					rdv : {
+						$gte: start,
+						$lte: stop
+					}
+				},{
+					end : {
+						$exists: false
+					}
+				},{
+					end : ""
+				},{
+					end : {
+						$gte: start,
+						$lte: stop
+					}
+				}]
+			};
+			var tmp = 	_
+						.chain(
+							Works
+							.find(where, {
+								sort : {
+									rdv : -1
+								}
+							})
+							.fetch()
+						)
+						.map(function(work){
+							work.rdv = moment(work.rdv).format("DD/MM/YY HH:mm");
+							return work;
+						})
+						.groupBy(function(work){
+							return work.end;
+						})
+						.value();
+			var unfinished = tmp.undefined || [];
+			var torun = [];
+			unfinished = 	unfinished
+							.map(function(work){
+								
+								if( _
+									.chain(work.schedular)
+									.keys()
+									.map(function(worker){
+										return  work.schedular[worker].length > 0;
+									})
+									.some()
+									.value()
+								){
+									return work;
+								}else{
+									torun.push(work);
+									return false;
+								}
+							});
+			unfinished = _.compact(unfinished)
+
+			delete tmp.undefined;		
+			return{
+				works : {
+					count : Works.find(where).count(),
+					date : date,
+					torun : torun.reverse(),
+					unfinished : unfinished,
+					finished : 	_
+								.chain(tmp)
+								.values()
+								.flatten()
+								.map(function(work){
+									work.depannage = work.type == "dépannage";
+									work.installation = work.type == "installation";
+									work.entretien = work.type == "maintenance";
+									return work;
+								})
+								.value()
+				},
+				shop : Shops.findOne(this.params.shopId)
+			};
 		},
 		action : function () {
 			var data = this.data();
 			if(data){
-				Session.set(Meteor.PAGE_TITLE, s.capitalize(data.name)+" - "+s.capitalize(data.brand));	
+				Session.set(Meteor.PAGE_TITLE, s.capitalize(data.shop.name)+" - "+s.capitalize(data.shop.brand));	
 			}
 			this.render("shopview");
 		}

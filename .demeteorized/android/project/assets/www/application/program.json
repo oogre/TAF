@@ -1456,11 +1456,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/shop/template.view.js?f5c8b49a9352eda38701fb0d6c9c269640640768",
+      "url": "/app/client/templates/shop/template.view.js?0db9e9fbc0876c4d3ed14e7e5973dc677dc1e06c",
       "sourceMap": "app/client/templates/shop/template.view.js.map",
-      "sourceMapUrl": "/app/client/templates/shop/f5c8b49a9352eda38701fb0d6c9c269640640768.map",
-      "size": 3245,
-      "hash": "f5c8b49a9352eda38701fb0d6c9c269640640768"
+      "sourceMapUrl": "/app/client/templates/shop/0db9e9fbc0876c4d3ed14e7e5973dc677dc1e06c.map",
+      "size": 3423,
+      "hash": "0db9e9fbc0876c4d3ed14e7e5973dc677dc1e06c"
     },
     {
       "path": "app/client/templates/task/template.action.js",
@@ -1577,11 +1577,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/work/template.index.js?ec790108646a413f7797d08bed52a530f7647c26",
+      "url": "/app/client/templates/work/template.index.js?671f913440e988c15c4a6b5476e6cb93c90a12c8",
       "sourceMap": "app/client/templates/work/template.index.js.map",
-      "sourceMapUrl": "/app/client/templates/work/ec790108646a413f7797d08bed52a530f7647c26.map",
-      "size": 6262,
-      "hash": "ec790108646a413f7797d08bed52a530f7647c26"
+      "sourceMapUrl": "/app/client/templates/work/671f913440e988c15c4a6b5476e6cb93c90a12c8.map",
+      "size": 8903,
+      "hash": "671f913440e988c15c4a6b5476e6cb93c90a12c8"
     },
     {
       "path": "app/client/templates/work/template.matter.js",
@@ -2006,11 +2006,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/router.js?5e4626c8495e310e97cd6d506d829f99545d264d",
+      "url": "/app/lib/router.js?9052120a92138f35dbfa789c269b2de7e0a6553b",
       "sourceMap": "app/lib/router.js.map",
-      "sourceMapUrl": "/app/lib/5e4626c8495e310e97cd6d506d829f99545d264d.map",
-      "size": 12278,
-      "hash": "5e4626c8495e310e97cd6d506d829f99545d264d"
+      "sourceMapUrl": "/app/lib/9052120a92138f35dbfa789c269b2de7e0a6553b.map",
+      "size": 14050,
+      "hash": "9052120a92138f35dbfa789c269b2de7e0a6553b"
     },
     {
       "path": "app/client/templates/buttons/destroy.js",
@@ -2259,11 +2259,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/shop/view.js?c34a3653972fe4b0bd16c1694a60018605d4123a",
+      "url": "/app/client/templates/shop/view.js?a516e87ecee9eacb0b07c72824fa25ddfc4157d4",
       "sourceMap": "app/client/templates/shop/view.js.map",
-      "sourceMapUrl": "/app/client/templates/shop/c34a3653972fe4b0bd16c1694a60018605d4123a.map",
-      "size": 2681,
-      "hash": "c34a3653972fe4b0bd16c1694a60018605d4123a"
+      "sourceMapUrl": "/app/client/templates/shop/a516e87ecee9eacb0b07c72824fa25ddfc4157d4.map",
+      "size": 1425,
+      "hash": "a516e87ecee9eacb0b07c72824fa25ddfc4157d4"
     },
     {
       "path": "app/client/templates/task/form.js",
@@ -2325,11 +2325,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/work/index.js?46520184b47362c7b52f9d54a74d0918668c4dbd",
+      "url": "/app/client/templates/work/index.js?358c8cb5731d8040e9c30156f96fbb6f46f8b4a9",
       "sourceMap": "app/client/templates/work/index.js.map",
-      "sourceMapUrl": "/app/client/templates/work/46520184b47362c7b52f9d54a74d0918668c4dbd.map",
-      "size": 574,
-      "hash": "46520184b47362c7b52f9d54a74d0918668c4dbd"
+      "sourceMapUrl": "/app/client/templates/work/358c8cb5731d8040e9c30156f96fbb6f46f8b4a9.map",
+      "size": 1354,
+      "hash": "358c8cb5731d8040e9c30156f96fbb6f46f8b4a9"
     },
     {
       "path": "app/client/templates/work/matter.js",
@@ -2523,11 +2523,11 @@
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/merged-stylesheets.css?0dcc07bf0fb875eb8f2fc306bc9fbba051863543",
+      "url": "/merged-stylesheets.css?937a1ebf24bff01226e41d1a60184e919cb4dcbd",
       "sourceMap": "merged-stylesheets.css.map",
-      "sourceMapUrl": "/0dcc07bf0fb875eb8f2fc306bc9fbba051863543.map",
-      "size": 226890,
-      "hash": "0dcc07bf0fb875eb8f2fc306bc9fbba051863543"
+      "sourceMapUrl": "/937a1ebf24bff01226e41d1a60184e919cb4dcbd.map",
+      "size": 227007,
+      "hash": "937a1ebf24bff01226e41d1a60184e919cb4dcbd"
     },
     {
       "path": "app/fonts/FontAwesome.otf",

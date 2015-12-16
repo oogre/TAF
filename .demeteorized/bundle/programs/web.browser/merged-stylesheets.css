@@ -13463,6 +13463,14 @@ address {
   z-index: auto;
 }
 
+.tt-menu {
+  background: #fff;
+  width: 100%;
+  text-align: left;
+  border: solid 1px #ccc;
+  border-radius: 3px;
+}
+
 .modules .module.completed {
   background: #DFF0D8;
 }

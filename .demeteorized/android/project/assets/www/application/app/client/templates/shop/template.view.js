@@ -12,7 +12,7 @@ Template["shopview"] = new Template("Template.shopview", (function() {
     }, "Carte"), "\n			", HTML.DIV({
       "class": "col-sm-10"
     }, "\n				", Blaze._TemplateWith(function() {
-      return Spacebars.call(view.lookup("."));
+      return Spacebars.call(view.lookup("shop"));
     }, function() {
       return Spacebars.include(view.lookupTemplate("position"));
     }), "\n			"), "\n		"), "\n\n		", HTML.HR(), "\n	" ];
@@ -22,12 +22,12 @@ Template["shopview"] = new Template("Template.shopview", (function() {
     "class": "col-sm-10"
   }, "\n			", HTML.DIV({
     "class": "col-sm-12"
-  }, "\n				", HTML.ADDRESS("\n					", HTML.STRONG(Blaze.View("lookup:name", function() {
-    return Spacebars.mustache(view.lookup("name"));
-  }), " - ", Blaze.View("lookup:brand", function() {
-    return Spacebars.mustache(view.lookup("brand"));
+  }, "\n				", HTML.ADDRESS("\n					", HTML.STRONG(Blaze.View("lookup:shop.name", function() {
+    return Spacebars.mustache(Spacebars.dot(view.lookup("shop"), "name"));
+  }), " - ", Blaze.View("lookup:shop.brand", function() {
+    return Spacebars.mustache(Spacebars.dot(view.lookup("shop"), "brand"));
   })), HTML.Raw("<br>"), "\n					", Spacebars.With(function() {
-    return Spacebars.call(view.lookup("address"));
+    return Spacebars.call(Spacebars.dot(view.lookup("shop"), "address"));
   }, function() {
     return [ "\n						", Blaze.View("lookup:street", function() {
       return Spacebars.mustache(view.lookup("street"));
@@ -45,7 +45,7 @@ Template["shopview"] = new Template("Template.shopview", (function() {
   }, "\n			", HTML.DIV({
     "class": "col-sm-12"
   }, "\n				", Blaze.Each(function() {
-    return Spacebars.call(view.lookup("contacts"));
+    return Spacebars.call(Spacebars.dot(view.lookup("shop"), "contacts"));
   }, function() {
     return [ "\n					", Blaze.View("lookup:.", function() {
       return Spacebars.mustache(view.lookup("."));
@@ -71,6 +71,7 @@ Template["shopview"] = new Template("Template.shopview", (function() {
     "class": "col-sm-12"
   }, "\n				", Blaze._TemplateWith(function() {
     return {
+      shopId: Spacebars.call(Spacebars.dot(view.lookup("shop"), "_id")),
       works: Spacebars.call(view.lookup("works"))
     };
   }, function() {

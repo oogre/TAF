@@ -34,13 +34,13 @@ Template.shopview.events({
 })
 Template.shopview.helpers({
 	location : function(){
-		return this.location;
+		return this.shop.location;
 	},
 	modules : function(){
-		if(this.modules){
+		if(this.shop.modules){
 			return	_
 					.chain(
-						this.modules
+						this.shop.modules
 					)
 					.groupBy(function(module){
 						if(module)
@@ -62,68 +62,5 @@ Template.shopview.helpers({
 					})
 					.value();
 		}
-	},
-	works : function(){
-		var tmp = _
-				.chain(
-					Works
-					.find({
-						"shop._id" : this._id
-					}, {
-						sort : {
-							rdv : -1
-						}
-					})
-					.fetch()
-				)
-				.map(function(work){
-					work.rdv = moment(work.rdv).format("DD/MM/YY HH:mm");
-					return work;
-				})
-				.groupBy(function(work){
-					return work.end;
-				})
-				.value();
-				var unfinished = tmp.undefined || [];
-				var torun = [];
-				unfinished = 	unfinished
-								.map(function(work){
-									
-									if( _
-										.chain(work.schedular)
-										.keys()
-										.map(function(worker){
-											return  work.schedular[worker].length > 0;
-										})
-										.some()
-										.value()
-									){
-										return work;
-									}else{
-										torun.push(work);
-										return false;
-									}
-								});
-				unfinished = _.compact(unfinished)
-
-				delete tmp.undefined;		
-		return{
-			torun : torun.reverse(),
-			unfinished : unfinished,
-			finished : 	_
-						.chain(tmp)
-						.values()
-						.flatten()
-						.map(function(work){
-							work.depannage = work.type == "dépannage";
-							work.installation = work.type == "installation";
-							work.entretien = work.type == "maintenance";
-							return work;
-						})
-						.value()
-		};
-		
-		
-				; 
-	},
+	}
 });

@@ -1,5 +1,30 @@
 <template name="workIndex">
 	{{#if listView}}
+		<ul class="pagination pagination-lg pull-right no-margin">
+			{{#each pager}}
+				{{#if first}}
+					<li>
+						<a href="{{pathFor route='shop.view' shopId=shopId query=query.data}}" aria-label="Previous">
+							<i class="fa fa-angle-double-left"></i>&nbsp;{{query.date}}
+						</a>
+					</li>
+				{{else}}
+					{{#if last}}
+						<li>
+							<a href="{{pathFor route='shop.view' shopId=shopId query=query.data}}" aria-label="Next">
+								{{query.date}}&nbsp;<i class="fa fa-angle-double-right"></i>
+							</a>
+						</li>
+					{{else}}
+						<li class="{{active}}">
+							<a href="{{pathFor route='shop.view' shopId=shopId query=query.data}}">
+								<i class="fa fa-angle-double-down"></i>
+							</a>
+						</li>
+					{{/if}}
+				{{/if}}
+			{{/each}}
+		</ul>
 		<table class="table" data-db-table-name="worker" >
 				<thead>
 					<tr>
@@ -17,11 +42,13 @@
 					</tr>
 				</thead>
 				<tbody>
+					
 					{{#if works.unfinished}}
 						<tr>
 							<th colspan="3">Travaux en cours :</th>
 						</tr>
 					{{/if}}
+					
 					{{#each works.unfinished}}
 						<tr>
 							<td>{{rdv}}</td>
