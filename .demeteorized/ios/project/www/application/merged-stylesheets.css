@@ -13369,7 +13369,7 @@ address {
   min-height: 46px;
 }
 
-.z-index-auto {
+.input-group .form-control.z-index-auto {
   z-index: auto;
 }
 
