@@ -451,6 +451,38 @@
       "path": "app/lib/methods/workers.js"
     },
     {
+      "sourceMap": "app/lib/routers/home.js.map",
+      "path": "app/lib/routers/home.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/matter.js.map",
+      "path": "app/lib/routers/matter.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/module.js.map",
+      "path": "app/lib/routers/module.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/shop.js.map",
+      "path": "app/lib/routers/shop.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/sign.js.map",
+      "path": "app/lib/routers/sign.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/task.js.map",
+      "path": "app/lib/routers/task.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/work.js.map",
+      "path": "app/lib/routers/work.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/worker.js.map",
+      "path": "app/lib/routers/worker.js"
+    },
+    {
       "sourceMap": "app/lib/collections.js.map",
       "path": "app/lib/collections.js"
     },
@@ -467,6 +499,22 @@
       "path": "app/lib/router.js"
     },
     {
+      "sourceMap": "app/server/pdf/methods.maintenance.js.map",
+      "path": "app/server/pdf/methods.maintenance.js"
+    },
+    {
+      "sourceMap": "app/server/pdf/methods.work.js.map",
+      "path": "app/server/pdf/methods.work.js"
+    },
+    {
+      "sourceMap": "app/server/pdf/pdfkit.config.js.map",
+      "path": "app/server/pdf/pdfkit.config.js"
+    },
+    {
+      "sourceMap": "app/server/pdf/pdfkit.js.map",
+      "path": "app/server/pdf/pdfkit.js"
+    },
+    {
       "sourceMap": "app/server/cron.js.map",
       "path": "app/server/cron.js"
     },
@@ -481,14 +529,6 @@
     {
       "sourceMap": "app/server/methods.js.map",
       "path": "app/server/methods.js"
-    },
-    {
-      "sourceMap": "app/server/pdfkit.config.js.map",
-      "path": "app/server/pdfkit.config.js"
-    },
-    {
-      "sourceMap": "app/server/pdfkit.js.map",
-      "path": "app/server/pdfkit.js"
     },
     {
       "sourceMap": "app/server/publications.js.map",

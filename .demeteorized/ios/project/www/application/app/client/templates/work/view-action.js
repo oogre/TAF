@@ -13,9 +13,10 @@ Template["work-viewaction"].helpers({
 	reopenable : function(){
 		if(Meteor.isChief()){
 			var work = Works.findOne(this._id);
-			if( !work || !work.signatures || !work.signatures.client || !work.signatures.adf){
-				return true;
-			}
+			//if( !work || !work.signatures || !work.signatures.client || !work.signatures.adf){
+				
+			//}
+			return true;
 		}
 		Session.set(Meteor.FILL_CONTEXT_MENU_KEY, false);
 		return false;

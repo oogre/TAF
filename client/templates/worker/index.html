@@ -38,17 +38,17 @@
 
 <template name="workeritem">
 	<tr data-worker-id="{{_id}}">
-		{{#with profile}}
-			<td class="td-lg">
-				<a href="{{pathFor route='worker.view' workerId=_id}}" class="btn btn-lg btn-link">
+		
+		<td class="td-lg">
+			<a href="{{pathFor route='worker.view' workerId=_id}}" class="btn btn-lg btn-link">
+				{{#with profile}}
 					{{firstname}} {{lastname}} 
-				</a>
-			</td>
-		{{else}}
-			<td class="td-lg">
-				...
-			</td>
-		{{/with}}
+				{{else}}
+					...
+				{{/with}}
+			</a>
+		</td>
+			
 		{{#if schedular}}
 			<td>
 				{{#if working }}

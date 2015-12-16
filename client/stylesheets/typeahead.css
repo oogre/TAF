@@ -15,6 +15,13 @@
 	text-transform: capitalize;
 	background-color: transparent;
 }
+.tt-menu{
+    background: #fff;
+    width: 100%;
+    text-align: left;
+    border: solid 1px #ccc;
+    border-radius: 3px;
+}
 .tt-cursor{
 	background-color: #428bca;
 	color: #fff;

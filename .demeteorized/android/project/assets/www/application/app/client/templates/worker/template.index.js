@@ -41,29 +41,27 @@ Template["workeritem"] = new Template("Template.workeritem", (function() {
     "data-worker-id": function() {
       return Spacebars.mustache(view.lookup("_id"));
     }
-  }, "\n		", Spacebars.With(function() {
+  }, "\n		\n		", HTML.TD({
+    "class": "td-lg"
+  }, "\n			", HTML.A({
+    href: function() {
+      return Spacebars.mustache(view.lookup("pathFor"), Spacebars.kw({
+        route: "worker.view",
+        workerId: view.lookup("_id")
+      }));
+    },
+    "class": "btn btn-lg btn-link"
+  }, "\n				", Spacebars.With(function() {
     return Spacebars.call(view.lookup("profile"));
   }, function() {
-    return [ "\n			", HTML.TD({
-      "class": "td-lg"
-    }, "\n				", HTML.A({
-      href: function() {
-        return Spacebars.mustache(view.lookup("pathFor"), Spacebars.kw({
-          route: "worker.view",
-          workerId: view.lookup("_id")
-        }));
-      },
-      "class": "btn btn-lg btn-link"
-    }, "\n					", Blaze.View("lookup:firstname", function() {
+    return [ "\n					", Blaze.View("lookup:firstname", function() {
       return Spacebars.mustache(view.lookup("firstname"));
     }), " ", Blaze.View("lookup:lastname", function() {
       return Spacebars.mustache(view.lookup("lastname"));
-    }), " \n				"), "\n			"), "\n		" ];
+    }), " \n				" ];
   }, function() {
-    return [ "\n			", HTML.TD({
-      "class": "td-lg"
-    }, "\n				...\n			"), "\n		" ];
-  }), "\n		", Blaze.If(function() {
+    return "\n					...\n				";
+  }), "\n			"), "\n		"), "\n			\n		", Blaze.If(function() {
     return Spacebars.call(view.lookup("schedular"));
   }, function() {
     return [ "\n			", HTML.TD("\n				", Blaze.If(function() {

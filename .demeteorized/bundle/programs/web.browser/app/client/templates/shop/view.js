@@ -20,7 +20,7 @@ Template.shopview.events({
 
 		Meteor.call("workToPdf", workId, function(err, file){
 			if(err)console.error(err);
-			window.open(file);
+			else window.open(file);
 		});
 	},
 	"click .maintenanceToPdf" : function(event){
@@ -28,7 +28,7 @@ Template.shopview.events({
 
 		Meteor.call("maintenanceToPdf", workId, function(err, file){
 			if(err)console.error(err);
-			window.open(file);
+			else window.open(file);
 		});
 	},
 })

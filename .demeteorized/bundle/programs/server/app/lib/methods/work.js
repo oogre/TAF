@@ -104,7 +104,9 @@ Meteor.methods({
 			$unset : {
 				end : "",
 				signatures : {},
-				raw : false
+				raw : false,
+				maintenance : "",
+				summary : ""
 			}
 		});
 	},

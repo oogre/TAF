@@ -1665,11 +1665,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/worker/template.index.js?ebc536a9db49f443b53fa51f2c478eb1ae09e6e4",
+      "url": "/app/client/templates/worker/template.index.js?ee67192ca9b41efc7e55001a832b38c97d884786",
       "sourceMap": "app/client/templates/worker/template.index.js.map",
-      "sourceMapUrl": "/app/client/templates/worker/ebc536a9db49f443b53fa51f2c478eb1ae09e6e4.map",
-      "size": 4627,
-      "hash": "ebc536a9db49f443b53fa51f2c478eb1ae09e6e4"
+      "sourceMapUrl": "/app/client/templates/worker/ee67192ca9b41efc7e55001a832b38c97d884786.map",
+      "size": 4556,
+      "hash": "ee67192ca9b41efc7e55001a832b38c97d884786"
     },
     {
       "path": "app/client/templates/worker/template.new.js",
@@ -1698,11 +1698,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/worker/template.view.js?53f9e2a105ff4b93b9747039cd65ebe893ee302f",
+      "url": "/app/client/templates/worker/template.view.js?9dfcd02a3cc2e2f9466ffbe105d3289bec2ba0de",
       "sourceMap": "app/client/templates/worker/template.view.js.map",
-      "sourceMapUrl": "/app/client/templates/worker/53f9e2a105ff4b93b9747039cd65ebe893ee302f.map",
-      "size": 177,
-      "hash": "53f9e2a105ff4b93b9747039cd65ebe893ee302f"
+      "sourceMapUrl": "/app/client/templates/worker/9dfcd02a3cc2e2f9466ffbe105d3289bec2ba0de.map",
+      "size": 270,
+      "hash": "9dfcd02a3cc2e2f9466ffbe105d3289bec2ba0de"
     },
     {
       "path": "app/client/templates/menu/template.main.js",
@@ -1929,11 +1929,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/work.js?75529041d89c1c2fa5583c35ab197345b7c50d4b",
+      "url": "/app/lib/methods/work.js?337daf136e51947ba418150d5d9103b89dea1eec",
       "sourceMap": "app/lib/methods/work.js.map",
-      "sourceMapUrl": "/app/lib/methods/75529041d89c1c2fa5583c35ab197345b7c50d4b.map",
-      "size": 5013,
-      "hash": "75529041d89c1c2fa5583c35ab197345b7c50d4b"
+      "sourceMapUrl": "/app/lib/methods/337daf136e51947ba418150d5d9103b89dea1eec.map",
+      "size": 5053,
+      "hash": "337daf136e51947ba418150d5d9103b89dea1eec"
     },
     {
       "path": "app/lib/methods/workers.js",
@@ -1945,6 +1945,94 @@
       "sourceMapUrl": "/app/lib/methods/6682a756c244349bd93466989b693dd3b8deb5c8.map",
       "size": 3155,
       "hash": "6682a756c244349bd93466989b693dd3b8deb5c8"
+    },
+    {
+      "path": "app/lib/routers/home.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/home.js?9304d39973e35f463334f77f40edd77b7881d2fc",
+      "sourceMap": "app/lib/routers/home.js.map",
+      "sourceMapUrl": "/app/lib/routers/9304d39973e35f463334f77f40edd77b7881d2fc.map",
+      "size": 548,
+      "hash": "9304d39973e35f463334f77f40edd77b7881d2fc"
+    },
+    {
+      "path": "app/lib/routers/matter.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/matter.js?2bc178d8987a534b05d307a6181e5295ebbee74d",
+      "sourceMap": "app/lib/routers/matter.js.map",
+      "sourceMapUrl": "/app/lib/routers/2bc178d8987a534b05d307a6181e5295ebbee74d.map",
+      "size": 1109,
+      "hash": "2bc178d8987a534b05d307a6181e5295ebbee74d"
+    },
+    {
+      "path": "app/lib/routers/module.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/module.js?f110313169fedabe90733e513dfe88d1a134d1e3",
+      "sourceMap": "app/lib/routers/module.js.map",
+      "sourceMapUrl": "/app/lib/routers/f110313169fedabe90733e513dfe88d1a134d1e3.map",
+      "size": 1339,
+      "hash": "f110313169fedabe90733e513dfe88d1a134d1e3"
+    },
+    {
+      "path": "app/lib/routers/shop.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/shop.js?8e30362c3f225575a208458057016dd78a5dc0e2",
+      "sourceMap": "app/lib/routers/shop.js.map",
+      "sourceMapUrl": "/app/lib/routers/8e30362c3f225575a208458057016dd78a5dc0e2.map",
+      "size": 4451,
+      "hash": "8e30362c3f225575a208458057016dd78a5dc0e2"
+    },
+    {
+      "path": "app/lib/routers/sign.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/sign.js?ec93ded08e028428208e9e3a2dda21cdb20b9ef3",
+      "sourceMap": "app/lib/routers/sign.js.map",
+      "sourceMapUrl": "/app/lib/routers/ec93ded08e028428208e9e3a2dda21cdb20b9ef3.map",
+      "size": 467,
+      "hash": "ec93ded08e028428208e9e3a2dda21cdb20b9ef3"
+    },
+    {
+      "path": "app/lib/routers/task.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/task.js?7bd9d9a1f882a11cd9a6bf489b790a918baeadf4",
+      "sourceMap": "app/lib/routers/task.js.map",
+      "sourceMapUrl": "/app/lib/routers/7bd9d9a1f882a11cd9a6bf489b790a918baeadf4.map",
+      "size": 1343,
+      "hash": "7bd9d9a1f882a11cd9a6bf489b790a918baeadf4"
+    },
+    {
+      "path": "app/lib/routers/work.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/work.js?343aafb32a16bb36a912c7b3a8de3847ed1c2421",
+      "sourceMap": "app/lib/routers/work.js.map",
+      "sourceMapUrl": "/app/lib/routers/343aafb32a16bb36a912c7b3a8de3847ed1c2421.map",
+      "size": 1305,
+      "hash": "343aafb32a16bb36a912c7b3a8de3847ed1c2421"
+    },
+    {
+      "path": "app/lib/routers/worker.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/routers/worker.js?ea1491d15f6716fae96f6c3290d8e20d27de1a29",
+      "sourceMap": "app/lib/routers/worker.js.map",
+      "sourceMapUrl": "/app/lib/routers/ea1491d15f6716fae96f6c3290d8e20d27de1a29.map",
+      "size": 1562,
+      "hash": "ea1491d15f6716fae96f6c3290d8e20d27de1a29"
     },
     {
       "path": "app/lib/collections.js",
@@ -1984,11 +2072,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/router.js?81b99d65bc35af29c9bc4a3e44d4ec04e6fcc5ab",
+      "url": "/app/lib/router.js?7fb13a1bd08cd6be88cf1ddd06f1fe6c7a482307",
       "sourceMap": "app/lib/router.js.map",
-      "sourceMapUrl": "/app/lib/81b99d65bc35af29c9bc4a3e44d4ec04e6fcc5ab.map",
-      "size": 13920,
-      "hash": "81b99d65bc35af29c9bc4a3e44d4ec04e6fcc5ab"
+      "sourceMapUrl": "/app/lib/7fb13a1bd08cd6be88cf1ddd06f1fe6c7a482307.map",
+      "size": 1637,
+      "hash": "7fb13a1bd08cd6be88cf1ddd06f1fe6c7a482307"
     },
     {
       "path": "app/client/templates/buttons/destroy.js",
@@ -2017,11 +2105,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/calendar/calendar.js?254fc74e7ad6c683c850cbc474c424361b254983",
+      "url": "/app/client/templates/calendar/calendar.js?96c8d53635ef008ae98a185320b3f46cc406bd14",
       "sourceMap": "app/client/templates/calendar/calendar.js.map",
-      "sourceMapUrl": "/app/client/templates/calendar/254fc74e7ad6c683c850cbc474c424361b254983.map",
-      "size": 2268,
-      "hash": "254fc74e7ad6c683c850cbc474c424361b254983"
+      "sourceMapUrl": "/app/client/templates/calendar/96c8d53635ef008ae98a185320b3f46cc406bd14.map",
+      "size": 2245,
+      "hash": "96c8d53635ef008ae98a185320b3f46cc406bd14"
     },
     {
       "path": "app/client/templates/dateTimePicker/rdvPicker.js",
@@ -2237,11 +2325,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/shop/view.js?a516e87ecee9eacb0b07c72824fa25ddfc4157d4",
+      "url": "/app/client/templates/shop/view.js?6f2d696e9124f956177ef5277b282262f22c1855",
       "sourceMap": "app/client/templates/shop/view.js.map",
-      "sourceMapUrl": "/app/client/templates/shop/a516e87ecee9eacb0b07c72824fa25ddfc4157d4.map",
-      "size": 1425,
-      "hash": "a516e87ecee9eacb0b07c72824fa25ddfc4157d4"
+      "sourceMapUrl": "/app/client/templates/shop/6f2d696e9124f956177ef5277b282262f22c1855.map",
+      "size": 1435,
+      "hash": "6f2d696e9124f956177ef5277b282262f22c1855"
     },
     {
       "path": "app/client/templates/task/form.js",
@@ -2369,11 +2457,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/work/view-action.js?a4d7c57d26670402a503b12a5b4d1ab0579b22e8",
+      "url": "/app/client/templates/work/view-action.js?8ba6c202646954e34ccfe2edbc6f390b011fc4ed",
       "sourceMap": "app/client/templates/work/view-action.js.map",
-      "sourceMapUrl": "/app/client/templates/work/a4d7c57d26670402a503b12a5b4d1ab0579b22e8.map",
-      "size": 1544,
-      "hash": "a4d7c57d26670402a503b12a5b4d1ab0579b22e8"
+      "sourceMapUrl": "/app/client/templates/work/8ba6c202646954e34ccfe2edbc6f390b011fc4ed.map",
+      "size": 1552,
+      "hash": "8ba6c202646954e34ccfe2edbc6f390b011fc4ed"
     },
     {
       "path": "app/client/templates/worker/action.js",
@@ -2429,6 +2517,17 @@
       "sourceMapUrl": "/app/client/templates/worker/fb9870619d5684229f134b343dd57567eea3046a.map",
       "size": 2249,
       "hash": "fb9870619d5684229f134b343dd57567eea3046a"
+    },
+    {
+      "path": "app/client/templates/worker/view.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/client/templates/worker/view.js?10060d260a0ba02b6106e8f865214ba7228eb871",
+      "sourceMap": "app/client/templates/worker/view.js.map",
+      "sourceMapUrl": "/app/client/templates/worker/10060d260a0ba02b6106e8f865214ba7228eb871.map",
+      "size": 107,
+      "hash": "10060d260a0ba02b6106e8f865214ba7228eb871"
     },
     {
       "path": "app/client/config/accounts-config.js",
@@ -2501,11 +2600,11 @@
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/merged-stylesheets.css?b9a7237403757371487558bec914110a612c4dc7",
+      "url": "/merged-stylesheets.css?0aff085b55e92a6ca409b03fe76820973fe93569",
       "sourceMap": "merged-stylesheets.css.map",
-      "sourceMapUrl": "/b9a7237403757371487558bec914110a612c4dc7.map",
+      "sourceMapUrl": "/0aff085b55e92a6ca409b03fe76820973fe93569.map",
       "size": 228408,
-      "hash": "b9a7237403757371487558bec914110a612c4dc7"
+      "hash": "0aff085b55e92a6ca409b03fe76820973fe93569"
     },
     {
       "path": "app/fonts/FontAwesome.otf",
