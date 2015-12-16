@@ -115,7 +115,7 @@ Meteor.methods({
 
 		Workers.update(workerId, {
 			$set : {
-				working : (action === "start")
+				working : (action === "start" ? workId : false)
 			}
 		});
 		return Works.update(workId, {$set : {schedular : schedular}});

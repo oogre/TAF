@@ -126,7 +126,6 @@ Template.position.rendered = function(){
 				resize(Session.get(Meteor.MAP_LARGE), Session.get(Meteor.MAP_FOLLOW_CENTER));
 			});
 
-			console.log(shop.location);
 			if(!shop.timeDist){
 				Meteor.routing(Meteor.QG.location, shop.location, function(error, route){
 					if(error) return console.log(error);

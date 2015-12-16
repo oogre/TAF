@@ -1720,11 +1720,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/worker/template.view.js?9dfcd02a3cc2e2f9466ffbe105d3289bec2ba0de",
+      "url": "/app/client/templates/worker/template.view.js?0cca2c96efa3502cb1012c4e4b02ee192e420695",
       "sourceMap": "app/client/templates/worker/template.view.js.map",
-      "sourceMapUrl": "/app/client/templates/worker/9dfcd02a3cc2e2f9466ffbe105d3289bec2ba0de.map",
-      "size": 270,
-      "hash": "9dfcd02a3cc2e2f9466ffbe105d3289bec2ba0de"
+      "sourceMapUrl": "/app/client/templates/worker/0cca2c96efa3502cb1012c4e4b02ee192e420695.map",
+      "size": 3121,
+      "hash": "0cca2c96efa3502cb1012c4e4b02ee192e420695"
     },
     {
       "path": "app/client/templates/menu/template.main.js",
@@ -1962,11 +1962,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/workers.js?6682a756c244349bd93466989b693dd3b8deb5c8",
+      "url": "/app/lib/methods/workers.js?aeb6716723950d77d5cf15ca493b7fed9d1f8edd",
       "sourceMap": "app/lib/methods/workers.js.map",
-      "sourceMapUrl": "/app/lib/methods/6682a756c244349bd93466989b693dd3b8deb5c8.map",
-      "size": 3155,
-      "hash": "6682a756c244349bd93466989b693dd3b8deb5c8"
+      "sourceMapUrl": "/app/lib/methods/aeb6716723950d77d5cf15ca493b7fed9d1f8edd.map",
+      "size": 3172,
+      "hash": "aeb6716723950d77d5cf15ca493b7fed9d1f8edd"
     },
     {
       "path": "app/lib/routers/home.js",
@@ -2182,11 +2182,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/map/position.js?fc80840000bbe7f01ff3a1fc19e927783444dd4a",
+      "url": "/app/client/templates/map/position.js?9ed5f7afade267387ef7c62a4dfed355e6209e48",
       "sourceMap": "app/client/templates/map/position.js.map",
-      "sourceMapUrl": "/app/client/templates/map/fc80840000bbe7f01ff3a1fc19e927783444dd4a.map",
-      "size": 4979,
-      "hash": "fc80840000bbe7f01ff3a1fc19e927783444dd4a"
+      "sourceMapUrl": "/app/client/templates/map/9ed5f7afade267387ef7c62a4dfed355e6209e48.map",
+      "size": 4948,
+      "hash": "9ed5f7afade267387ef7c62a4dfed355e6209e48"
     },
     {
       "path": "app/client/templates/matter/form.js",
@@ -2545,11 +2545,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/worker/view.js?10060d260a0ba02b6106e8f865214ba7228eb871",
+      "url": "/app/client/templates/worker/view.js?5ac204e03483ff872a36917d9aed4f7a95d9021b",
       "sourceMap": "app/client/templates/worker/view.js.map",
-      "sourceMapUrl": "/app/client/templates/worker/10060d260a0ba02b6106e8f865214ba7228eb871.map",
-      "size": 107,
-      "hash": "10060d260a0ba02b6106e8f865214ba7228eb871"
+      "sourceMapUrl": "/app/client/templates/worker/5ac204e03483ff872a36917d9aed4f7a95d9021b.map",
+      "size": 144,
+      "hash": "5ac204e03483ff872a36917d9aed4f7a95d9021b"
     },
     {
       "path": "app/client/config/accounts-config.js",

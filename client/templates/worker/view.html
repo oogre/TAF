@@ -1,3 +1,50 @@
 <template name="workerview">
-	{{data}}
+	
+
+	<div class="row">
+		<label class="col-sm-2">En ce moment</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				{{#if working}}				
+					<a href="{{pathFor route='work.show' workId=workingAt._id}}" >
+						{{workingAt.type}} chez {{workingAt.shop.name}}
+					</a>
+				{{else}}
+					non référencé comme en train de travailler 
+				{{/if}}
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<div class="row">
+		<label class="col-sm-2">Adresse</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				<address>
+					<strong>{{profile.firstname}} - {{profile.lastname}}</strong><br>
+					{{#with profile.address}} 
+						{{street}} {{number}}<br/>
+						{{zipcode}} {{city}}
+					{{/with}}
+				</address>
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+	
+	<div class="row">
+		<label class="col-sm-2">Contact</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				{{#each emails}}
+					{{address}} <br/>
+				{{/each}}
+				{{profile.phone}}
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+
 </template>

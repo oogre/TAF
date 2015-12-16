@@ -1,7 +1,7 @@
 
 
 Template.workerview.helpers({
-	data : function(){
-		console.log(this);
+	workingAt: function(){
+		return this.working && Works.findOne(this.working);
 	}
 })
