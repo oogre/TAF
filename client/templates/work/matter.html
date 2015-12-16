@@ -7,9 +7,9 @@
 							placeholder="Matériel" autocomplete="off" spellcheck="off" 
 							data-source="matters" data-highlight="true" required/>
 				</label>
-				<input class="form-control input-lg input-xl" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">
+				<input class="form-control input-lg input-xl z-index-auto" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">
 				<label class="input-group-addon autowidth">
-					<select class="form-control input-lg lowercase" id="unit" name="unit">
+					<select class="form-control input-lg lowercase z-index-auto" id="unit" name="unit">
 						<option selected disabled>Unité</option>
 						<option value="">-</option>
 						{{#each units}}
@@ -32,7 +32,7 @@
 				<label class="input-group-addon">
 					{{this.name}}
 				</label>
-				<input class="form-control input-lg" type="text" disabled="disabled" value="{{this.quantity}}">
+				<input class="form-control input-lg z-index-auto" type="text" disabled="disabled" value="{{this.quantity}}">
 				<label class="input-group-addon">
 					{{this.unit}}
 				</label>

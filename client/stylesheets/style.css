@@ -126,6 +126,9 @@ address{
 	height: auto;
 	min-height: 46px;
 }
+.z-index-auto{
+	z-index:auto;
+}
 
 .modules .module.completed{
 	background: #DFF0D8;

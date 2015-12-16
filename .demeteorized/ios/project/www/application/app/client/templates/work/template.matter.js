@@ -8,10 +8,10 @@ Template["matterselector"] = new Template("Template.matterselector", (function()
     "class": "form-group col-sm-12"
   }, "\n			", HTML.DIV({
     "class": "input-group col-sm-12"
-  }, "\n				", HTML.Raw('<label class="input-group-addon autowidth" for="matter">\n					<input class="typeahead input-lg" name="matter" id="matter" type="text" placeholder="Matériel" autocomplete="off" spellcheck="off" data-source="matters" data-highlight="true" required="">\n				</label>'), "\n				", HTML.Raw('<input class="form-control input-lg input-xl" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">'), "\n				", HTML.LABEL({
+  }, "\n				", HTML.Raw('<label class="input-group-addon autowidth" for="matter">\n					<input class="typeahead input-lg" name="matter" id="matter" type="text" placeholder="Matériel" autocomplete="off" spellcheck="off" data-source="matters" data-highlight="true" required="">\n				</label>'), "\n				", HTML.Raw('<input class="form-control input-lg input-xl z-index-auto" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">'), "\n				", HTML.LABEL({
     "class": "input-group-addon autowidth"
   }, "\n					", HTML.SELECT({
-    "class": "form-control input-lg lowercase",
+    "class": "form-control input-lg lowercase z-index-auto",
     id: "unit",
     name: "unit"
   }, "\n						", HTML.Raw('<option selected="" disabled="">Unité</option>'), "\n						", HTML.Raw('<option value="">-</option>'), "\n						", Blaze.Each(function() {
@@ -49,7 +49,7 @@ Template["matterlist"] = new Template("Template.matterlist", (function() {
     }, "\n					", Blaze.View("lookup:..name", function() {
       return Spacebars.mustache(Spacebars.dot(view.lookup("."), "name"));
     }), "\n				"), "\n				", HTML.INPUT({
-      "class": "form-control input-lg",
+      "class": "form-control input-lg z-index-auto",
       type: "text",
       disabled: "disabled",
       value: function() {

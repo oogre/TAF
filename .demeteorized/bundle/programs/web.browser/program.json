@@ -1566,11 +1566,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/work/template.matter.js?7f7fa4f0d7ff7918f650879cedf69318b4aa58d2",
+      "url": "/app/client/templates/work/template.matter.js?fa993eb70657fa4adcb1cd680928d8f472be3b04",
       "sourceMap": "app/client/templates/work/template.matter.js.map",
-      "sourceMapUrl": "/app/client/templates/work/7f7fa4f0d7ff7918f650879cedf69318b4aa58d2.map",
-      "size": 2931,
-      "hash": "7f7fa4f0d7ff7918f650879cedf69318b4aa58d2"
+      "sourceMapUrl": "/app/client/templates/work/fa993eb70657fa4adcb1cd680928d8f472be3b04.map",
+      "size": 2970,
+      "hash": "fa993eb70657fa4adcb1cd680928d8f472be3b04"
     },
     {
       "path": "app/client/templates/work/template.new.js",
@@ -2501,11 +2501,11 @@
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/merged-stylesheets.css?d6aeb70fd646796699369be58a0b1750a7cba037",
+      "url": "/merged-stylesheets.css?ffd62d49602ded34c1402e064fc5c5fbd13af222",
       "sourceMap": "merged-stylesheets.css.map",
-      "sourceMapUrl": "/d6aeb70fd646796699369be58a0b1750a7cba037.map",
-      "size": 228229,
-      "hash": "d6aeb70fd646796699369be58a0b1750a7cba037"
+      "sourceMapUrl": "/ffd62d49602ded34c1402e064fc5c5fbd13af222.map",
+      "size": 228265,
+      "hash": "ffd62d49602ded34c1402e064fc5c5fbd13af222"
     },
     {
       "path": "app/fonts/FontAwesome.otf",
