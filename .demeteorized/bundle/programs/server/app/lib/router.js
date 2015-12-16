@@ -217,7 +217,7 @@ Router.configure({
 							.fetch()
 						)
 						.map(function(work){
-							work.rdv = moment(work.rdv).format("DD/MM/YY HH:mm");
+							work.rdv = moment(work.rdv).format("dd DD MMM HH:mm");//.format("DD/MM/YY HH:mm");
 							return work;
 						})
 						.groupBy(function(work){
