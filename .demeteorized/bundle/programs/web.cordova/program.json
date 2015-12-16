@@ -2006,11 +2006,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/router.js?9052120a92138f35dbfa789c269b2de7e0a6553b",
+      "url": "/app/lib/router.js?47a6748199dbfaf3c71f82759b9bc51a388a51ab",
       "sourceMap": "app/lib/router.js.map",
-      "sourceMapUrl": "/app/lib/9052120a92138f35dbfa789c269b2de7e0a6553b.map",
-      "size": 14050,
-      "hash": "9052120a92138f35dbfa789c269b2de7e0a6553b"
+      "sourceMapUrl": "/app/lib/47a6748199dbfaf3c71f82759b9bc51a388a51ab.map",
+      "size": 13891,
+      "hash": "47a6748199dbfaf3c71f82759b9bc51a388a51ab"
     },
     {
       "path": "app/client/templates/buttons/destroy.js",

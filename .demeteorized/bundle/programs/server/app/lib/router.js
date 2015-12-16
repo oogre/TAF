@@ -201,23 +201,10 @@ Router.configure({
 			var stop = moment(date).add(1, "month").toISOString();
 			where = {
 				"shop._id" : this.params.shopId, 
-				$or : [{
-					rdv : {
-						$gte: start,
-						$lte: stop
-					}
-				},{
-					end : {
-						$exists: false
-					}
-				},{
-					end : ""
-				},{
-					end : {
-						$gte: start,
-						$lte: stop
-					}
-				}]
+				rdv : {
+					$gte: start,
+					$lte: stop
+				}
 			};
 			var tmp = 	_
 						.chain(
