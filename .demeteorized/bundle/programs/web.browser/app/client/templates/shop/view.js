@@ -108,7 +108,7 @@ Template.shopview.helpers({
 
 				delete tmp.undefined;		
 		return{
-			torun : torun,
+			torun : torun.reverse(),
 			unfinished : unfinished,
 			finished : 	_
 						.chain(tmp)

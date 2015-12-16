@@ -2259,11 +2259,11 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/shop/view.js?e45b79f826189ec1d1f30157ea7d4064450bac2a",
+      "url": "/app/client/templates/shop/view.js?c34a3653972fe4b0bd16c1694a60018605d4123a",
       "sourceMap": "app/client/templates/shop/view.js.map",
-      "sourceMapUrl": "/app/client/templates/shop/e45b79f826189ec1d1f30157ea7d4064450bac2a.map",
-      "size": 2671,
-      "hash": "e45b79f826189ec1d1f30157ea7d4064450bac2a"
+      "sourceMapUrl": "/app/client/templates/shop/c34a3653972fe4b0bd16c1694a60018605d4123a.map",
+      "size": 2681,
+      "hash": "c34a3653972fe4b0bd16c1694a60018605d4123a"
     },
     {
       "path": "app/client/templates/task/form.js",
