@@ -194,3 +194,7 @@ label.vertical-label>div{
 .input-group-addon.autowidth{
 	width: auto;
 }
+
+#login-password {
+    text-transform: initial;
+}

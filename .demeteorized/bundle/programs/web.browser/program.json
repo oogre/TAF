@@ -11,13 +11,13 @@
       "hash": "3de40f9b0f3ab56b3162d536ae4576b08e4c6954"
     },
     {
-      "path": "a377d3ba2c9d2aae6cb8da6f146e8a25d634a0b9.css",
+      "path": "7c2f88ecc4cf436838f474b7e73b06d7ddd97dad.css",
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/a377d3ba2c9d2aae6cb8da6f146e8a25d634a0b9.css?meteor_css_resource=true",
-      "size": 181965,
-      "hash": "a377d3ba2c9d2aae6cb8da6f146e8a25d634a0b9"
+      "url": "/7c2f88ecc4cf436838f474b7e73b06d7ddd97dad.css?meteor_css_resource=true",
+      "size": 182004,
+      "hash": "7c2f88ecc4cf436838f474b7e73b06d7ddd97dad"
     },
     {
       "path": "app/fonts/FontAwesome.otf",
