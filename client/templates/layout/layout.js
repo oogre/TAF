@@ -68,6 +68,9 @@ Template.layout.helpers({
   },
   title : function(){
     return Session.get(Meteor.PAGE_TITLE) || "Gestion DU Travail : Atelier du Froid";
+  },
+  absoluteUrl : function(){
+    return Meteor.absoluteUrl();
   }
 });
 

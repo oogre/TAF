@@ -78,7 +78,7 @@
     <splash height="1536" src="resources/ipad_landscape_2x.splash.png" width="2048" />
     <name>GduTAF</name>
     <description>Gestion du Travail à l'Atelier du Froid</description>
-    <author email="vincent@ogre.be" href="http://ogre.be">Vincent Evrard</author>
+    <author email="vincent@ogre.be" href="http://taf.ogre.be">Vincent Evrard</author>
     <preference name="webviewbounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="deployment-target" value="7.0" />
@@ -102,4 +102,5 @@
     <access origin="http://meteor.local/*" />
     <access origin="*://localhost/*" />
     <access origin="*://10.0.2.2/*" />
+    <access origin="*" />
 </widget>

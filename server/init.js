@@ -12,6 +12,8 @@
 /*global process : false */
 /*global UploadServer : false */
 
+
+
 var uploadServerInit = function(){
 	UploadServer.init({
 		tmpDir : process.env.PWD + "/.uploads/tmp",
@@ -120,6 +122,12 @@ var clean = function(){
 	Tasks.remove({});
 	Wikis.remove({});
 };
+
+WebApp.connectHandlers.use(function(req, res, next) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  return next();
+});
+
 
 Meteor.startup(function () {
 	uploadServerInit();

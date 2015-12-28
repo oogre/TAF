@@ -7,7 +7,7 @@
 Template.buttonpicture.events({
 	"click button.photoShoot": function () {
 		var selector = this.selector;
-
+		
 		if(!(selector && selector)){
 			return false;
 		}
@@ -45,7 +45,7 @@ function uploadImage(photo, selector){
 	formData.append("directoryName", "images");
 	formData.append("_id", selector._id);
 	formData.append("collection", selector.collection);
-
+	console.log(selector);
 
 	if(!Meteor.status().connected){
 		Meteor.call("pictureCreator", photo, {

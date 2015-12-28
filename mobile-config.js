@@ -11,9 +11,11 @@ App.info({
 	description: "Gestion du Travail à l'Atelier du Froid",
 	author: "Vincent Evrard",
 	email: "vincent@ogre.be",
-	website: "http://ogre.be"
+	website: "http://taf.ogre.be"
 });
- 
+
+App.accessRule("*");
+
 // Set up resources such as icons and launch screens.
 App.icons({
 	"android_ldpi": "public/icons/icon-36x36.png",
