@@ -167,7 +167,7 @@ Template.position.events({
 			navigator.geolocation.clearWatch(Session.get(Meteor.MAP_ROUTING));
 			Session.set(Meteor.MAP_ROUTING, false);
 		}
-		initRouter(this);
+		initRouter(this.location);
 		return false;
 	},
 	"click .mapResume" : function(){

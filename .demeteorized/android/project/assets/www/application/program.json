@@ -2,13 +2,13 @@
   "format": "web-program-pre1",
   "manifest": [
     {
-      "path": "cf033dad5386ae646ff3da256190af3d7aa466a3.js",
+      "path": "2ddc1a7739a1c0144999e23fa32eb87b818f852c.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/cf033dad5386ae646ff3da256190af3d7aa466a3.js?meteor_js_resource=true",
-      "size": 1407141,
-      "hash": "cf033dad5386ae646ff3da256190af3d7aa466a3"
+      "url": "/2ddc1a7739a1c0144999e23fa32eb87b818f852c.js?meteor_js_resource=true",
+      "size": 1407367,
+      "hash": "2ddc1a7739a1c0144999e23fa32eb87b818f852c"
     },
     {
       "path": "04b81052bf17c5817b2675e1e8059738611ca358.css",
@@ -232,8 +232,8 @@
       "type": "asset",
       "cacheable": false,
       "url": "/splash/splash-320x426.png",
-      "size": 323626,
-      "hash": "8fed9bc5c4af2ae89d4611b24ee409682b4becc8"
+      "size": 1314995,
+      "hash": "05ec2cbf61053509f2781da024d38ad1d274c166"
     },
     {
       "path": "app/splash/splash-320x470.png",
@@ -241,8 +241,8 @@
       "type": "asset",
       "cacheable": false,
       "url": "/splash/splash-320x470.png",
-      "size": 356280,
-      "hash": "8a6335efe71002ff0ce69d90419f5428e9117390"
+      "size": 1414392,
+      "hash": "5f04e20336656edfdac8be10267257cf4223e0c8"
     },
     {
       "path": "app/splash/splash-480x800.png",
@@ -250,8 +250,8 @@
       "type": "asset",
       "cacheable": false,
       "url": "/splash/splash-480x800.png",
-      "size": 955569,
-      "hash": "365c20bdc4e93eeec8397c5aebf2d83e0448d466"
+      "size": 3504059,
+      "hash": "693f889c8979c88c83c7b9274d550ce1dbcd8448"
     },
     {
       "path": "app/splash/splash-720x1280.png",
@@ -259,8 +259,8 @@
       "type": "asset",
       "cacheable": false,
       "url": "/splash/splash-720x1280.png",
-      "size": 2184960,
-      "hash": "ac1519515a288a8e83a155da8aebdff114f7caf1"
+      "size": 8741953,
+      "hash": "267a1a451557eff36af84a9a4ba241a74185abe8"
     },
     {
       "path": "app/fonts/dejavu/DejaVuSans-Bold.ttf",

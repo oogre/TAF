@@ -36,10 +36,22 @@
 					<i class="fa fa-fw fa-2x fa-sign-out"></i>&nbsp; Déconnection
 				</a>
 			</li>
+			{{#if isAdmin}}
+				<li>
+					<a href="#" >
+						<i class="fa fa-fw fa-2x fa-home"></i>&nbsp; {{absoluteUrl}}
+					</a>
+				</li>
+			{{/if}}
 		{{else}}
 			<li>
 				<a href="{{pathFor route='home'}}" class="{{#if currentUser}}{{else}}active{{/if}}">
 					<i class="fa fa-fw fa-2x fa-sign-in"></i>&nbsp; Connection
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<i class="fa fa-fw fa-2x fa-home"></i>&nbsp; {{absoluteUrl}}
 				</a>
 			</li>
 		{{/if}}

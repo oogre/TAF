@@ -7,7 +7,7 @@
 App.info({
 	id: "be.ogre.GduTAF",
 	name: "GduTAF",
-	version: "0.1.1",
+	version: "0.1.2",
 	description: "Gestion du Travail à l'Atelier du Froid",
 	author: "Vincent Evrard",
 	email: "vincent@ogre.be",
