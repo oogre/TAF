@@ -21,12 +21,14 @@ var uploadServerInit = function(){
 		minFileSize : 20,
 		checkCreateDirectories : true, //create the directories for you
 		getDirectory: function(fileInfo, formData) {
+			console.log("getDirectory");
 			if (formData && formData.directoryName) {
 				return formData.directoryName;
 			}
 			return "";
 		},
 		getFileName: function(fileInfo, formData) {
+			console.log("getFileName");
 			var ext = fileInfo.type.split("/").pop();
 			var filename = (new Date()).getTime() + "." + ext;
 			if (formData && formData._id) filename = formData._id + "-" + filename;
@@ -34,6 +36,9 @@ var uploadServerInit = function(){
 			return filename;
 		},
 		finished: function(fileInfo, formData) {
+			console.log(formData);
+			console.log(fileInfo);
+			console.log("fileInfo");
 			if (formData && formData._id) {
 				if(formData.next === "workSignature"){
 					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo);
