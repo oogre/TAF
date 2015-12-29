@@ -64,10 +64,6 @@ Template.workSignature.events({
 	},
 	"click button.save" : function(){
 		var name = this.client ? "Client" : "ADF";
-		alert("name");
-		alert(name);
-		alert(this.work._id);
-		alert(signaturePad[name].toDataURL());
 		uploadImage(this.work._id, name, signaturePad[name].toDataURL());
 		return false;
 	}
@@ -79,16 +75,12 @@ function uploadImage(workId, prefix, photo){
 	formData.append("_id", workId);
 	formData.append("prefix", prefix);
 	formData.append("next", "workSignature");
-	alert(workId);
-	alert(prefix);
 	if(!Meteor.status().connected){
 		Meteor.call("workSignature", workId, prefix, photo);
 		return ;
 	}
-	alert("photo");
 	Meteor.b64toBlob(photo, function success(blob) {
 		formData.append("file[]", blob);
-		alert("blobed");
 		$.ajax({
 			url: Meteor.pictureUploadServer,
 			type: "POST",
@@ -97,11 +89,7 @@ function uploadImage(workId, prefix, photo){
 			contentType: false,
 			processData: false
 		})
-		.done(function(){
-			alert("done");
-		})
 		.fail(function(){
-			alert("failed");
 			Meteor.call("workSignature", workId, prefix, photo);
 		});
 	}, function error(err){
