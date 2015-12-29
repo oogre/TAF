@@ -76,7 +76,6 @@ function uploadImage(workId, prefix, photo){
 	formData.append("prefix", prefix);
 	formData.append("next", "workSignature");
 	
-	
 	if(!Meteor.status().connected){
 		Meteor.call("workSignature", workId, prefix, photo);
 		return ;
@@ -85,7 +84,7 @@ function uploadImage(workId, prefix, photo){
 	Meteor.b64toBlob(photo, function success(blob) {
 		formData.append("file[]", blob);
 		$.ajax({
-			url: "/upload",
+			url: Meteor.pictureUploadServer,
 			type: "POST",
 			data: formData,
 			cache: false,
