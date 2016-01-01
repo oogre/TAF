@@ -36,7 +36,14 @@ Meteor.methods({
 			Router.go("module.index");
 		}
 		return true;
-	}
+	},
+	moduleDestroyer: function (moduleId) {
+		if (! Meteor.userId()) {
+			return new Meteor.Error("not-authorized");
+		}
+		this.unblock();
+		return Modules.remove(moduleId);
+	},
 });
 }).call(this);
 

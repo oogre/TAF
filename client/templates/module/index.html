@@ -54,6 +54,7 @@
 					<a href="{{pathFor route='module.edit' moduleId=_id}}" class="btn btn-lg btn-default pull-right">
 						Modifier
 					</a>
+					{{>buttondestroy method="moduleDestroyer" _id=_id}}
 				{{/if}}
 			{{/unless}}
 		</td>
