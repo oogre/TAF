@@ -47,6 +47,7 @@
 				<a href="{{pathFor route='task.edit' taskId=_id}}" class="btn btn-lg btn-default">
 					Modifier
 				</a>
+				{{>buttondestroy method="taskDestroyer" _id=_id}}
 			{{/if}}
 		</td>
 	</tr>

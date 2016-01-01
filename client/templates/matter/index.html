@@ -34,8 +34,9 @@
 				<a href="{{pathFor route='matter.edit' matterId=_id}}" class="btn btn-lg btn-default">
 					Modifier
 				</a>
+				{{>buttondestroy method="matterDestroyer" _id=_id}}
 			{{/if}}
-			{{>buttondestroy method="matterDestroyer" _id=_id}}
+			
 		</td>
 	</tr>
 </template>

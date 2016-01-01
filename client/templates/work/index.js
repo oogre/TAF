@@ -20,19 +20,19 @@ Template.workIndex.helpers({
 			if(key==1){
 				return {
 					date : moment(self.works.date).subtract(1, "month").format("MMMYYYY"),
-					data : "date="+moment(self.works.date).subtract(1, "month").toISOString()
+					data : "date="+moment(self.works.date).subtract(1, "month").format("YYYY-MM-01")
 				}
 			}
 			else if(key==max){
 				return {
 					date : moment(self.works.date).add(1, "month").format("MMMYYYY"),
-					data : "date="+moment(self.works.date).add(1, "month").toISOString()
+					data : "date="+moment(self.works.date).add(1, "month").format("YYYY-MM-01")
 				}
 			}
 			else{
 				return {
 					date : moment().format("MMMYYYY"),
-					data : ""
+					data : "date="+moment().format("YYYY-MM-01")
 				}
 			}
 		};
