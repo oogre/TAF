@@ -3,7 +3,7 @@
 	<ul class="list-unstyled text-center">
 		{{#if isAdmin }}
 			<li>
-				<button class="btn btn-lg btn-block btn-danger workDestructor" >Supprimer</button>
+				{{>buttondestroy method="workDestructor" class="btn-block" html="Supprimer" _id=_id}}
 			</li>
 		{{/if}}
 		{{#if reopenable}}
@@ -13,6 +13,11 @@
 				{{else}}
 					<button class="btn btn-lg btn-block btn-default workClose" >Cloturer</button>
 				{{/if}}
+			</li>
+		{{/if}}
+		{{#if end}}
+			<li>
+				<button class="btn btn-lg btn-block btn-default print" >Imprimer</button>
 			</li>
 		{{/if}}
 	</ul>

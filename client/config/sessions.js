@@ -32,7 +32,7 @@ Meteor.SIGNATURE				= "signature";
 Meteor.MATTER					= "matter";
 Meteor.PWD_ERROR				= "pwdError";
 Meteor.USER_ERROR				= "userError";
-
+Meteor.DATE_CONF				= "dateConf";
 
 Session.setDefault(Meteor.PAGE_TITLE, false);
 Session.setDefault(Meteor.MENU_KEY, false);
@@ -61,6 +61,8 @@ Session.setDefault(Meteor.MATTER, false);
 Session.setDefault(Meteor.PWD_ERROR, false);
 Session.setDefault(Meteor.USER_ERROR, false);
 Session.setDefault(Meteor.SIGNATURE, {});
+Session.setDefault(Meteor.DATE_CONF, moment().toISOString());
+Session.set(Meteor.DATE_CONF, moment().toISOString());
 Session.setDefault(Meteor.CALENDAR_CONF, {
 	defaultDate : moment().toISOString(),
 	defaultView : "basicDay"

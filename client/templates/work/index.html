@@ -25,9 +25,12 @@
 				{{/if}}
 			{{/each}}
 		</ul>
-		<table class="table" data-db-table-name="worker" >
+		<table class="table" data-db-table-name="works" >
 				<thead>
 					<tr>
+						<th data-db-row-name="work_myId">
+							ID
+						</th>
 						<th data-db-row-name="work_rdv">
 							RDV
 						</th>
@@ -51,6 +54,7 @@
 					
 					{{#each works.unfinished}}
 						<tr>
+							<td>{{myId}}</td>
 							<td>{{rdv}}</td>
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
 							{{#if isConnected isChief}}
@@ -65,6 +69,7 @@
 					{{/if}}
 					{{#each works.torun}}
 						<tr>
+							<td>{{myId}}</td>
 							<td>{{rdv}}</td>
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
 							{{#if isConnected isChief}}
@@ -79,6 +84,7 @@
 					{{/if}}
 					{{#each works.finished}}
 						<tr>
+							<td>{{myId}}</td>
 							<td>{{rdv}}</td>
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
 							{{#if isConnected isChief}}

@@ -1,5 +1,5 @@
 <template name="workerindex">
-	{{#if workers}}
+	{{#if workers2}}
 	<div class="row">
 		<div class="col-sm-12">
 			<table class="table" data-db-table-name="worker" >
@@ -7,6 +7,9 @@
 					<tr>
 						<th data-db-row-name="worker_name">
 							Nom
+						</th>
+						<th>
+							Temps
 						</th>
 						{{#if schedular}}
 							<th>
@@ -26,7 +29,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{{#each workers}}
+					{{#each workers2}}
 						{{>workeritem}}
 					{{/each}}
 				</tbody>
@@ -48,9 +51,16 @@
 				{{/with}}
 			</a>
 		</td>
-			
-		{{#if schedular}}
-			<td>
+		<td class="td-lg timetable">
+			<ul>
+				{{#each timetable}}
+				 <li> {{humanizer this.start}} - {{humanizer this.stop}}</li>
+				{{/each}}
+			</ul>
+		</td>
+		
+		<td>
+			{{#if schedular}}
 				{{#if working }}
 					<button class="btn btn-lg btn-danger btn-block schedule stop">
 						<i class="fa fa-cog fa-spin"></i>&nbsp; Arrêter
@@ -60,15 +70,16 @@
 						<i class="fa fa-play"></i>&nbsp; Commencer
 					</button>
 				{{/if}}
-			</td>
-		{{/if}}
+			{{/if}}
+		</td>
+		
 		{{#if schedularSummary}}
 			<td class="td-lg">
 				{{schedularSummary}}
 			</td>
 		{{/if}}
 		
-		{{#if actions }}
+		{{#if isEditAndDestroyVisible }}
 				<td>
 					{{#if isChief }}
 						<a class="btn btn-lg btn-default" href="{{pathFor route='user.edit' workerId=_id}}">Modifier</a>

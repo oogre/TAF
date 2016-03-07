@@ -42,12 +42,22 @@ Template["work-viewaction"].events({
 		});
 		return false;
 	},
-	"click .workDestructor" : function(){
+	
+	"click .print" : function(){
 		var workId = $("[data-work-id]").first().attr("data-work-id");
-		Meteor.call("workDestructor", workId, function(error){
-			if(error) return console.log(error);
-			Session.set(Meteor.CONTEXT_MENU_KEY, false);
-			Router.go("home");
-		});
+		if(this.type == "entretien"){
+			Meteor.call("maintenanceToPdf", workId, function(err, file){
+				if(err)console.error(err);
+				else window.open(file);
+			});
+		}
+		else{
+			Meteor.call("workToPdf", workId, function(err, file){
+				if(err)console.error(err);
+				else window.open(file);
+			});
+		}
+		return false;
 	}
+
 });

@@ -1,5 +1,11 @@
 <template name="buttondestroy">
 	{{#if isBoss }}
-		<button class="btn btn-lg btn-danger" data-method="{{method}}" data-id="{{_id}}" data-selector="{{selector}}"><i class="fa fa-trash"></i></button>
+		<button class="btn btn-lg btn-danger {{class}}" data-method="{{method}}" data-id="{{_id}}" data-selector="{{selector}}">
+			{{#if html}}
+				{{html}} 
+			{{else}}
+				<i class="fa fa-trash"></i>
+			{{/if}}
+		</button>
 	{{/if}}
 </template>

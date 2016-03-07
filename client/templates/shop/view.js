@@ -25,14 +25,26 @@ Template.shopview.events({
 	},
 	"click .maintenanceToPdf" : function(event){
 		var workId = $(event.target).attr("data-work-id");
-
 		Meteor.call("maintenanceToPdf", workId, function(err, file){
 			if(err)console.error(err);
 			else window.open(file);
 		});
 	},
-})
+});
+
+
+function timeDistToZone(timeInSeconds){
+	var timeDist = 2 * Math.ceil(timeInSeconds / 900) * 900;
+	timeDist = moment.duration(timeDist , "seconds");
+	var hours = Math.floor(timeDist.asHours());
+	var min = (timeDist.minutes() / 60)  * 100;
+	return timeInSeconds ? hours+"."+min : "";
+};
+
 Template.shopview.helpers({
+	zone : function(){
+		return " Zone : "+ timeDistToZone(this.shop.timeDist);
+	},
 	location : function(){
 		return this.shop.location;
 	},
