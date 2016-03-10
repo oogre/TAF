@@ -6,6 +6,23 @@
 					<input 	class="typeahead input-lg" name="matter" id="matter" type="text" 
 							placeholder="Matériel" autocomplete="off" spellcheck="off" 
 							data-source="matters" data-highlight="true" required/>
+					{{#if origins}}
+						<select name="origin" class="form-control input-lg">
+							<option  disabled selected>origin</option>
+							{{#each origins}}
+								<option value="{{this._id}}">{{this.ref}}</option>
+							{{/each}}
+						</select>
+
+						{{#if destins}}
+							<select name="destiny" class="form-control input-lg">
+								<option disabled selected>destination</option>
+								{{#each destins}}
+									<option value="{{this.serial}}">{{this.serial}}</option>
+								{{/each}}
+							</select>
+						{{/if}}
+					{{/if}}
 				</label>
 				<input class="form-control input-lg input-xl z-index-auto" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">
 				<label class="input-group-addon autowidth">

@@ -1,23 +1,27 @@
 <template name="workSignature">
-	
-	<div class="btn-margin-bottom btn-margin-top">
-		<button class="btn btn-lg btn-danger reset" {{drawn}}>
-			Effacer
-		</button>
-		<button class="btn btn-lg btn-primary save" {{drawn}}>
-			Valider
-		</button>
-	</div>
-
-	<div class="input-group col-sm-12">
-		<label class="input-group-addon vertical-label" ><div>{{name}}</div></label>
-		<div class="modules form-control input-lg no-padding">
-			{{#if saved}}
-				<img src="{{saved}}" />
-			{{else}}
-				<canvas class="signature disable-swipe"></canvas>
-			{{/if}}
+	<div class="popup">
+		<div class="btn-margin-bottom btn-margin-top">
+			<button class="btn btn-lg btn-default exit">
+				Fermer
+			</button>
+			<button class="btn btn-lg btn-danger reset" {{drawn}}>
+				Effacer
+			</button>
+			<button class="btn btn-lg btn-primary save" {{drawn}}>
+				Valider
+			</button>
 		</div>
-	</div>
+
+		<div class="input-group">
+			<label class="input-group-addon vertical-label" ><div>{{name}}</div></label>
+			<div class="modules form-control input-lg no-padding">
+				{{#if saved}}
+					<img src="{{saved}}" />
+				{{else}}
+					<canvas class="signature disable-swipe"></canvas>
+				{{/if}}
+			</div>
+		</div>
+</div>
 	
 </template>

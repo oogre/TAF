@@ -14,22 +14,28 @@ Meteor.startup(function () {
     swipe_velocity : 0.10 // px/ms
   })
   .on("swipeleft", function(event) {
-    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe")){
+    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe") || Session.equals(Meteor.SIGNATURE_OPEN,false)){
       return false;
     }
     Session.set(Meteor.MENU_KEY, false);
   })
   .on("swiperight", function(event) {
-    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe")){
+    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe") || Session.equals(Meteor.SIGNATURE_OPEN,false)){
       return false;
     }
     Session.set(Meteor.MENU_KEY, true);
   })
   .on("swipedown", function() {
+    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe") || Session.equals(Meteor.SIGNATURE_OPEN,false)){
+      return false;
+    }
     if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY) && $(".cbp-spmenu-push").get(0).scrollTop === 0)
         Session.set(Meteor.CONTEXT_MENU_KEY, true);
   })
   .on("swipeup", function() {
+    if($(event.target).parents(".disable-swipe").length>0 || $(event.target).hasClass("disable-swipe") || Session.equals(Meteor.SIGNATURE_OPEN,false)){
+      return false;
+    }
    if(Session.get(Meteor.FILL_CONTEXT_MENU_KEY))
         Session.set(Meteor.CONTEXT_MENU_KEY, false);
   });

@@ -36,12 +36,37 @@ Template.matterselector.helpers({
 			var matter = Session.get(Meteor.MATTER);
 			var inputReset = "select[name='unit'], input[name='quantity'], input[name='matter']";
 			if (matter && matter.quantity && matter.name && (matter.unit||matter.unit==="") && self && self.work){
+				var originsId = $("select[name='origin']").val();
+				var destinyId = $("select[name='destiny']").val();
+
 				Session.set(Meteor.MATTER, false);
+				if(originsId && destinyId){
+					Meteor.call("matterOriginsTransfert", matter.quantity, originsId, destinyId, moment().toISOString());
+				}
+
 				Meteor.call("workMatter", self.work._id, matter, inputReset, function(){
 					$(inputReset).val("");
 				});
 			}
 		});
+	},
+	origins : function(){
+		var matter = Session.get(Meteor.MATTER);
+		if(matter && matter._id){
+			return Origins.find({
+				matter : matter._id,
+			}).fetch()
+		}
+		return false;
+	},
+	destins : function(){
+		if(this && this.work && this.work.shop && this.work.shop._id){
+			var shop = Shops.findOne(this.work.shop._id);
+			if(shop){
+				return shop.modules;
+			}
+		}
+		return false;
 	}
 });
 Template.matterselector.destroyed = function(){

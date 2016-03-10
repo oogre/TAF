@@ -10,15 +10,19 @@ var signaturePad = {};
 
 Template.workSignature.destroyed = function(){
 	Session.set(Meteor.SIGNATURE, {});
+	Session.set(Meteor.SIGNATURE_OPEN, false);
 };
 
 Template.workSignature.rendered = function(){
 	var name = this.data.client ? "Client" : "ADF";
 
 	var canvas = $(this.lastNode).find("canvas.signature");
+	var popupParent = canvas.parents(".popup");
+	var groupParent = popupParent.find(".input-group");
+
 	if(canvas[0]){
-		canvas[0].width = canvas.width();
-		canvas[0].height = 210;
+		canvas[0].width = popupParent.width() - canvas.parent().offset().left;
+		canvas[0].height = popupParent.height() - groupParent.offset().top;
 		signaturePad[name] = new SignaturePad(canvas[0], {
 			onEnd : function(){
 				var signature = Session.get(Meteor.SIGNATURE);
@@ -31,7 +35,7 @@ Template.workSignature.rendered = function(){
 
 Template.workSignature.helpers({
 	name : function(){
-		return this.client ? "Client" : "Atelier du froid";
+		return this.client ? "Client" : "ADF";
 	},
 	drawn : function(){
 		var name = this.client ? "Client" : "ADF";
@@ -64,7 +68,14 @@ Template.workSignature.events({
 	},
 	"click button.save" : function(){
 		var name = this.client ? "Client" : "ADF";
+		signaturePad[name]._ctx.fillStyle = "black";
+		signaturePad[name]._ctx.font = "64px Arial";
+		signaturePad[name]._ctx.fillText($("#"+name.toLowerCase()+"_name").val(), 100, 100);
 		uploadImage(this.work._id, name, signaturePad[name].toDataURL());
+		return false;
+	},
+	"click button.exit" : function(){
+		Session.set(Meteor.SIGNATURE_OPEN, false);
 		return false;
 	}
 });

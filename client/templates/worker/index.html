@@ -1,5 +1,5 @@
 <template name="workerindex">
-	{{#if workers2}}
+	{{#if workers}}
 	<div class="row">
 		<div class="col-sm-12">
 			<table class="table" data-db-table-name="worker" >
@@ -8,28 +8,25 @@
 						<th data-db-row-name="worker_name">
 							Nom
 						</th>
-						<th>
-							Temps
-						</th>
-						{{#if schedular}}
-							<th>
-								Travail
-							</th>
-						{{/if}}
-						{{#if schedularSummary}}
-							<th>
-								Temps de travail - hh:mm
-							</th>
-						{{/if}}
-						{{#if actions }}
+						{{#if isEditAndDestroyVisible }}
 							<th>
 								Actions
 							</th>
+						{{else}}
+							<th>
+								Temps
+							</th>
+
+							{{#unless summary}}
+								<th>
+									Travail
+								</th>
+							{{/unless}}
 						{{/if}}
 					</tr>
 				</thead>
 				<tbody>
-					{{#each workers2}}
+					{{#each workers}}
 						{{>workeritem}}
 					{{/each}}
 				</tbody>
@@ -43,7 +40,7 @@
 	<tr data-worker-id="{{_id}}">
 		
 		<td class="td-lg">
-			<a href="{{pathFor route='worker.view' workerId=_id}}" class="btn btn-lg btn-link">
+			<a href="{{pathFor route='worker.view' workerId=_id}}" class="">
 				{{#with profile}}
 					{{firstname}} {{lastname}} 
 				{{else}}
@@ -51,34 +48,7 @@
 				{{/with}}
 			</a>
 		</td>
-		<td class="td-lg timetable">
-			<ul>
-				{{#each timetable}}
-				 <li> {{humanizer this.start}} - {{humanizer this.stop}}</li>
-				{{/each}}
-			</ul>
-		</td>
-		
-		<td>
-			{{#if schedular}}
-				{{#if working }}
-					<button class="btn btn-lg btn-danger btn-block schedule stop">
-						<i class="fa fa-cog fa-spin"></i>&nbsp; Arrêter
-					</button>
-				{{else}}
-					<button class="btn btn-lg btn-default btn-block schedule start">
-						<i class="fa fa-play"></i>&nbsp; Commencer
-					</button>
-				{{/if}}
-			{{/if}}
-		</td>
-		
-		{{#if schedularSummary}}
-			<td class="td-lg">
-				{{schedularSummary}}
-			</td>
-		{{/if}}
-		
+				
 		{{#if isEditAndDestroyVisible }}
 				<td>
 					{{#if isChief }}
@@ -86,6 +56,31 @@
 					{{/if}}
 					{{>buttondestroy method="workerDestroyer" _id=_id}}
 				</td>
+		{{else}}
+			<td class="td-lg timetable">
+				<ul>
+					{{#each timetable}}
+					 <li>{{humanizer this.start this.stop}}</li>
+					{{/each}}
+					<li>Total : <strong>{{summarize timetable}}</strong></li>
+				</ul>
+			</td>
+			
+			{{#unless summary}}
+			<td>
+				{{#if schedular}}
+					{{#if working }}
+						<button class="btn btn-lg btn-danger btn-block schedule stop">
+							<i class="fa fa-cog fa-spin"></i>&nbsp; Arrêter
+						</button>
+					{{else}}
+						<button class="btn btn-lg btn-default btn-block schedule start">
+							<i class="fa fa-play"></i>&nbsp; Commencer
+						</button>
+					{{/if}}
+				{{/if}}
+			</td>
+			{{/unless}}
 		{{/if}}
 	</tr>
 </template>

@@ -1,0 +1,78 @@
+
+<template name="mattershow">
+	
+	<div class="row">
+		<label class="col-sm-2">Identification</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				{{matter.name}}
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+	
+	<div class="row">
+		<label class="col-sm-2">Unité</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				{{matter.unit}}
+			</div>
+		</div>
+	</div>
+
+	<hr/>
+	
+	<div class="row">
+		<label class="col-sm-2">Origines</label>
+		<div class="col-sm-10">
+			<div class="col-sm-12">
+				<div class="input-group col-sm-12">
+					<label class="input-group-addon" for="ref" >Ajouter/Trouver</label>
+					<input class="form-control input-lg" type="text" id="ref" name="ref" value="">
+					<span class="input-group-btn">
+					 	<button class="btn btn-lg btn-default add" {{disable}}>
+							Ajouter
+						</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="col-sm-12">
+				
+
+
+				<table class="table" data-db-table-name="Origin" >
+					<thead>
+						<tr>
+							<th>
+								Origine Ref
+							</th>
+							<th>
+								Action
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each originList}}
+							<tr>
+								<td class="td-lg">
+									<a href="{{pathFor route='origin.show' originId=_id}}" class="btn btn-link btn-lg">{{ref}}</a>
+								</td>
+								<td>
+									{{>buttondestroy method="originDestroyer" _id=_id}}
+								</td>
+							</tr>
+						{{/each}}
+					</tbody>
+				</table>
+
+
+
+			</div>
+		</div>
+	</div>
+</template>

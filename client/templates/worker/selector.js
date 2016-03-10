@@ -41,7 +41,7 @@ var initSelector = function(workers, autoAdd){
 		onChange: function(option, checked) {
 			if(checked){
 				if(autoAdd){
-					Meteor.call("workAddWorker2", workId, $("#workers").val());
+					Meteor.call("workAddWorker", workId, $("#workers").val());
 				}
 			}
 		}

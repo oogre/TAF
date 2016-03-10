@@ -51,17 +51,18 @@
 							<th colspan="3">Travaux en cours :</th>
 						</tr>
 					{{/if}}
-					
 					{{#each works.unfinished}}
 						<tr>
-							<td>{{myId}}</td>
+							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
 							<td>{{rdv}}</td>
-							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
+							<td>{{type}}<br/></td>
 							{{#if isConnected isChief}}
 							<td></td>
 							{{/if}}
 						</tr>
 					{{/each}}
+
+
 					{{#if works.torun}}
 						<tr>
 							<th colspan="3">Travaux à venir :</th>
@@ -69,14 +70,16 @@
 					{{/if}}
 					{{#each works.torun}}
 						<tr>
-							<td>{{myId}}</td>
+							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
 							<td>{{rdv}}</td>
-							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
+							<td>{{type}}<br/></td>
 							{{#if isConnected isChief}}
 							<td>{{>buttondestroy method="workDestructor" _id=_id}}</td>
 							{{/if}}
 						</tr>
 					{{/each}}
+
+					
 					{{#if works.finished}}
 						<tr>
 							<th colspan="3">Travaux cloturés :</th>
@@ -84,9 +87,9 @@
 					{{/if}}
 					{{#each works.finished}}
 						<tr>
-							<td>{{myId}}</td>
+							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
 							<td>{{rdv}}</td>
-							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{type}}</a><br/></td>
+							<td>{{type}}<br/></td>
 							{{#if isConnected isChief}}
 							<td>
 								<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-primary">

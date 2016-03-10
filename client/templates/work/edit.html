@@ -10,7 +10,7 @@
 			<fieldset class="row">
 				<label class="col-sm-2">Client/Magasin</label>
 				<div class="form-group col-sm-10">
-					<a href="{{pathFor route='shop.view' shopId=shop._id}}" class="btn btn-link btn-lg" >{{shop.name}} - {{shop.brand}}</a>
+					<a href="{{pathFor route='shop.view' shopId=shop._id}}" class="" >{{shop.name}} - {{shop.brand}}</a>
 				</div>
 			</fieldset>
 			
@@ -26,7 +26,7 @@
 								<button class="btn btn-default btn-lg workerAdd" >Ajouter</button>
 							{{/if}}
 						{{/if}}
-						{{>workerindex schedular=true worker_ids=worker_ids workId=_id}}
+						{{>workerindex origine='shop' schedular=true worker_ids=worker_ids workId=_id}}
 					</div>
 			</fieldset>
 			

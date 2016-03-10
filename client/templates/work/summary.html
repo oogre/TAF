@@ -32,7 +32,7 @@
 			<fieldset class="row worker">
 				<label class="col-sm-2">Hommes</label>
 					<div class="col-sm-10">
-						{{>workerindex schedularSummary=true worker_ids=worker_ids workId=_id}}
+						{{>workerindex origine='shop' summary=true workId=_id}}
 					</div>
 			</fieldset>
 
@@ -80,11 +80,52 @@
 
 			<fieldset class="row">
 				<label class="col-sm-2">Signature</label>
-				<div class="form-group col-sm-5">
-					{{>workSignature work=this client=true}}
+				<div class="signature form-group col-sm-5">
+					{{#if saved 'Client'}}
+						<div class="input-group col-sm-12">
+							<label class="input-group-addon" for="client_name">Client</label>
+							<div class="modules form-control input-lg no-padding">
+								<img src="{{saved 'Client'}}" />
+							</div>
+						</div>
+					{{else}}
+						<div class="input-group col-sm-12">
+							<label class="input-group-addon" for="client_name">Nom client</label>
+							<input class="form-control input-lg" type="text" id="client_name" name="client_name" />
+							<span class="input-group-btn" id="basic-addon1">
+							 	<button class="btn btn-lg btn-default sign Client " {{disable 'Client'}}>
+									Sign
+								</button>
+							</span>
+						</div>
+						{{#if popupedSig 'Client'}}
+							{{>workSignature work=this client=true}}
+						{{/if}}
+					{{/if}}
+					
 				</div>
-				<div class="form-group col-sm-5">
-					{{>workSignature work=this client=false}}
+				<div class="signature form-group col-sm-5">
+					{{#if saved 'ADF'}}
+						<div class="input-group col-sm-12">
+							<label class="input-group-addon" for="adf_name">Tech</label>
+							<div class="modules form-control input-lg no-padding">
+								<img src="{{saved 'ADF'}}" />
+							</div>
+						</div>
+					{{else}}
+						<div class="input-group col-sm-12">
+							<label class="input-group-addon" for="client_name">Nom tech</label>
+							<input class="form-control input-lg" type="text" id="adf_name" name="adf_name" />
+							<span class="input-group-btn" id="basic-addon1">
+								<button class="btn btn-lg btn-default sign ADF" {{disable 'ADF'}}>
+									Sign
+								</button>
+							</span>
+						</div>
+						{{#if popupedSig 'ADF'}}
+							{{>workSignature work=this client=false}}
+						{{/if}}
+					{{/if}}					
 				</div>
 			</fieldset>
 
