@@ -42,9 +42,6 @@
 	<div class="row">
 		<div class="col-sm-offset-2 col-sm-10">
 			<div class="col-sm-12">
-				
-
-
 				<table class="table" data-db-table-name="Origin" >
 					<thead>
 						<tr>
@@ -57,21 +54,29 @@
 						</tr>
 					</thead>
 					<tbody>
-						{{#each originList}}
+						{{#if originList}}
+							{{#each originList}}
+								<tr>
+									<td class="td-lg">
+										<a href="{{pathFor route='origin.show' originId=_id}}" class="btn btn-link btn-lg">{{ref}}</a>
+									</td>
+									<td>
+										{{>buttondestroy method="originDestroyer" _id=_id}}
+									</td>
+								</tr>
+							{{/each}}
+						{{else}}
 							<tr>
 								<td class="td-lg">
-									<a href="{{pathFor route='origin.show' originId=_id}}" class="btn btn-link btn-lg">{{ref}}</a>
+									Cette liste est vide
 								</td>
 								<td>
-									{{>buttondestroy method="originDestroyer" _id=_id}}
 								</td>
 							</tr>
-						{{/each}}
+						{{/if}}
+						
 					</tbody>
 				</table>
-
-
-
 			</div>
 		</div>
 	</div>

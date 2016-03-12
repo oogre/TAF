@@ -204,3 +204,12 @@ label.vertical-label>div{
     list-style-type: none;
     font-size: 0.85em;
 }
+.matterTransfert input.typeahead{
+	float: left;
+	max-width: 100px;
+	border: solid 1px #ccc;
+}
+.matterTransfert select[name="destiny"]{
+	float: left;
+	max-width: 100px;
+}
