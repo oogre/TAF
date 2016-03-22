@@ -71,7 +71,14 @@ Template["moduleitem"] = new Template("Template.moduleitem", (function() {
           }));
         },
         "class": "btn btn-lg btn-default pull-right"
-      }, "\n						Modifier\n					"), "\n				" ];
+      }, "\n						Modifier\n					"), "\n					", Blaze._TemplateWith(function() {
+        return {
+          method: Spacebars.call("moduleDestroyer"),
+          _id: Spacebars.call(view.lookup("_id"))
+        };
+      }, function() {
+        return Spacebars.include(view.lookupTemplate("buttondestroy"));
+      }), "\n				" ];
     }), "\n			" ];
   }), "\n		"), "\n	");
 }));

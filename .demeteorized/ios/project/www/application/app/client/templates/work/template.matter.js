@@ -8,7 +8,56 @@ Template["matterselector"] = new Template("Template.matterselector", (function()
     "class": "form-group col-sm-12"
   }, "\n			", HTML.DIV({
     "class": "input-group col-sm-12"
-  }, "\n				", HTML.Raw('<label class="input-group-addon autowidth" for="matter">\n					<input class="typeahead input-lg" name="matter" id="matter" type="text" placeholder="Matériel" autocomplete="off" spellcheck="off" data-source="matters" data-highlight="true" required="">\n				</label>'), "\n				", HTML.Raw('<input class="form-control input-lg input-xl z-index-auto" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">'), "\n				", HTML.LABEL({
+  }, "\n				", HTML.LABEL({
+    "class": "input-group-addon autowidth",
+    "for": "matter"
+  }, "\n					", HTML.Raw('<input class="typeahead input-lg" name="matter" id="matter" type="text" placeholder="Matériel" autocomplete="off" spellcheck="off" data-source="matters" data-highlight="true" required="">'), "\n					", Blaze.If(function() {
+    return Spacebars.call(view.lookup("origins"));
+  }, function() {
+    return [ "\n						", HTML.SELECT({
+      name: "origin",
+      "class": "form-control input-lg barcode"
+    }, "\n							", HTML.OPTION({
+      disabled: "",
+      selected: ""
+    }, "origin"), "\n							", Blaze.If(function() {
+      return Spacebars.call(view.lookup("isMobile"));
+    }, function() {
+      return [ "\n								", HTML.OPTION({
+        value: "barcode"
+      }, "~ Scan ~"), "\n							" ];
+    }), "\n							", Blaze.Each(function() {
+      return Spacebars.call(view.lookup("origins"));
+    }, function() {
+      return [ "\n								", HTML.OPTION({
+        value: function() {
+          return Spacebars.mustache(Spacebars.dot(view.lookup("."), "_id"));
+        }
+      }, Blaze.View("lookup:..ref", function() {
+        return Spacebars.mustache(Spacebars.dot(view.lookup("."), "ref"));
+      })), "\n							" ];
+    }), "\n						"), "\n\n						", Blaze.If(function() {
+      return Spacebars.call(view.lookup("destins"));
+    }, function() {
+      return [ "\n							", HTML.SELECT({
+        name: "destiny",
+        "class": "form-control input-lg"
+      }, "\n								", HTML.OPTION({
+        disabled: "",
+        selected: ""
+      }, "destination"), "\n								", Blaze.Each(function() {
+        return Spacebars.call(view.lookup("destins"));
+      }, function() {
+        return [ "\n									", HTML.OPTION({
+          value: function() {
+            return Spacebars.mustache(Spacebars.dot(view.lookup("."), "serial"));
+          }
+        }, Blaze.View("lookup:..serial", function() {
+          return Spacebars.mustache(Spacebars.dot(view.lookup("."), "serial"));
+        })), "\n								" ];
+      }), "\n							"), "\n						" ];
+    }), "\n					" ];
+  }), "\n				"), "\n				", HTML.Raw('<input class="form-control input-lg input-xl z-index-auto" type="number" step="any" min="0" name="quantity" placeholder="Quantité" value="">'), "\n				", HTML.LABEL({
     "class": "input-group-addon autowidth"
   }, "\n					", HTML.SELECT({
     "class": "form-control input-lg lowercase z-index-auto",

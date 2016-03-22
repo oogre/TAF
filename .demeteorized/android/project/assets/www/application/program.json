@@ -2,22 +2,22 @@
   "format": "web-program-pre1",
   "manifest": [
     {
-      "path": "69d71381f9743c63d44f45b085e64f1074bc424c.js",
+      "path": "90aa07b85297affeef60c374fc59fad24dae7e97.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/69d71381f9743c63d44f45b085e64f1074bc424c.js?meteor_js_resource=true",
-      "size": 1407740,
-      "hash": "69d71381f9743c63d44f45b085e64f1074bc424c"
+      "url": "/90aa07b85297affeef60c374fc59fad24dae7e97.js?meteor_js_resource=true",
+      "size": 1473273,
+      "hash": "90aa07b85297affeef60c374fc59fad24dae7e97"
     },
     {
-      "path": "04b81052bf17c5817b2675e1e8059738611ca358.css",
+      "path": "76c5f03ebbd65a091193fcca399b8fc4f8186034.css",
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/04b81052bf17c5817b2675e1e8059738611ca358.css?meteor_css_resource=true",
-      "size": 180865,
-      "hash": "04b81052bf17c5817b2675e1e8059738611ca358"
+      "url": "/76c5f03ebbd65a091193fcca399b8fc4f8186034.css?meteor_css_resource=true",
+      "size": 181847,
+      "hash": "76c5f03ebbd65a091193fcca399b8fc4f8186034"
     },
     {
       "path": "app/fonts/FontAwesome.otf",

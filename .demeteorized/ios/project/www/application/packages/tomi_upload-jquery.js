@@ -2865,7 +2865,7 @@ Template['dropzone'].helpers({                                                  
                                                                                                                        // 14
     // we may have not yet selected a file                                                                             // 15
     if (progress.progress == 0 || progress.progress == 100) {                                                          // 16
-      return "Drop files here";                                                                                        // 17
+      return Uploader.localisation.dropFiles;                                                                          // 17
     }                                                                                                                  // 18
     return progress.progress + "%";                                                                                    // 19
   },                                                                                                                   // 20
@@ -2915,6 +2915,7 @@ Template['dropzone'].rendered = function () {                                   
     }, 100);                                                                                                           // 64
   });                                                                                                                  // 65
 };                                                                                                                     // 66
+                                                                                                                       // 67
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -2949,330 +2950,331 @@ Uploader = {                                                                    
     remove: "Remove",                                                                                                  // 15
     upload: "Upload",                                                                                                  // 16
     done: "Done",                                                                                                      // 17
-    cancel: "Cancel"                                                                                                   // 18
-  },                                                                                                                   // 19
-  UI: {                                                                                                                // 20
-    bootstrap: {                                                                                                       // 21
-      upload: 'btn btn-primary btn-file upload-control',                                                               // 22
-      progressOuter: 'form-control upload-control',                                                                    // 23
-      progressInner: 'progressInner',                                                                                  // 24
-      progressBar: 'progress-bar progress-bar-success progress-bar-striped',                                           // 25
-      removeButton: 'btn btn-default upload-control remove',                                                           // 26
-      removeButtonIcon: 'glyphicon glyphicon-remove',                                                                  // 27
-      startButton: 'btn btn-info upload-control start',                                                                // 28
-      startButtonIcon: 'glyphicon glyphicon-upload',                                                                   // 29
-      doneButton: 'btn btn-default upload-control done',                                                               // 30
-      doneButtonIcon: 'glyphicon glyphicon-ok',                                                                        // 31
-      cancelButton: 'btn btn-danger upload-control cancel',                                                            // 32
-      cancelButtonIcon: 'glyphicon glyphicon-stop',                                                                    // 33
-      cancelledButton: 'btn btn-warning upload-control',                                                               // 34
-      cancelledButtonIcon: 'glyphicon glyphicon-cross'                                                                 // 35
-    },                                                                                                                 // 36
-    semanticUI: {                                                                                                      // 37
-      upload: 'ui icon button btn-file leftButton upload-control',                                                     // 38
-      progressOuter: 'progressOuter',                                                                                  // 39
-      progressInner: 'semantic progressInner',                                                                         // 40
-      progressBar: 'bar progress-bar',                                                                                 // 41
-      removeButton: 'ui red button upload-control remove rightButton',                                                 // 42
-      removeButtonIcon: 'trash icon',                                                                                  // 43
-      startButton: 'ui button primary upload-control start rightButton',                                               // 44
-      startButtonIcon: 'upload icon',                                                                                  // 45
-      doneButton: 'ui green button upload-control rightButton done',                                                   // 46
-      doneButtonIcon: 'icon thumbs up',                                                                                // 47
-      cancelButton: 'ui yellow button upload-control cancel rightButton',                                              // 48
-      cancelButtonIcon: 'icon stop',                                                                                   // 49
-      cancelledButton: 'ui yellow button upload-control rightButton'                                                   // 50
-    }                                                                                                                  // 51
-  },                                                                                                                   // 52
-  uploadUrl: '/upload',                                                                                                // 53
-  createName: function(templateContext) {                                                                              // 54
-    if (templateContext.queue.length == 1) {                                                                           // 55
-      var file = templateContext.queue[0];                                                                             // 56
-      templateContext.info.set(file);                                                                                  // 57
-    } else {                                                                                                           // 58
-      // calculate size                                                                                                // 59
-      var file = {                                                                                                     // 60
-        name: templateContext.queue.length + ' files',                                                                 // 61
-        size: templateContext.queue.size                                                                               // 62
-      }                                                                                                                // 63
-      templateContext.info.set(file);                                                                                  // 64
-    }                                                                                                                  // 65
-  },                                                                                                                   // 66
-  /**                                                                                                                  // 67
-   * Starts upload                                                                                                     // 68
-   * @param e                                                                                                          // 69
-   * @param {string} name Name of the file in the queue that we want to upload                                         // 70
-   */                                                                                                                  // 71
-  startUpload: function(e, name) {                                                                                     // 72
-    if (e) e.preventDefault();                                                                                         // 73
-                                                                                                                       // 74
-    if (this.queue.length == 0) return;                                                                                // 75
-                                                                                                                       // 76
-    var that = this;                                                                                                   // 77
-                                                                                                                       // 78
-    $.each(this.queue, function(index, queueItem) {                                                                    // 79
-                                                                                                                       // 80
-      var data = queueItem.data;                                                                                       // 81
-      if (name && data.files[0].name !== name) return true;                                                            // 82
-                                                                                                                       // 83
-      data.jqXHR = data.submit()                                                                                       // 84
-        .done(function(data, textStatus, jqXHR) {                                                                      // 85
-          // remove from queue                                                                                         // 86
-          that.queue.splice(that.queue.indexOf(queueItem), 1);                                                         // 87
-                                                                                                                       // 88
-          Uploader.log(Uploader.logLevels.debug, 'data.sumbit.done: textStatus= ' + textStatus);                       // 89
-                                                                                                                       // 90
-          if (Uploader.status) {                                                                                       // 91
-            Uploader.status(false, data, textStatus, jqXHR);                                                           // 92
-          }                                                                                                            // 93
-        })                                                                                                             // 94
-        .fail(function(jqXHR, textStatus, errorThrown) {                                                               // 95
-          // remove from queue                                                                                         // 96
-          that.queue.splice(that.queue.indexOf(queueItem), 1);                                                         // 97
-                                                                                                                       // 98
-          if (jqXHR.statusText === 'abort') {                                                                          // 99
-            that.info.set({                                                                                            // 100
-              name: 'Aborted',                                                                                         // 101
-              size: 0                                                                                                  // 102
-            })                                                                                                         // 103
-          } else {                                                                                                     // 104
-            that.info.set({                                                                                            // 105
-              name: 'Failed: ' + jqXHR.responseText + ' ' + jqXHR.status + ' ' + jqXHR.statusText,                     // 106
-              size: 0                                                                                                  // 107
-            })                                                                                                         // 108
-          }                                                                                                            // 109
-          if (Uploader.status) {                                                                                       // 110
-            Uploader.status(true, data, textStatus, jqXHR);                                                            // 111
-          }                                                                                                            // 112
-                                                                                                                       // 113
+    cancel: "Cancel",                                                                                                  // 18
+    dropFiles: "Drop files here"                                                                                       // 19
+  },                                                                                                                   // 20
+  UI: {                                                                                                                // 21
+    bootstrap: {                                                                                                       // 22
+      upload: 'btn btn-primary btn-file upload-control',                                                               // 23
+      progressOuter: 'form-control upload-control',                                                                    // 24
+      progressInner: 'progressInner',                                                                                  // 25
+      progressBar: 'progress-bar progress-bar-success progress-bar-striped',                                           // 26
+      removeButton: 'btn btn-default upload-control remove',                                                           // 27
+      removeButtonIcon: 'glyphicon glyphicon-remove',                                                                  // 28
+      startButton: 'btn btn-info upload-control start',                                                                // 29
+      startButtonIcon: 'glyphicon glyphicon-upload',                                                                   // 30
+      doneButton: 'btn btn-default upload-control done',                                                               // 31
+      doneButtonIcon: 'glyphicon glyphicon-ok',                                                                        // 32
+      cancelButton: 'btn btn-danger upload-control cancel',                                                            // 33
+      cancelButtonIcon: 'glyphicon glyphicon-stop',                                                                    // 34
+      cancelledButton: 'btn btn-warning upload-control',                                                               // 35
+      cancelledButtonIcon: 'glyphicon glyphicon-cross'                                                                 // 36
+    },                                                                                                                 // 37
+    semanticUI: {                                                                                                      // 38
+      upload: 'ui icon button btn-file leftButton upload-control',                                                     // 39
+      progressOuter: 'progressOuter',                                                                                  // 40
+      progressInner: 'semantic progressInner',                                                                         // 41
+      progressBar: 'bar progress-bar',                                                                                 // 42
+      removeButton: 'ui red button upload-control remove rightButton',                                                 // 43
+      removeButtonIcon: 'trash icon',                                                                                  // 44
+      startButton: 'ui button primary upload-control start rightButton',                                               // 45
+      startButtonIcon: 'upload icon',                                                                                  // 46
+      doneButton: 'ui green button upload-control rightButton done',                                                   // 47
+      doneButtonIcon: 'icon thumbs up',                                                                                // 48
+      cancelButton: 'ui yellow button upload-control cancel rightButton',                                              // 49
+      cancelButtonIcon: 'icon stop',                                                                                   // 50
+      cancelledButton: 'ui yellow button upload-control rightButton'                                                   // 51
+    }                                                                                                                  // 52
+  },                                                                                                                   // 53
+  uploadUrl: '/upload',                                                                                                // 54
+  createName: function(templateContext) {                                                                              // 55
+    if (templateContext.queue.length == 1) {                                                                           // 56
+      var file = templateContext.queue[0];                                                                             // 57
+      templateContext.info.set(file);                                                                                  // 58
+    } else {                                                                                                           // 59
+      // calculate size                                                                                                // 60
+      var file = {                                                                                                     // 61
+        name: templateContext.queue.length + ' files',                                                                 // 62
+        size: templateContext.queue.size                                                                               // 63
+      }                                                                                                                // 64
+      templateContext.info.set(file);                                                                                  // 65
+    }                                                                                                                  // 66
+  },                                                                                                                   // 67
+  /**                                                                                                                  // 68
+   * Starts upload                                                                                                     // 69
+   * @param e                                                                                                          // 70
+   * @param {string} name Name of the file in the queue that we want to upload                                         // 71
+   */                                                                                                                  // 72
+  startUpload: function(e, name) {                                                                                     // 73
+    if (e) e.preventDefault();                                                                                         // 74
+                                                                                                                       // 75
+    if (this.queue.length == 0) return;                                                                                // 76
+                                                                                                                       // 77
+    var that = this;                                                                                                   // 78
+                                                                                                                       // 79
+    $.each(this.queue, function(index, queueItem) {                                                                    // 80
+                                                                                                                       // 81
+      var data = queueItem.data;                                                                                       // 82
+      if (name && data.files[0].name !== name) return true;                                                            // 83
+                                                                                                                       // 84
+      data.jqXHR = data.submit()                                                                                       // 85
+        .done(function(data, textStatus, jqXHR) {                                                                      // 86
+          // remove from queue                                                                                         // 87
+          that.queue.splice(that.queue.indexOf(queueItem), 1);                                                         // 88
+                                                                                                                       // 89
+          Uploader.log(Uploader.logLevels.debug, 'data.sumbit.done: textStatus= ' + textStatus);                       // 90
+                                                                                                                       // 91
+          if (Uploader.status) {                                                                                       // 92
+            Uploader.status(false, data, textStatus, jqXHR);                                                           // 93
+          }                                                                                                            // 94
+        })                                                                                                             // 95
+        .fail(function(jqXHR, textStatus, errorThrown) {                                                               // 96
+          // remove from queue                                                                                         // 97
+          that.queue.splice(that.queue.indexOf(queueItem), 1);                                                         // 98
+                                                                                                                       // 99
+          if (jqXHR.statusText === 'abort') {                                                                          // 100
+            that.info.set({                                                                                            // 101
+              name: 'Aborted',                                                                                         // 102
+              size: 0                                                                                                  // 103
+            })                                                                                                         // 104
+          } else {                                                                                                     // 105
+            that.info.set({                                                                                            // 106
+              name: 'Failed: ' + jqXHR.responseText + ' ' + jqXHR.status + ' ' + jqXHR.statusText,                     // 107
+              size: 0                                                                                                  // 108
+            })                                                                                                         // 109
+          }                                                                                                            // 110
+          if (Uploader.status) {                                                                                       // 111
+            Uploader.status(true, data, textStatus, jqXHR);                                                            // 112
+          }                                                                                                            // 113
+                                                                                                                       // 114
           Uploader.log(Uploader.logLevels.debug, 'data.sumbit.fail: ' + jqXHR.responseText + ' ' + jqXHR.status + ' ' + jqXHR.statusText);
-        })                                                                                                             // 115
-        .always(function(data, textStatus, jqXHR) {                                                                    // 116
-          Uploader.log(Uploader.logLevels.debug, 'data.sumbit.always:  textStatus= ' + textStatus);                    // 117
-        });                                                                                                            // 118
-    });                                                                                                                // 119
-  },                                                                                                                   // 120
-  formatProgress: function(file, progress, bitrate) {                                                                  // 121
+        })                                                                                                             // 116
+        .always(function(data, textStatus, jqXHR) {                                                                    // 117
+          Uploader.log(Uploader.logLevels.debug, 'data.sumbit.always:  textStatus= ' + textStatus);                    // 118
+        });                                                                                                            // 119
+    });                                                                                                                // 120
+  },                                                                                                                   // 121
+  formatProgress: function(file, progress, bitrate) {                                                                  // 122
     return progress + "%&nbsp;of&nbsp;" + file + "&nbsp;<span style='font-size:smaller'>@&nbsp;" + bytesToSize(bitrate) + "&nbsp;/&nbsp;sec</span>"
-  },                                                                                                                   // 123
-  removeFromQueue: function(e, name) {                                                                                 // 124
-    e.preventDefault();                                                                                                // 125
-                                                                                                                       // 126
-    // remove from data queue                                                                                          // 127
-    var that = this;                                                                                                   // 128
-    $.each(this.queue, function(index, item) {                                                                         // 129
-      // skip all with different name                                                                                  // 130
-      if (item.name === name) {                                                                                        // 131
-        that.queue.splice(index, 1);                                                                                   // 132
-        return false;                                                                                                  // 133
-      }                                                                                                                // 134
-    });                                                                                                                // 135
-                                                                                                                       // 136
-    // set the queueView                                                                                               // 137
-    this.queueView.set(this.queue);                                                                                    // 138
-                                                                                                                       // 139
-    // update name                                                                                                     // 140
-    Uploader.createName(this);                                                                                         // 141
-  },                                                                                                                   // 142
-  reset: function(e) {                                                                                                 // 143
-    e.preventDefault();                                                                                                // 144
-    this.globalInfo.set({                                                                                              // 145
-      running: false,                                                                                                  // 146
-      cancelled: false,                                                                                                // 147
-      progress: 0,                                                                                                     // 148
-      bitrate: 0                                                                                                       // 149
-    });                                                                                                                // 150
-    this.info.set("");                                                                                                 // 151
-  },                                                                                                                   // 152
-  cancelUpload: function(e, name) {                                                                                    // 153
-    e.preventDefault();                                                                                                // 154
-                                                                                                                       // 155
-    var that = this;                                                                                                   // 156
-    $.each(this.queue, function(index, queueItem) {                                                                    // 157
-      // skip all with different name                                                                                  // 158
-      if (name && queueItem.name !== name) return true;                                                                // 159
-                                                                                                                       // 160
-      // cancel upload of non completed files                                                                          // 161
-      if (that.queue[queueItem.name].get().progress !== 100) {                                                         // 162
-        queueItem.data.jqXHR.abort();                                                                                  // 163
-                                                                                                                       // 164
-        // set status to redraw interface                                                                              // 165
-        that.queue[queueItem.name].set({                                                                               // 166
-          running: false,                                                                                              // 167
-          cancelled: true,                                                                                             // 168
-          progress: 0,                                                                                                 // 169
-          bitrate: 0                                                                                                   // 170
-        });                                                                                                            // 171
-      }                                                                                                                // 172
-    });                                                                                                                // 173
-                                                                                                                       // 174
-    // mark global as cancelled                                                                                        // 175
-    if (!name) {                                                                                                       // 176
-      this.globalInfo.set({                                                                                            // 177
-        running: false,                                                                                                // 178
-        cancelled: true,                                                                                               // 179
-        progress: 0,                                                                                                   // 180
-        bitrate: 0                                                                                                     // 181
-      })                                                                                                               // 182
-    }                                                                                                                  // 183
-  },                                                                                                                   // 184
-  init: function(data) {                                                                                               // 185
-    // this is used to view the queue in the interface                                                                 // 186
-    data.queueView = new ReactiveVar([]);                                                                              // 187
-    // this holds all the data about the queue                                                                         // 188
-    data.queue = [];                                                                                                   // 189
-    // info about the global item being processed                                                                      // 190
-    data.info = new ReactiveVar;                                                                                       // 191
-    // info about global progress                                                                                      // 192
-    data.globalInfo = new ReactiveVar({                                                                                // 193
-      running: false,                                                                                                  // 194
-      progress: 0,                                                                                                     // 195
-      bitrate: 0                                                                                                       // 196
-    });                                                                                                                // 197
-  },                                                                                                                   // 198
-  render: function() {                                                                                                 // 199
-    // template context is the template instance itself                                                                // 200
-    var templateContext = this;                                                                                        // 201
-    templateContext.progressBar = this.$('.progress-bar');                                                             // 202
-    templateContext.progressLabel = this.$('.progress-label');                                                         // 203
-    templateContext.uploadControl = this.$('.jqUploadclass');                                                          // 204
-    templateContext.dropZone = this.$('.jqDropZone');                                                                  // 205
-                                                                                                                       // 206
-    // this.data holds the template context (arguments supplied to the template in HTML)                               // 207
-    var dataContext = this.data;                                                                                       // 208
-                                                                                                                       // 209
-    // attach the context to the form object (so that we can access it in the callbacks such as add() etc.)            // 210
-    this.find('form').uploadContext = templateContext;                                                                 // 211
-                                                                                                                       // 212
-    // set the upload related callbacks for HTML node that has jqUploadclass specified for it                          // 213
-    // Example html node: <input type="file" class="jqUploadclass" />                                                  // 214
-    templateContext.uploadControl.fileupload({                                                                         // 215
-        url: Uploader.uploadUrl,                                                                                       // 216
-        dataType: 'json',                                                                                              // 217
-        dropZone: templateContext.dropZone,                                                                            // 218
-        add: function(e, data) {                                                                                       // 219
-          Uploader.log(Uploader.logLevels.debug, 'render.add ');                                                       // 220
-                                                                                                                       // 221
-          // get dynamic formData                                                                                      // 222
-          if (dataContext != null && dataContext.callbacks != null) {                                                  // 223
-                                                                                                                       // 224
-            // form data                                                                                               // 225
-                                                                                                                       // 226
-            if (dataContext.callbacks.formData != null) {                                                              // 227
-              data.formData = dataContext.callbacks.formData();                                                        // 228
-            }                                                                                                          // 229
-                                                                                                                       // 230
-            // validate                                                                                                // 231
-            if (dataContext.callbacks.validate != null &&                                                              // 232
-              !dataContext.callbacks.validate(data.files)) {                                                           // 233
-              return;                                                                                                  // 234
-            }                                                                                                          // 235
-          }                                                                                                            // 236
-                                                                                                                       // 237
-          // adding file will clear the queue                                                                          // 238
-          if (dataContext == null ||                                                                                   // 239
-            !dataContext.multiple) {                                                                                   // 240
-            templateContext.queue = [];                                                                                // 241
-            templateContext.queueView.set([]);                                                                         // 242
-          }                                                                                                            // 243
-                                                                                                                       // 244
-          // update the queue collection, so that the ui gets updated                                                  // 245
-          $.each(data.files, function(index, file) {                                                                   // 246
-            var item = file;                                                                                           // 247
-            item.data = data;                                                                                          // 248
-            templateContext.queue[file.name] = new ReactiveVar({                                                       // 249
-              running: false,                                                                                          // 250
-              progress: 0                                                                                              // 251
-            });                                                                                                        // 252
-            templateContext.queue.push(item);                                                                          // 253
-            templateContext.queue.size += parseInt(file.size);                                                         // 254
-          });                                                                                                          // 255
-                                                                                                                       // 256
-          // say name                                                                                                  // 257
-          Uploader.createName(templateContext);                                                                        // 258
-                                                                                                                       // 259
-          // set template context                                                                                      // 260
-          templateContext.queueView.set(templateContext.queue);                                                        // 261
-                                                                                                                       // 262
-          // we can automatically start the upload                                                                     // 263
-          if (templateContext.autoStart) {                                                                             // 264
-            Uploader.startUpload.call(templateContext);                                                                // 265
-          }                                                                                                            // 266
-                                                                                                                       // 267
-        }, // end of add callback handler                                                                              // 268
-        done: function(e, data) {                                                                                      // 269
-          Uploader.log(Uploader.logLevels.debug, 'render.done ');                                                      // 270
-                                                                                                                       // 271
-          templateContext.globalInfo.set({                                                                             // 272
-            running: false,                                                                                            // 273
-            progress: 100                                                                                              // 274
-          });                                                                                                          // 275
-                                                                                                                       // 276
-          $.each(data.result.files, function(index, file) {                                                            // 277
-            Uploader.finished(index, file, templateContext);                                                           // 278
-                                                                                                                       // 279
-            // notify user                                                                                             // 280
-            if (dataContext.callbacks != null &&                                                                       // 281
-              dataContext.callbacks.finished != null) {                                                                // 282
-              dataContext.callbacks.finished(index, file, templateContext);                                            // 283
-            }                                                                                                          // 284
-          });                                                                                                          // 285
-        },                                                                                                             // 286
-        fail: function(e, data) {                                                                                      // 287
-          Uploader.log(Uploader.logLevels.debug, 'render.fail ');                                                      // 288
-        },                                                                                                             // 289
-        progress: function(e, data) {                                                                                  // 290
-          // file progress is displayed only when single file is uploaded                                              // 291
-          var fi = templateContext.queue[data.files[0].name];                                                          // 292
-          if (fi) {                                                                                                    // 293
-            fi.set({                                                                                                   // 294
-              running: true,                                                                                           // 295
-              progress: parseInt(data.loaded / data.total * 100, 10),                                                  // 296
-              bitrate: data.bitrate                                                                                    // 297
-            });                                                                                                        // 298
-          }                                                                                                            // 299
-        },                                                                                                             // 300
-        progressall: function(e, data) {                                                                               // 301
-          templateContext.globalInfo.set({                                                                             // 302
-            running: true,                                                                                             // 303
-            progress: parseInt(data.loaded / data.total * 100, 10),                                                    // 304
-            bitrate: data.bitrate                                                                                      // 305
-          });                                                                                                          // 306
-        },                                                                                                             // 307
-        drop: function(e, data) { // called when files are dropped onto ui                                             // 308
-          $.each(data.files, function(index, file) {                                                                   // 309
-            Uploader.log(Uploader.logLevels.debug, "render.drop file: " + file.name);                                  // 310
-          });                                                                                                          // 311
-        },                                                                                                             // 312
-        change: function(e, data) { // called when input selection changes (file selected)                             // 313
-          // clear the queue, this is used to visualise all the data                                                   // 314
-          templateContext.queue = [];                                                                                  // 315
-          templateContext.queue.size = 0;                                                                              // 316
-          templateContext.progressBar.css('width', '0%');                                                              // 317
-          templateContext.globalInfo.set({                                                                             // 318
-            running: false,                                                                                            // 319
-            progress: 0                                                                                                // 320
-          });                                                                                                          // 321
-                                                                                                                       // 322
-          $.each(data.files, function(index, file) {                                                                   // 323
-            Uploader.log(Uploader.logLevels.debug, 'render.change file: ' + file.name);                                // 324
-          });                                                                                                          // 325
-        }                                                                                                              // 326
-      })                                                                                                               // 327
-      .prop('disabled', ($.support != null && $.support.fileInput != null) ? !$.support.fileInput : false)             // 328
+  },                                                                                                                   // 124
+  removeFromQueue: function(e, name) {                                                                                 // 125
+    e.preventDefault();                                                                                                // 126
+                                                                                                                       // 127
+    // remove from data queue                                                                                          // 128
+    var that = this;                                                                                                   // 129
+    $.each(this.queue, function(index, item) {                                                                         // 130
+      // skip all with different name                                                                                  // 131
+      if (item.name === name) {                                                                                        // 132
+        that.queue.splice(index, 1);                                                                                   // 133
+        return false;                                                                                                  // 134
+      }                                                                                                                // 135
+    });                                                                                                                // 136
+                                                                                                                       // 137
+    // set the queueView                                                                                               // 138
+    this.queueView.set(this.queue);                                                                                    // 139
+                                                                                                                       // 140
+    // update name                                                                                                     // 141
+    Uploader.createName(this);                                                                                         // 142
+  },                                                                                                                   // 143
+  reset: function(e) {                                                                                                 // 144
+    e.preventDefault();                                                                                                // 145
+    this.globalInfo.set({                                                                                              // 146
+      running: false,                                                                                                  // 147
+      cancelled: false,                                                                                                // 148
+      progress: 0,                                                                                                     // 149
+      bitrate: 0                                                                                                       // 150
+    });                                                                                                                // 151
+    this.info.set("");                                                                                                 // 152
+  },                                                                                                                   // 153
+  cancelUpload: function(e, name) {                                                                                    // 154
+    e.preventDefault();                                                                                                // 155
+                                                                                                                       // 156
+    var that = this;                                                                                                   // 157
+    $.each(this.queue, function(index, queueItem) {                                                                    // 158
+      // skip all with different name                                                                                  // 159
+      if (name && queueItem.name !== name) return true;                                                                // 160
+                                                                                                                       // 161
+      // cancel upload of non completed files                                                                          // 162
+      if (that.queue[queueItem.name].get().progress !== 100) {                                                         // 163
+        queueItem.data.jqXHR.abort();                                                                                  // 164
+                                                                                                                       // 165
+        // set status to redraw interface                                                                              // 166
+        that.queue[queueItem.name].set({                                                                               // 167
+          running: false,                                                                                              // 168
+          cancelled: true,                                                                                             // 169
+          progress: 0,                                                                                                 // 170
+          bitrate: 0                                                                                                   // 171
+        });                                                                                                            // 172
+      }                                                                                                                // 173
+    });                                                                                                                // 174
+                                                                                                                       // 175
+    // mark global as cancelled                                                                                        // 176
+    if (!name) {                                                                                                       // 177
+      this.globalInfo.set({                                                                                            // 178
+        running: false,                                                                                                // 179
+        cancelled: true,                                                                                               // 180
+        progress: 0,                                                                                                   // 181
+        bitrate: 0                                                                                                     // 182
+      })                                                                                                               // 183
+    }                                                                                                                  // 184
+  },                                                                                                                   // 185
+  init: function(data) {                                                                                               // 186
+    // this is used to view the queue in the interface                                                                 // 187
+    data.queueView = new ReactiveVar([]);                                                                              // 188
+    // this holds all the data about the queue                                                                         // 189
+    data.queue = [];                                                                                                   // 190
+    // info about the global item being processed                                                                      // 191
+    data.info = new ReactiveVar;                                                                                       // 192
+    // info about global progress                                                                                      // 193
+    data.globalInfo = new ReactiveVar({                                                                                // 194
+      running: false,                                                                                                  // 195
+      progress: 0,                                                                                                     // 196
+      bitrate: 0                                                                                                       // 197
+    });                                                                                                                // 198
+  },                                                                                                                   // 199
+  render: function() {                                                                                                 // 200
+    // template context is the template instance itself                                                                // 201
+    var templateContext = this;                                                                                        // 202
+    templateContext.progressBar = this.$('.progress-bar');                                                             // 203
+    templateContext.progressLabel = this.$('.progress-label');                                                         // 204
+    templateContext.uploadControl = this.$('.jqUploadclass');                                                          // 205
+    templateContext.dropZone = this.$('.jqDropZone');                                                                  // 206
+                                                                                                                       // 207
+    // this.data holds the template context (arguments supplied to the template in HTML)                               // 208
+    var dataContext = this.data;                                                                                       // 209
+                                                                                                                       // 210
+    // attach the context to the form object (so that we can access it in the callbacks such as add() etc.)            // 211
+    this.find('form').uploadContext = templateContext;                                                                 // 212
+                                                                                                                       // 213
+    // set the upload related callbacks for HTML node that has jqUploadclass specified for it                          // 214
+    // Example html node: <input type="file" class="jqUploadclass" />                                                  // 215
+    templateContext.uploadControl.fileupload({                                                                         // 216
+        url: Uploader.uploadUrl,                                                                                       // 217
+        dataType: 'json',                                                                                              // 218
+        dropZone: templateContext.dropZone,                                                                            // 219
+        add: function(e, data) {                                                                                       // 220
+          Uploader.log(Uploader.logLevels.debug, 'render.add ');                                                       // 221
+                                                                                                                       // 222
+          // get dynamic formData                                                                                      // 223
+          if (dataContext != null && dataContext.callbacks != null) {                                                  // 224
+                                                                                                                       // 225
+            // form data                                                                                               // 226
+                                                                                                                       // 227
+            if (dataContext.callbacks.formData != null) {                                                              // 228
+              data.formData = dataContext.callbacks.formData();                                                        // 229
+            }                                                                                                          // 230
+                                                                                                                       // 231
+            // validate                                                                                                // 232
+            if (dataContext.callbacks.validate != null &&                                                              // 233
+              !dataContext.callbacks.validate(data.files)) {                                                           // 234
+              return;                                                                                                  // 235
+            }                                                                                                          // 236
+          }                                                                                                            // 237
+                                                                                                                       // 238
+          // adding file will clear the queue                                                                          // 239
+          if (dataContext == null ||                                                                                   // 240
+            !dataContext.multiple) {                                                                                   // 241
+            templateContext.queue = [];                                                                                // 242
+            templateContext.queueView.set([]);                                                                         // 243
+          }                                                                                                            // 244
+                                                                                                                       // 245
+          // update the queue collection, so that the ui gets updated                                                  // 246
+          $.each(data.files, function(index, file) {                                                                   // 247
+            var item = file;                                                                                           // 248
+            item.data = data;                                                                                          // 249
+            templateContext.queue[file.name] = new ReactiveVar({                                                       // 250
+              running: false,                                                                                          // 251
+              progress: 0                                                                                              // 252
+            });                                                                                                        // 253
+            templateContext.queue.push(item);                                                                          // 254
+            templateContext.queue.size += parseInt(file.size);                                                         // 255
+          });                                                                                                          // 256
+                                                                                                                       // 257
+          // say name                                                                                                  // 258
+          Uploader.createName(templateContext);                                                                        // 259
+                                                                                                                       // 260
+          // set template context                                                                                      // 261
+          templateContext.queueView.set(templateContext.queue);                                                        // 262
+                                                                                                                       // 263
+          // we can automatically start the upload                                                                     // 264
+          if (templateContext.autoStart) {                                                                             // 265
+            Uploader.startUpload.call(templateContext);                                                                // 266
+          }                                                                                                            // 267
+                                                                                                                       // 268
+        }, // end of add callback handler                                                                              // 269
+        done: function(e, data) {                                                                                      // 270
+          Uploader.log(Uploader.logLevels.debug, 'render.done ');                                                      // 271
+                                                                                                                       // 272
+          templateContext.globalInfo.set({                                                                             // 273
+            running: false,                                                                                            // 274
+            progress: 100                                                                                              // 275
+          });                                                                                                          // 276
+                                                                                                                       // 277
+          $.each(data.result.files, function(index, file) {                                                            // 278
+            Uploader.finished(index, file, templateContext);                                                           // 279
+                                                                                                                       // 280
+            // notify user                                                                                             // 281
+            if (dataContext != null && dataContext.callbacks != null &&                                                // 282
+              dataContext.callbacks.finished != null) {                                                                // 283
+              dataContext.callbacks.finished(index, file, templateContext);                                            // 284
+            }                                                                                                          // 285
+          });                                                                                                          // 286
+        },                                                                                                             // 287
+        fail: function(e, data) {                                                                                      // 288
+          Uploader.log(Uploader.logLevels.debug, 'render.fail ');                                                      // 289
+        },                                                                                                             // 290
+        progress: function(e, data) {                                                                                  // 291
+          // file progress is displayed only when single file is uploaded                                              // 292
+          var fi = templateContext.queue[data.files[0].name];                                                          // 293
+          if (fi) {                                                                                                    // 294
+            fi.set({                                                                                                   // 295
+              running: true,                                                                                           // 296
+              progress: parseInt(data.loaded / data.total * 100, 10),                                                  // 297
+              bitrate: data.bitrate                                                                                    // 298
+            });                                                                                                        // 299
+          }                                                                                                            // 300
+        },                                                                                                             // 301
+        progressall: function(e, data) {                                                                               // 302
+          templateContext.globalInfo.set({                                                                             // 303
+            running: true,                                                                                             // 304
+            progress: parseInt(data.loaded / data.total * 100, 10),                                                    // 305
+            bitrate: data.bitrate                                                                                      // 306
+          });                                                                                                          // 307
+        },                                                                                                             // 308
+        drop: function(e, data) { // called when files are dropped onto ui                                             // 309
+          $.each(data.files, function(index, file) {                                                                   // 310
+            Uploader.log(Uploader.logLevels.debug, "render.drop file: " + file.name);                                  // 311
+          });                                                                                                          // 312
+        },                                                                                                             // 313
+        change: function(e, data) { // called when input selection changes (file selected)                             // 314
+          // clear the queue, this is used to visualise all the data                                                   // 315
+          templateContext.queue = [];                                                                                  // 316
+          templateContext.queue.size = 0;                                                                              // 317
+          templateContext.progressBar.css('width', '0%');                                                              // 318
+          templateContext.globalInfo.set({                                                                             // 319
+            running: false,                                                                                            // 320
+            progress: 0                                                                                                // 321
+          });                                                                                                          // 322
+                                                                                                                       // 323
+          $.each(data.files, function(index, file) {                                                                   // 324
+            Uploader.log(Uploader.logLevels.debug, 'render.change file: ' + file.name);                                // 325
+          });                                                                                                          // 326
+        }                                                                                                              // 327
+      })                                                                                                               // 328
+      .prop('disabled', ($.support != null && $.support.fileInput != null) ? !$.support.fileInput : false)             // 329
       .parent().addClass(($.support != null && $.support.fileInput != null && !$.support.fileInput) ? 'disabled' : undefined);
-  },                                                                                                                   // 330
-  finished: function() {}                                                                                              // 331
-}                                                                                                                      // 332
-                                                                                                                       // 333
-bytesToSize = function(bytes) {                                                                                        // 334
-  if (bytes == 0) return '0 Byte';                                                                                     // 335
-  var k = 1000;                                                                                                        // 336
-  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];                                               // 337
-  var i = Math.floor(Math.log(bytes) / Math.log(k));                                                                   // 338
-  return (bytes / Math.pow(k, i)).toPrecision(3) + '&nbsp;' + sizes[i];                                                // 339
-}                                                                                                                      // 340
-                                                                                                                       // 341
+  },                                                                                                                   // 331
+  finished: function() {}                                                                                              // 332
+}                                                                                                                      // 333
+                                                                                                                       // 334
+bytesToSize = function(bytes) {                                                                                        // 335
+  if (bytes == 0) return '0 Byte';                                                                                     // 336
+  var k = 1000;                                                                                                        // 337
+  var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];                                               // 338
+  var i = Math.floor(Math.log(bytes) / Math.log(k));                                                                   // 339
+  return (bytes / Math.pow(k, i)).toPrecision(3) + '&nbsp;' + sizes[i];                                                // 340
+}                                                                                                                      // 341
+                                                                                                                       // 342
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

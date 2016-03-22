@@ -86,14 +86,17 @@ Router.route("/shop/:shopId", {
 	controller : "ApplicationController",
 	name: "shop.view",
 	data : function(){
-		var date = this.params.query.date || moment();
-		var start = moment(date).subtract(1, "month").toISOString();
-		var stop = moment(date).add(1, "month").toISOString();
-		where = {
+		var date = moment(this.params.query.date || Session.get(Meteor.CALENDAR_CONF).defaultDate);
+		date = moment([date.year(), date.month()]);
+
+
+		Session.set(Meteor.DATE_CONF, date.format());
+		
+		var where = {
 			"shop._id" : this.params.shopId, 
 			rdv : {
-				$gte: start,
-				$lte: stop
+				$gte: date.toISOString(),
+				$lte: date.endOf('month').toISOString()
 			}
 		};
 		var tmp = 	_

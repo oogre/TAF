@@ -525,520 +525,522 @@ var _loadDatabase = function _loadDatabase() {                                  
       .then(function afterKernelEach() {                                                                             // 485
         // Setting database loaded, this allows minimongo to be saved into local                                     // 486
         self._databaseLoaded = true;                                                                                 // 487
-      });                                                                                                            // 488
-                                                                                                                     // 489
-    }                                                                                                                // 490
+        self.collection.emit('loaded', { type: 'database', data: data });                                            // 488
+        Ground.emit('loaded', { type: 'database', collection: self.name });                                          // 489
+      });                                                                                                            // 490
                                                                                                                      // 491
-  });                                                                                                                // 492
-};                                                                                                                   // 493
-                                                                                                                     // 494
-// Bulk Save database from memory to local, meant to be as slim, fast and                                            // 495
-// realiable as possible                                                                                             // 496
-var _saveDatabase = function _saveDatabase() {                                                                       // 497
-  var self = this;                                                                                                   // 498
-  // If data loaded from localstorage then its ok to save - otherwise we                                             // 499
-  // would override with less data                                                                                   // 500
-  if (self._databaseLoaded && _isReloading === false) {                                                              // 501
-    self._saveDatabaseTimeout(function _saveDatabaseTimeout() {                                                      // 502
-      // We delay the operation a bit in case of multiple saves - this creates                                       // 503
-      // a minor lag in terms of localstorage updating but it limits the num                                         // 504
-      // of saves to the database                                                                                    // 505
-      // Make sure our database is loaded                                                                            // 506
-      self.collection.emit('cache', { type: 'database' });                                                           // 507
-      Ground.emit('cache', { type: 'database', collection: self.name });                                             // 508
-      var minifiedDb = MiniMaxDB.minify(_groundUtil.getDatabaseMap(self));                                           // 509
-      // Save the collection into localstorage                                                                       // 510
-      self.storage.setItem('data', minifiedDb, function storageCache(err) {                                          // 511
-        // Emit feedback                                                                                             // 512
-        if (err) {                                                                                                   // 513
-          // Emit error                                                                                              // 514
-          self.collection.emit('error', { error: err });                                                             // 515
-          Ground.emit('error', { collection: self.name, error: err });                                               // 516
-        } else {                                                                                                     // 517
-          // Emit cached event                                                                                       // 518
-          self.collection.emit('cached', { type: 'database', data: minifiedDb });                                    // 519
-          Ground.emit('cached', { type: 'database', collection: self.name });                                        // 520
-        }                                                                                                            // 521
-      });                                                                                                            // 522
-                                                                                                                     // 523
-    });                                                                                                              // 524
-  }                                                                                                                  // 525
-};                                                                                                                   // 526
-                                                                                                                     // 527
-                                                                                                                     // 528
-// Reactive variable containing a boolean flag, true == all subscriptions have                                       // 529
-// been loaded                                                                                                       // 530
-// XXX: this should be a bit more finegrained eg. pr. collection, but thats not                                      // 531
-// possible yet                                                                                                      // 532
-Ground.ready = _groundUtil.allSubscriptionsReady;                                                                    // 533
-                                                                                                                     // 534
-Ground.lookup = function groundLookup(collectionName) {                                                              // 535
-  return _groundDatabases[collectionName];                                                                           // 536
-};                                                                                                                   // 537
-                                                                                                                     // 538
-var _allowMethodResumeMap = {};                                                                                      // 539
-var _methodResumeConnections = [];                                                                                   // 540
-                                                                                                                     // 541
-var addConnectionToResume = function addConnectionToResume(connection) {                                             // 542
-  if (_methodResumeConnections.indexOf(connection) < 0) {                                                            // 543
-    _methodResumeConnections.push(connection);                                                                       // 544
-  }                                                                                                                  // 545
-};                                                                                                                   // 546
-                                                                                                                     // 547
-Ground.methodResume = function methodResume(names, connection) {                                                     // 548
-  // Allow string or array of strings                                                                                // 549
-  if (names === ''+names) {                                                                                          // 550
-    names = [names];                                                                                                 // 551
-  }                                                                                                                  // 552
-                                                                                                                     // 553
-  // Default to the default connection...                                                                            // 554
-  connection = connection || _groundUtil.connection;                                                                 // 555
-                                                                                                                     // 556
-  // This index comes in handy when we use getMethodList                                                             // 557
-  addConnectionToResume(connection);                                                                                 // 558
-                                                                                                                     // 559
-  // Add methods to resume                                                                                           // 560
-  _groundUtil.each(names, function(name) {                                                                           // 561
-    _allowMethodResumeMap[name] = connection;                                                                        // 562
-  });                                                                                                                // 563
-  // console.log(_allowMethodResumeMap);                                                                             // 564
-};                                                                                                                   // 565
-                                                                                                                     // 566
-// Add settings for methods to skip or not when caching methods                                                      // 567
-Ground.skipMethods = function skipMethods() {                                                                        // 568
-  throw new Error('Ground.skipMethods is deprecated, use Ground.methodResume instead');                              // 569
-};                                                                                                                   // 570
-                                                                                                                     // 571
-Ground.OneTimeout = OneTimeout;                                                                                      // 572
+    }                                                                                                                // 492
+                                                                                                                     // 493
+  });                                                                                                                // 494
+};                                                                                                                   // 495
+                                                                                                                     // 496
+// Bulk Save database from memory to local, meant to be as slim, fast and                                            // 497
+// realiable as possible                                                                                             // 498
+var _saveDatabase = function _saveDatabase() {                                                                       // 499
+  var self = this;                                                                                                   // 500
+  // If data loaded from localstorage then its ok to save - otherwise we                                             // 501
+  // would override with less data                                                                                   // 502
+  if (self._databaseLoaded && _isReloading === false) {                                                              // 503
+    self._saveDatabaseTimeout(function _saveDatabaseTimeout() {                                                      // 504
+      // We delay the operation a bit in case of multiple saves - this creates                                       // 505
+      // a minor lag in terms of localstorage updating but it limits the num                                         // 506
+      // of saves to the database                                                                                    // 507
+      // Make sure our database is loaded                                                                            // 508
+      self.collection.emit('cache', { type: 'database' });                                                           // 509
+      Ground.emit('cache', { type: 'database', collection: self.name });                                             // 510
+      var minifiedDb = MiniMaxDB.minify(_groundUtil.getDatabaseMap(self));                                           // 511
+      // Save the collection into localstorage                                                                       // 512
+      self.storage.setItem('data', minifiedDb, function storageCache(err) {                                          // 513
+        // Emit feedback                                                                                             // 514
+        if (err) {                                                                                                   // 515
+          // Emit error                                                                                              // 516
+          self.collection.emit('error', { error: err });                                                             // 517
+          Ground.emit('error', { collection: self.name, error: err });                                               // 518
+        } else {                                                                                                     // 519
+          // Emit cached event                                                                                       // 520
+          self.collection.emit('cached', { type: 'database', data: minifiedDb });                                    // 521
+          Ground.emit('cached', { type: 'database', collection: self.name });                                        // 522
+        }                                                                                                            // 523
+      });                                                                                                            // 524
+                                                                                                                     // 525
+    });                                                                                                              // 526
+  }                                                                                                                  // 527
+};                                                                                                                   // 528
+                                                                                                                     // 529
+                                                                                                                     // 530
+// Reactive variable containing a boolean flag, true == all subscriptions have                                       // 531
+// been loaded                                                                                                       // 532
+// XXX: this should be a bit more finegrained eg. pr. collection, but thats not                                      // 533
+// possible yet                                                                                                      // 534
+Ground.ready = _groundUtil.allSubscriptionsReady;                                                                    // 535
+                                                                                                                     // 536
+Ground.lookup = function groundLookup(collectionName) {                                                              // 537
+  return _groundDatabases[collectionName];                                                                           // 538
+};                                                                                                                   // 539
+                                                                                                                     // 540
+var _allowMethodResumeMap = {};                                                                                      // 541
+var _methodResumeConnections = [];                                                                                   // 542
+                                                                                                                     // 543
+var addConnectionToResume = function addConnectionToResume(connection) {                                             // 544
+  if (_methodResumeConnections.indexOf(connection) < 0) {                                                            // 545
+    _methodResumeConnections.push(connection);                                                                       // 546
+  }                                                                                                                  // 547
+};                                                                                                                   // 548
+                                                                                                                     // 549
+Ground.methodResume = function methodResume(names, connection) {                                                     // 550
+  // Allow string or array of strings                                                                                // 551
+  if (names === ''+names) {                                                                                          // 552
+    names = [names];                                                                                                 // 553
+  }                                                                                                                  // 554
+                                                                                                                     // 555
+  // Default to the default connection...                                                                            // 556
+  connection = connection || _groundUtil.connection;                                                                 // 557
+                                                                                                                     // 558
+  // This index comes in handy when we use getMethodList                                                             // 559
+  addConnectionToResume(connection);                                                                                 // 560
+                                                                                                                     // 561
+  // Add methods to resume                                                                                           // 562
+  _groundUtil.each(names, function(name) {                                                                           // 563
+    _allowMethodResumeMap[name] = connection;                                                                        // 564
+  });                                                                                                                // 565
+  // console.log(_allowMethodResumeMap);                                                                             // 566
+};                                                                                                                   // 567
+                                                                                                                     // 568
+// Add settings for methods to skip or not when caching methods                                                      // 569
+Ground.skipMethods = function skipMethods() {                                                                        // 570
+  throw new Error('Ground.skipMethods is deprecated, use Ground.methodResume instead');                              // 571
+};                                                                                                                   // 572
                                                                                                                      // 573
-///////////////////////////// RESUME METHODS ///////////////////////////////////                                     // 574
+Ground.OneTimeout = OneTimeout;                                                                                      // 574
                                                                                                                      // 575
-// Is methods resumed?                                                                                               // 576
-var _methodsResumed = false;                                                                                         // 577
-var _methodsResumedDeps = new Tracker.Dependency();                                                                  // 578
-                                                                                                                     // 579
-                                                                                                                     // 580
-Ground.isResumed = function isResumed() {                                                                            // 581
-  _methodsResumedDeps.depend();                                                                                      // 582
-  return _methodsResumed;                                                                                            // 583
-};                                                                                                                   // 584
-                                                                                                                     // 585
-// Get a nice array of current methods                                                                               // 586
-var _getMethodsList = function _getMethodsList() {                                                                   // 587
-  // Array of outstanding methods                                                                                    // 588
-  var methods = [];                                                                                                  // 589
-  // Made a public API to disallow caching of some method calls                                                      // 590
-  // Convert the data into nice array                                                                                // 591
-                                                                                                                     // 592
-  // We iterate over the connections that have resumable methods                                                     // 593
-  _groundUtil.each(_methodResumeConnections, function resumeEachConnection(connection) {                             // 594
-    // We run through the method invokers                                                                            // 595
-    _groundUtil.each(connection._methodInvokers, function resumeEachInvoker(method) {                                // 596
-      // Get the method name                                                                                         // 597
-      var name = method._message.method;                                                                             // 598
-      // Check that this method is resumeable and on the correct connection                                          // 599
-      if (_allowMethodResumeMap[name] === connection) {                                                              // 600
-        // Push the method                                                                                           // 601
-        methods.push({                                                                                               // 602
-          // Format the data                                                                                         // 603
-          method: name,                                                                                              // 604
-          args: method._message.params,                                                                              // 605
-          options: { wait: method._wait }                                                                            // 606
-        });                                                                                                          // 607
-                                                                                                                     // 608
-      }                                                                                                              // 609
+///////////////////////////// RESUME METHODS ///////////////////////////////////                                     // 576
+                                                                                                                     // 577
+// Is methods resumed?                                                                                               // 578
+var _methodsResumed = false;                                                                                         // 579
+var _methodsResumedDeps = new Tracker.Dependency();                                                                  // 580
+                                                                                                                     // 581
+                                                                                                                     // 582
+Ground.isResumed = function isResumed() {                                                                            // 583
+  _methodsResumedDeps.depend();                                                                                      // 584
+  return _methodsResumed;                                                                                            // 585
+};                                                                                                                   // 586
+                                                                                                                     // 587
+// Get a nice array of current methods                                                                               // 588
+var _getMethodsList = function _getMethodsList() {                                                                   // 589
+  // Array of outstanding methods                                                                                    // 590
+  var methods = [];                                                                                                  // 591
+  // Made a public API to disallow caching of some method calls                                                      // 592
+  // Convert the data into nice array                                                                                // 593
+                                                                                                                     // 594
+  // We iterate over the connections that have resumable methods                                                     // 595
+  _groundUtil.each(_methodResumeConnections, function resumeEachConnection(connection) {                             // 596
+    // We run through the method invokers                                                                            // 597
+    _groundUtil.each(connection._methodInvokers, function resumeEachInvoker(method) {                                // 598
+      // Get the method name                                                                                         // 599
+      var name = method._message.method;                                                                             // 600
+      // Check that this method is resumeable and on the correct connection                                          // 601
+      if (_allowMethodResumeMap[name] === connection) {                                                              // 602
+        // Push the method                                                                                           // 603
+        methods.push({                                                                                               // 604
+          // Format the data                                                                                         // 605
+          method: name,                                                                                              // 606
+          args: method._message.params,                                                                              // 607
+          options: { wait: method._wait }                                                                            // 608
+        });                                                                                                          // 609
                                                                                                                      // 610
-    });                                                                                                              // 611
-  });                                                                                                                // 612
-                                                                                                                     // 613
-  return methods;                                                                                                    // 614
-};                                                                                                                   // 615
-                                                                                                                     // 616
-// Flush in memory methods, its a dirty trick and could have some edge cases                                         // 617
-// that would throw an error? Eg. if flushed in the middle of waiting for                                            // 618
-// a method call to return - the returning call would not be able to find the                                        // 619
-// method callback. This could happen if the user submits a change in one window                                     // 620
-// and then switches to another tab and submits a change there before the first                                      // 621
-// method gets back?                                                                                                 // 622
-var _flushInMemoryMethods = function _flushInMemoryMethods() {                                                       // 623
-  var didFlushSome = false;                                                                                          // 624
-  // TODO: flush should be rewritten to - we should do method proxy stuff...                                         // 625
-  // This code is a bit dirty                                                                                        // 626
-  if (_groundUtil.connection && _groundUtil.connection._outstandingMethodBlocks &&                                   // 627
-          _groundUtil.connection._outstandingMethodBlocks.length) {                                                  // 628
-                                                                                                                     // 629
-    // Clear the in memory outstanding methods TODO: Check if this is enough                                         // 630
-    // Check to see if we should skip methods                                                                        // 631
-    for (var i = 0; i < _groundUtil.connection._outstandingMethodBlocks.length; i++) {                               // 632
-      var method = _groundUtil.connection._outstandingMethodBlocks[i];                                               // 633
-      if (method && method._message && _allowMethodResumeMap[method._message.method]) {                              // 634
-        // Clear invoke callbacks                                                                                    // 635
-//    _groundUtil.connection._outstandingMethodBlocks = [];                                                          // 636
-        delete _groundUtil.connection._outstandingMethodBlocks[i];                                                   // 637
-//    _groundUtil.connection._methodInvokers = {};                                                                   // 638
-        delete _groundUtil.connection._methodInvokers[i];                                                            // 639
-        // Set the flag to call back                                                                                 // 640
-        didFlushSome = true;                                                                                         // 641
-      }                                                                                                              // 642
-    }                                                                                                                // 643
-    if (didFlushSome) {                                                                                              // 644
-      // Call the event callback                                                                                     // 645
-      Ground.emit('flush', { type: 'methods' });                                                                     // 646
-    }                                                                                                                // 647
-                                                                                                                     // 648
-  }                                                                                                                  // 649
-};                                                                                                                   // 650
-                                                                                                                     // 651
-// Extract only newly added methods from localstorage                                                                // 652
-var _getMethodUpdates = function _getMethodUpdates(newMethods) {                                                     // 653
-  var result = [];                                                                                                   // 654
-  if (newMethods && newMethods.length > 0) {                                                                         // 655
-    // Get the old methods allready in memory                                                                        // 656
-    // We could have done an optimized slice version or just starting at                                             // 657
-    // oldMethods.length, but this tab is not in focus                                                               // 658
-    var oldMethods = _getMethodsList();                                                                              // 659
-    // We do a check to see if we should flush our in memory methods if allready                                     // 660
-    // run on an other tab - an odd case - the first item would not match in                                         // 661
-    // old methods and new methods, its only valid to make this test if both                                         // 662
-    // methods arrays are not empty allready                                                                         // 663
-    if (oldMethods.length &&                                                                                         // 664
-            EJSON.stringify(oldMethods[0]) !== EJSON.stringify(newMethods[0])) {                                     // 665
-      // Flush the in memory / queue methods                                                                         // 666
-      _flushInMemoryMethods();                                                                                       // 667
-      // We reset the oldMethods array of outstanding methods                                                        // 668
-      oldMethods = [];                                                                                               // 669
-    }                                                                                                                // 670
-    // Iterate over the new methods, old ones should be ordered in beginning of                                      // 671
-    // newMethods we do a simple test an throw an error if thats not the case                                        // 672
-    for (var i=0; i < newMethods.length; i++) {                                                                      // 673
-                                                                                                                     // 674
-      if (i < oldMethods.length) {                                                                                   // 675
-        // Do a hard slow test to make sure all is in sync                                                           // 676
-        if (EJSON.stringify(oldMethods[i]) !== EJSON.stringify(newMethods[i])) {                                     // 677
-          // The client data is corrupted, throw error or force the client to                                        // 678
-          // reload, does not make sense to continue?                                                                // 679
-          throw new Error('The method database is corrupted or out of sync at position: ' + i);                      // 680
-        }                                                                                                            // 681
-      } else {                                                                                                       // 682
-        // Ok out of oldMethods this is a new method call                                                            // 683
-        result.push(newMethods[i]);                                                                                  // 684
-                                                                                                                     // 685
-        Ground.emit('methodcall', newMethods[i]);                                                                    // 686
-      }                                                                                                              // 687
-    } // EO for iteration                                                                                            // 688
-                                                                                                                     // 689
-  } else {                                                                                                           // 690
-    // If new methods are empty this means that the other client / tap has                                           // 691
-    // Allready sendt and recieved the method calls - so we flush our in mem                                         // 692
-    // Flush the in memory / queue methods                                                                           // 693
-    _flushInMemoryMethods();                                                                                         // 694
-  }                                                                                                                  // 695
-                                                                                                                     // 696
-  // return the result                                                                                               // 697
-  return result;                                                                                                     // 698
-};                                                                                                                   // 699
-                                                                                                                     // 700
-///////////////////////////// LOAD & SAVE METHODS //////////////////////////////                                     // 701
-// Create the storage for methods                                                                                    // 702
-var _methodsStorage = Store.create({                                                                                 // 703
-  name: '_methods_',                                                                                                 // 704
-  version: 1.1                                                                                                       // 705
-});                                                                                                                  // 706
-                                                                                                                     // 707
-var _sendMethod = function _sendMethod(method, connection) {                                                         // 708
-  // Send a log message first to the test                                                                            // 709
-  test.log('SEND', JSON.stringify(method));                                                                          // 710
-                                                                                                                     // 711
-  if (test.isMain) {                                                                                                 // 712
-    console.warn('Main test should not send methods...');                                                            // 713
-  }                                                                                                                  // 714
-                                                                                                                     // 715
-  connection.apply(                                                                                                  // 716
-    method.method, method.args, method.options, function resumeMethodCallback(err, result) {                         // 717
-      // We cant fix the missing callbacks made at runtime the                                                       // 718
-      // last time the app ran. But we can emit data                                                                 // 719
-                                                                                                                     // 720
-      if (err) {                                                                                                     // 721
-        test.log('RETURNED ERROR', JSON.stringify(method), err.message);                                             // 722
-      } else {                                                                                                       // 723
-        test.log('RETURNED METHOD', JSON.stringify(method));                                                         // 724
-      }                                                                                                              // 725
-                                                                                                                     // 726
-      // Emit the data we got back here                                                                              // 727
-      Ground.emit('method', { method: method, error: err, result: result });                                         // 728
-    }                                                                                                                // 729
-  );                                                                                                                 // 730
-};                                                                                                                   // 731
-                                                                                                                     // 732
-var waitingMethods = [];                                                                                             // 733
+      }                                                                                                              // 611
+                                                                                                                     // 612
+    });                                                                                                              // 613
+  });                                                                                                                // 614
+                                                                                                                     // 615
+  return methods;                                                                                                    // 616
+};                                                                                                                   // 617
+                                                                                                                     // 618
+// Flush in memory methods, its a dirty trick and could have some edge cases                                         // 619
+// that would throw an error? Eg. if flushed in the middle of waiting for                                            // 620
+// a method call to return - the returning call would not be able to find the                                        // 621
+// method callback. This could happen if the user submits a change in one window                                     // 622
+// and then switches to another tab and submits a change there before the first                                      // 623
+// method gets back?                                                                                                 // 624
+var _flushInMemoryMethods = function _flushInMemoryMethods() {                                                       // 625
+  var didFlushSome = false;                                                                                          // 626
+  // TODO: flush should be rewritten to - we should do method proxy stuff...                                         // 627
+  // This code is a bit dirty                                                                                        // 628
+  if (_groundUtil.connection && _groundUtil.connection._outstandingMethodBlocks &&                                   // 629
+          _groundUtil.connection._outstandingMethodBlocks.length) {                                                  // 630
+                                                                                                                     // 631
+    // Clear the in memory outstanding methods TODO: Check if this is enough                                         // 632
+    // Check to see if we should skip methods                                                                        // 633
+    for (var i = 0; i < _groundUtil.connection._outstandingMethodBlocks.length; i++) {                               // 634
+      var method = _groundUtil.connection._outstandingMethodBlocks[i];                                               // 635
+      if (method && method._message && _allowMethodResumeMap[method._message.method]) {                              // 636
+        // Clear invoke callbacks                                                                                    // 637
+//    _groundUtil.connection._outstandingMethodBlocks = [];                                                          // 638
+        delete _groundUtil.connection._outstandingMethodBlocks[i];                                                   // 639
+//    _groundUtil.connection._methodInvokers = {};                                                                   // 640
+        delete _groundUtil.connection._methodInvokers[i];                                                            // 641
+        // Set the flag to call back                                                                                 // 642
+        didFlushSome = true;                                                                                         // 643
+      }                                                                                                              // 644
+    }                                                                                                                // 645
+    if (didFlushSome) {                                                                                              // 646
+      // Call the event callback                                                                                     // 647
+      Ground.emit('flush', { type: 'methods' });                                                                     // 648
+    }                                                                                                                // 649
+                                                                                                                     // 650
+  }                                                                                                                  // 651
+};                                                                                                                   // 652
+                                                                                                                     // 653
+// Extract only newly added methods from localstorage                                                                // 654
+var _getMethodUpdates = function _getMethodUpdates(newMethods) {                                                     // 655
+  var result = [];                                                                                                   // 656
+  if (newMethods && newMethods.length > 0) {                                                                         // 657
+    // Get the old methods allready in memory                                                                        // 658
+    // We could have done an optimized slice version or just starting at                                             // 659
+    // oldMethods.length, but this tab is not in focus                                                               // 660
+    var oldMethods = _getMethodsList();                                                                              // 661
+    // We do a check to see if we should flush our in memory methods if allready                                     // 662
+    // run on an other tab - an odd case - the first item would not match in                                         // 663
+    // old methods and new methods, its only valid to make this test if both                                         // 664
+    // methods arrays are not empty allready                                                                         // 665
+    if (oldMethods.length &&                                                                                         // 666
+            EJSON.stringify(oldMethods[0]) !== EJSON.stringify(newMethods[0])) {                                     // 667
+      // Flush the in memory / queue methods                                                                         // 668
+      _flushInMemoryMethods();                                                                                       // 669
+      // We reset the oldMethods array of outstanding methods                                                        // 670
+      oldMethods = [];                                                                                               // 671
+    }                                                                                                                // 672
+    // Iterate over the new methods, old ones should be ordered in beginning of                                      // 673
+    // newMethods we do a simple test an throw an error if thats not the case                                        // 674
+    for (var i=0; i < newMethods.length; i++) {                                                                      // 675
+                                                                                                                     // 676
+      if (i < oldMethods.length) {                                                                                   // 677
+        // Do a hard slow test to make sure all is in sync                                                           // 678
+        if (EJSON.stringify(oldMethods[i]) !== EJSON.stringify(newMethods[i])) {                                     // 679
+          // The client data is corrupted, throw error or force the client to                                        // 680
+          // reload, does not make sense to continue?                                                                // 681
+          throw new Error('The method database is corrupted or out of sync at position: ' + i);                      // 682
+        }                                                                                                            // 683
+      } else {                                                                                                       // 684
+        // Ok out of oldMethods this is a new method call                                                            // 685
+        result.push(newMethods[i]);                                                                                  // 686
+                                                                                                                     // 687
+        Ground.emit('methodcall', newMethods[i]);                                                                    // 688
+      }                                                                                                              // 689
+    } // EO for iteration                                                                                            // 690
+                                                                                                                     // 691
+  } else {                                                                                                           // 692
+    // If new methods are empty this means that the other client / tap has                                           // 693
+    // Allready sendt and recieved the method calls - so we flush our in mem                                         // 694
+    // Flush the in memory / queue methods                                                                           // 695
+    _flushInMemoryMethods();                                                                                         // 696
+  }                                                                                                                  // 697
+                                                                                                                     // 698
+  // return the result                                                                                               // 699
+  return result;                                                                                                     // 700
+};                                                                                                                   // 701
+                                                                                                                     // 702
+///////////////////////////// LOAD & SAVE METHODS //////////////////////////////                                     // 703
+// Create the storage for methods                                                                                    // 704
+var _methodsStorage = Store.create({                                                                                 // 705
+  name: '_methods_',                                                                                                 // 706
+  version: 1.1                                                                                                       // 707
+});                                                                                                                  // 708
+                                                                                                                     // 709
+var _sendMethod = function _sendMethod(method, connection) {                                                         // 710
+  // Send a log message first to the test                                                                            // 711
+  test.log('SEND', JSON.stringify(method));                                                                          // 712
+                                                                                                                     // 713
+  if (test.isMain) {                                                                                                 // 714
+    console.warn('Main test should not send methods...');                                                            // 715
+  }                                                                                                                  // 716
+                                                                                                                     // 717
+  connection.apply(                                                                                                  // 718
+    method.method, method.args, method.options, function resumeMethodCallback(err, result) {                         // 719
+      // We cant fix the missing callbacks made at runtime the                                                       // 720
+      // last time the app ran. But we can emit data                                                                 // 721
+                                                                                                                     // 722
+      if (err) {                                                                                                     // 723
+        test.log('RETURNED ERROR', JSON.stringify(method), err.message);                                             // 724
+      } else {                                                                                                       // 725
+        test.log('RETURNED METHOD', JSON.stringify(method));                                                         // 726
+      }                                                                                                              // 727
+                                                                                                                     // 728
+      // Emit the data we got back here                                                                              // 729
+      Ground.emit('method', { method: method, error: err, result: result });                                         // 730
+    }                                                                                                                // 731
+  );                                                                                                                 // 732
+};                                                                                                                   // 733
                                                                                                                      // 734
-// We may end in a situation where things have changed eg. if collections are                                        // 735
-// renamed or left out in the app. We make sure that ground db will try 5 time                                       // 736
-// times and then have the missing methods die.                                                                      // 737
-// The correct thing in the future would prop. be to have the conflict resolution                                    // 738
-// create patch calls instead of resume.                                                                             // 739
-var resumeAttemptsLeft = 5;                                                                                          // 740
-                                                                                                                     // 741
-var resumeWaitingMethods = function resumeWaitingMethods() {                                                         // 742
-  var missing = [];                                                                                                  // 743
-                                                                                                                     // 744
-  resumeAttemptsLeft--;                                                                                              // 745
+var waitingMethods = [];                                                                                             // 735
+                                                                                                                     // 736
+// We may end in a situation where things have changed eg. if collections are                                        // 737
+// renamed or left out in the app. We make sure that ground db will try 5 time                                       // 738
+// times and then have the missing methods die.                                                                      // 739
+// The correct thing in the future would prop. be to have the conflict resolution                                    // 740
+// create patch calls instead of resume.                                                                             // 741
+var resumeAttemptsLeft = 5;                                                                                          // 742
+                                                                                                                     // 743
+var resumeWaitingMethods = function resumeWaitingMethods() {                                                         // 744
+  var missing = [];                                                                                                  // 745
                                                                                                                      // 746
-  // Resume each method                                                                                              // 747
-  _groundUtil.each(waitingMethods, function eachWaitingMethods(method) {                                             // 748
-    if (method) {                                                                                                    // 749
-                                                                                                                     // 750
-      // name helper for the method                                                                                  // 751
-      var name = method.method;                                                                                      // 752
-                                                                                                                     // 753
-      if (name) {                                                                                                    // 754
+  resumeAttemptsLeft--;                                                                                              // 747
+                                                                                                                     // 748
+  // Resume each method                                                                                              // 749
+  _groundUtil.each(waitingMethods, function eachWaitingMethods(method) {                                             // 750
+    if (method) {                                                                                                    // 751
+                                                                                                                     // 752
+      // name helper for the method                                                                                  // 753
+      var name = method.method;                                                                                      // 754
                                                                                                                      // 755
-        test.log('RESUME', 'Load method "' + name + '"');                                                            // 756
-        // Get the connection from the allow method resume                                                           // 757
-        var methodConnection = _allowMethodResumeMap[name];                                                          // 758
-        // Run it in fenced mode since the changes have already been applied                                         // 759
-        // locally                                                                                                   // 760
-        if (methodConnection) {                                                                                      // 761
-                                                                                                                     // 762
-          _groundUtil.connection.stubFence(name, function runFencedMethod() {                                        // 763
-            // Add method to connection                                                                              // 764
-            _sendMethod(method, methodConnection);                                                                   // 765
-          });                                                                                                        // 766
-                                                                                                                     // 767
-        } else {                                                                                                     // 768
-          // XXX: make sure we keep order                                                                            // 769
-          // TODO: Check if we should use push or unshift                                                            // 770
-          missing.push(method);                                                                                      // 771
-          test.log('RESUME', 'Missing method "' + name + '" - retry later');                                         // 772
+      if (name) {                                                                                                    // 756
+                                                                                                                     // 757
+        test.log('RESUME', 'Load method "' + name + '"');                                                            // 758
+        // Get the connection from the allow method resume                                                           // 759
+        var methodConnection = _allowMethodResumeMap[name];                                                          // 760
+        // Run it in fenced mode since the changes have already been applied                                         // 761
+        // locally                                                                                                   // 762
+        if (methodConnection) {                                                                                      // 763
+                                                                                                                     // 764
+          _groundUtil.connection.stubFence(name, function runFencedMethod() {                                        // 765
+            // Add method to connection                                                                              // 766
+            _sendMethod(method, methodConnection);                                                                   // 767
+          });                                                                                                        // 768
+                                                                                                                     // 769
+        } else {                                                                                                     // 770
+          // XXX: make sure we keep order                                                                            // 771
+          // TODO: Check if we should use push or unshift                                                            // 772
+          missing.push(method);                                                                                      // 773
+          test.log('RESUME', 'Missing method "' + name + '" - retry later');                                         // 774
           console.warn('Ground method resume: Cannot resume "' + name + '" connection not rigged yet, retry later');
-        }                                                                                                            // 774
-                                                                                                                     // 775
-      }                                                                                                              // 776
+        }                                                                                                            // 776
                                                                                                                      // 777
-    }                                                                                                                // 778
-  });                                                                                                                // 779
-                                                                                                                     // 780
-  // Keep track of missing methods                                                                                   // 781
-  waitingMethods = missing;                                                                                          // 782
-                                                                                                                     // 783
-  // If no waiting methods - then we must be done?                                                                   // 784
-  if (!_methodsResumed && !waitingMethods.length || !resumeAttemptsLeft) {                                           // 785
-    // Methods have resumed                                                                                          // 786
-    _methodsResumed = true;                                                                                          // 787
-    _methodsResumedDeps.changed();                                                                                   // 788
-  }                                                                                                                  // 789
-                                                                                                                     // 790
-};                                                                                                                   // 791
+      }                                                                                                              // 778
+                                                                                                                     // 779
+    }                                                                                                                // 780
+  });                                                                                                                // 781
+                                                                                                                     // 782
+  // Keep track of missing methods                                                                                   // 783
+  waitingMethods = missing;                                                                                          // 784
+                                                                                                                     // 785
+  // If no waiting methods - then we must be done?                                                                   // 786
+  if (!_methodsResumed && !waitingMethods.length || !resumeAttemptsLeft) {                                           // 787
+    // Methods have resumed                                                                                          // 788
+    _methodsResumed = true;                                                                                          // 789
+    _methodsResumedDeps.changed();                                                                                   // 790
+  }                                                                                                                  // 791
                                                                                                                      // 792
-                                                                                                                     // 793
-var loadMissingMethods = function loadMissingMethods(callback) {                                                     // 794
-  _methodsStorage.getItem('methods', function storageLoadMissingMethods(err, data) {                                 // 795
-    test.log('RESUME', 'methods loaded into memory');                                                                // 796
-    if (err) {                                                                                                       // 797
-      // XXX:                                                                                                        // 798
-      callback(err);                                                                                                 // 799
-    } else if (data) {                                                                                               // 800
-      // Maxify the data from storage                                                                                // 801
-      // We are only going to submit the diff                                                                        // 802
-      // Set missing methods                                                                                         // 803
-      waitingMethods = _getMethodUpdates(MiniMaxMethods.maxify(data));                                               // 804
-    }                                                                                                                // 805
-                                                                                                                     // 806
-    callback();                                                                                                      // 807
-  });                                                                                                                // 808
-};                                                                                                                   // 809
-                                                                                                                     // 810
-// load methods from localstorage and resume the methods                                                             // 811
-var _loadMethods = function _loadMethods() {                                                                         // 812
-                                                                                                                     // 813
-  loadMissingMethods(function loadMissingMethods(err) {                                                              // 814
-    if (err) {                                                                                                       // 815
-      test.log('RESUME', 'Could not load missing methods into memory', err);                                         // 816
-    } else {                                                                                                         // 817
-                                                                                                                     // 818
-      // Try to resume missing methods now                                                                           // 819
-      resumeWaitingMethods();                                                                                        // 820
-                                                                                                                     // 821
-      // If not all methods are resumed then try until success                                                       // 822
-      if (!_methodsResumed) {                                                                                        // 823
-                                                                                                                     // 824
-        var interval = Meteor.setInterval(function loadMissingMethodsInterval() {                                    // 825
-          // Try to resume missing methods                                                                           // 826
-          resumeWaitingMethods();                                                                                    // 827
-                                                                                                                     // 828
-          // If methods are resumed then stop this                                                                   // 829
-          if (_methodsResumed) {                                                                                     // 830
-            Meteor.clearInterval(interval);                                                                          // 831
-          }                                                                                                          // 832
-        }, 1000);                                                                                                    // 833
-                                                                                                                     // 834
-      }                                                                                                              // 835
+};                                                                                                                   // 793
+                                                                                                                     // 794
+                                                                                                                     // 795
+var loadMissingMethods = function loadMissingMethods(callback) {                                                     // 796
+  _methodsStorage.getItem('methods', function storageLoadMissingMethods(err, data) {                                 // 797
+    test.log('RESUME', 'methods loaded into memory');                                                                // 798
+    if (err) {                                                                                                       // 799
+      // XXX:                                                                                                        // 800
+      callback(err);                                                                                                 // 801
+    } else if (data) {                                                                                               // 802
+      // Maxify the data from storage                                                                                // 803
+      // We are only going to submit the diff                                                                        // 804
+      // Set missing methods                                                                                         // 805
+      waitingMethods = _getMethodUpdates(MiniMaxMethods.maxify(data));                                               // 806
+    }                                                                                                                // 807
+                                                                                                                     // 808
+    callback();                                                                                                      // 809
+  });                                                                                                                // 810
+};                                                                                                                   // 811
+                                                                                                                     // 812
+// load methods from localstorage and resume the methods                                                             // 813
+var _loadMethods = function _loadMethods() {                                                                         // 814
+                                                                                                                     // 815
+  loadMissingMethods(function loadMissingMethods(err) {                                                              // 816
+    if (err) {                                                                                                       // 817
+      test.log('RESUME', 'Could not load missing methods into memory', err);                                         // 818
+    } else {                                                                                                         // 819
+                                                                                                                     // 820
+      // Try to resume missing methods now                                                                           // 821
+      resumeWaitingMethods();                                                                                        // 822
+                                                                                                                     // 823
+      // If not all methods are resumed then try until success                                                       // 824
+      if (!_methodsResumed) {                                                                                        // 825
+                                                                                                                     // 826
+        var interval = Meteor.setInterval(function loadMissingMethodsInterval() {                                    // 827
+          // Try to resume missing methods                                                                           // 828
+          resumeWaitingMethods();                                                                                    // 829
+                                                                                                                     // 830
+          // If methods are resumed then stop this                                                                   // 831
+          if (_methodsResumed) {                                                                                     // 832
+            Meteor.clearInterval(interval);                                                                          // 833
+          }                                                                                                          // 834
+        }, 1000);                                                                                                    // 835
                                                                                                                      // 836
-    }                                                                                                                // 837
-  });                                                                                                                // 838
-                                                                                                                     // 839
-}; // EO load methods                                                                                                // 840
+      }                                                                                                              // 837
+                                                                                                                     // 838
+    }                                                                                                                // 839
+  });                                                                                                                // 840
                                                                                                                      // 841
-// Save the methods into the localstorage                                                                            // 842
-var _saveMethods = function _saveMethods() {                                                                         // 843
-  if (_methodsResumed) {                                                                                             // 844
-                                                                                                                     // 845
-    // Ok memory is initialized                                                                                      // 846
-    Ground.emit('cache', { type: 'methods' });                                                                       // 847
-                                                                                                                     // 848
-    // Save outstanding methods to localstorage                                                                      // 849
-    var methods = _getMethodsList();                                                                                 // 850
-//test.log('SAVE METHODS', JSON.stringify(methods));                                                                 // 851
+}; // EO load methods                                                                                                // 842
+                                                                                                                     // 843
+// Save the methods into the localstorage                                                                            // 844
+var _saveMethods = function _saveMethods() {                                                                         // 845
+  if (_methodsResumed) {                                                                                             // 846
+                                                                                                                     // 847
+    // Ok memory is initialized                                                                                      // 848
+    Ground.emit('cache', { type: 'methods' });                                                                       // 849
+                                                                                                                     // 850
+    // Save outstanding methods to localstorage                                                                      // 851
+    var methods = _getMethodsList();                                                                                 // 852
+//test.log('SAVE METHODS', JSON.stringify(methods));                                                                 // 853
     _methodsStorage.setItem('methods', MiniMaxMethods.minify(methods), function storage_saveMethods() { // jshint ignore:line
-      // XXX:                                                                                                        // 853
-    });                                                                                                              // 854
-                                                                                                                     // 855
-  }                                                                                                                  // 856
-};                                                                                                                   // 857
-                                                                                                                     // 858
-//////////////////////////// STARTUP METHODS RESUME ////////////////////////////                                     // 859
+      // XXX:                                                                                                        // 855
+    });                                                                                                              // 856
+                                                                                                                     // 857
+  }                                                                                                                  // 858
+};                                                                                                                   // 859
                                                                                                                      // 860
-Meteor.startup(function startupMethodResume() {                                                                      // 861
-  // Wait some not to conflict with accouts login                                                                    // 862
-  // TODO: Do we have a better way, instead of depending on time should depend                                       // 863
-  // on en event.                                                                                                    // 864
-  Meteor.setTimeout(function loadMethods() {                                                                         // 865
-    test.log('INIT LOAD METHODS');                                                                                   // 866
-    _loadMethods();                                                                                                  // 867
-  }, 500);                                                                                                           // 868
-});                                                                                                                  // 869
-                                                                                                                     // 870
-/////////////////////////// SYNC TABS METHODS DATABSE //////////////////////////                                     // 871
+//////////////////////////// STARTUP METHODS RESUME ////////////////////////////                                     // 861
+                                                                                                                     // 862
+Meteor.startup(function startupMethodResume() {                                                                      // 863
+  // Wait some not to conflict with accouts login                                                                    // 864
+  // TODO: Do we have a better way, instead of depending on time should depend                                       // 865
+  // on en event.                                                                                                    // 866
+  Meteor.setTimeout(function loadMethods() {                                                                         // 867
+    test.log('INIT LOAD METHODS');                                                                                   // 868
+    _loadMethods();                                                                                                  // 869
+  }, 500);                                                                                                           // 870
+});                                                                                                                  // 871
                                                                                                                      // 872
-var syncDatabaseTimeout = new OneTimeout(150);                                                                       // 873
+/////////////////////////// SYNC TABS METHODS DATABSE //////////////////////////                                     // 873
                                                                                                                      // 874
-// Offline client only databases will sync a bit different than normal                                               // 875
-// This function is a bit hard - but it works - optimal solution could be to                                         // 876
-// have virtual method calls it would complicate things                                                              // 877
-var _syncDatabase = function _syncDatabase() {                                                                       // 878
-  var self = this;                                                                                                   // 879
-  // We set a small delay in case of more updates within the wait                                                    // 880
-  syncDatabaseTimeout(function syncDatabaseTimeout() {                                                               // 881
-//    if (self && (self.offlineDatabase === true || !Meteor.status().connected)) {                                   // 882
-    if (self) {                                                                                                      // 883
-      // Add event hook                                                                                              // 884
-      self.collection.emit('sync');                                                                                  // 885
-      Ground.emit('sync', { type: 'database', collection: self.name });                                              // 886
-      // Hard reset database?                                                                                        // 887
-      self.storage.getItem('data', function storageSyncFetch(err, data) {                                            // 888
-        if (err) {                                                                                                   // 889
-          //                                                                                                         // 890
-          throw err;                                                                                                 // 891
-        } else {                                                                                                     // 892
-          // Get the data back in size                                                                               // 893
-          var newDocs = MiniMaxDB.maxify(data) || {};                                                                // 894
-                                                                                                                     // 895
-          self.collection.find().forEach(function storageSyncFetchEach(doc) {                                        // 896
-            // Remove document                                                                                       // 897
-            self._collection.remove(doc._id);                                                                        // 898
-            // If found in new documents then hard update                                                            // 899
-            if (typeof newDocs[doc._id] !== 'undefined') {                                                           // 900
-              // Update doc                                                                                          // 901
-              self._collection.insert(newDocs[doc._id]);                                                             // 902
-              delete newDocs[doc._id];                                                                               // 903
-            }                                                                                                        // 904
-          });                                                                                                        // 905
-                                                                                                                     // 906
-          _groundUtil.each(newDocs, function storageSyncFetchEachNew(doc) {                                          // 907
-            // insert doc                                                                                            // 908
-            self._collection.insert(doc);                                                                            // 909
-          });                                                                                                        // 910
-                                                                                                                     // 911
-        }                                                                                                            // 912
-      });                                                                                                            // 913
-                                                                                                                     // 914
-    }                                                                                                                // 915
-  });                                                                                                                // 916
-};                                                                                                                   // 917
-                                                                                                                     // 918
-var syncMethodsTimeout = new OneTimeout(500);                                                                        // 919
+var syncDatabaseTimeout = new OneTimeout(150);                                                                       // 875
+                                                                                                                     // 876
+// Offline client only databases will sync a bit different than normal                                               // 877
+// This function is a bit hard - but it works - optimal solution could be to                                         // 878
+// have virtual method calls it would complicate things                                                              // 879
+var _syncDatabase = function _syncDatabase() {                                                                       // 880
+  var self = this;                                                                                                   // 881
+  // We set a small delay in case of more updates within the wait                                                    // 882
+  syncDatabaseTimeout(function syncDatabaseTimeout() {                                                               // 883
+//    if (self && (self.offlineDatabase === true || !Meteor.status().connected)) {                                   // 884
+    if (self) {                                                                                                      // 885
+      // Add event hook                                                                                              // 886
+      self.collection.emit('sync');                                                                                  // 887
+      Ground.emit('sync', { type: 'database', collection: self.name });                                              // 888
+      // Hard reset database?                                                                                        // 889
+      self.storage.getItem('data', function storageSyncFetch(err, data) {                                            // 890
+        if (err) {                                                                                                   // 891
+          //                                                                                                         // 892
+          throw err;                                                                                                 // 893
+        } else {                                                                                                     // 894
+          // Get the data back in size                                                                               // 895
+          var newDocs = MiniMaxDB.maxify(data) || {};                                                                // 896
+                                                                                                                     // 897
+          self.collection.find().forEach(function storageSyncFetchEach(doc) {                                        // 898
+            // Remove document                                                                                       // 899
+            self._collection.remove(doc._id);                                                                        // 900
+            // If found in new documents then hard update                                                            // 901
+            if (typeof newDocs[doc._id] !== 'undefined') {                                                           // 902
+              // Update doc                                                                                          // 903
+              self._collection.insert(newDocs[doc._id]);                                                             // 904
+              delete newDocs[doc._id];                                                                               // 905
+            }                                                                                                        // 906
+          });                                                                                                        // 907
+                                                                                                                     // 908
+          _groundUtil.each(newDocs, function storageSyncFetchEachNew(doc) {                                          // 909
+            // insert doc                                                                                            // 910
+            self._collection.insert(doc);                                                                            // 911
+          });                                                                                                        // 912
+                                                                                                                     // 913
+        }                                                                                                            // 914
+      });                                                                                                            // 915
+                                                                                                                     // 916
+    }                                                                                                                // 917
+  });                                                                                                                // 918
+};                                                                                                                   // 919
                                                                                                                      // 920
-// Syncronize tabs via method calls                                                                                  // 921
-var _syncMethods = function _syncMethods() {                                                                         // 922
-  // We are going to into reload, stop all access to localstorage                                                    // 923
-  _isReloading = true;                                                                                               // 924
-  // We are not master and the user is working on another tab, we are not in                                         // 925
-  // a hurry to spam the browser with work, plus there are typically acouple                                         // 926
-  // of db access required in most operations, we wait a sec?                                                        // 927
-  syncMethodsTimeout(function _syncMethodsTimeout() {                                                                // 928
-    // Add event hook                                                                                                // 929
-    Ground.emit('sync', { type: 'methods' });                                                                        // 930
-    // Load the offline data into our memory                                                                         // 931
-    _groundUtil.each(_groundDatabases, function syncMethodsTimeoutEach(collection, name) {                           // 932
-      test.log('SYNC DB', name);                                                                                     // 933
-      _loadDatabase.call(collection);                                                                                // 934
-    });                                                                                                              // 935
-    // Resume methods                                                                                                // 936
-    test.log('SYNC METHODS');                                                                                        // 937
-    _loadMethods();                                                                                                  // 938
-    // Resume normal writes                                                                                          // 939
-    _isReloading = false;                                                                                            // 940
-  });                                                                                                                // 941
-};                                                                                                                   // 942
-                                                                                                                     // 943
-/////////////////////// ADD TRIGGERS IN LIVEDATACONNECTION /////////////////////                                     // 944
+var syncMethodsTimeout = new OneTimeout(500);                                                                        // 921
+                                                                                                                     // 922
+// Syncronize tabs via method calls                                                                                  // 923
+var _syncMethods = function _syncMethods() {                                                                         // 924
+  // We are going to into reload, stop all access to localstorage                                                    // 925
+  _isReloading = true;                                                                                               // 926
+  // We are not master and the user is working on another tab, we are not in                                         // 927
+  // a hurry to spam the browser with work, plus there are typically acouple                                         // 928
+  // of db access required in most operations, we wait a sec?                                                        // 929
+  syncMethodsTimeout(function _syncMethodsTimeout() {                                                                // 930
+    // Add event hook                                                                                                // 931
+    Ground.emit('sync', { type: 'methods' });                                                                        // 932
+    // Load the offline data into our memory                                                                         // 933
+    _groundUtil.each(_groundDatabases, function syncMethodsTimeoutEach(collection, name) {                           // 934
+      test.log('SYNC DB', name);                                                                                     // 935
+      _loadDatabase.call(collection);                                                                                // 936
+    });                                                                                                              // 937
+    // Resume methods                                                                                                // 938
+    test.log('SYNC METHODS');                                                                                        // 939
+    _loadMethods();                                                                                                  // 940
+    // Resume normal writes                                                                                          // 941
+    _isReloading = false;                                                                                            // 942
+  });                                                                                                                // 943
+};                                                                                                                   // 944
                                                                                                                      // 945
-if (!test.isMain) {                                                                                                  // 946
+/////////////////////// ADD TRIGGERS IN LIVEDATACONNECTION /////////////////////                                     // 946
                                                                                                                      // 947
-  // Add hooks method hooks                                                                                          // 948
-  // We need to know when methods are added and when they have returned                                              // 949
-                                                                                                                     // 950
-  var _superApply = _groundUtil.Connection.prototype.apply;                                                          // 951
-  var _superOutstandingMethodFinished = _groundUtil.Connection.prototype._outstandingMethodFinished;                 // 952
-                                                                                                                     // 953
-  _groundUtil.Connection.prototype.apply = function applyHook(name /* , args, options, callback */) {                // 954
-    // Intercept grounded databases                                                                                  // 955
-    if (_allowMethodResumeMap[name]) {                                                                               // 956
-      test.debug('APPLY', JSON.stringify(_groundUtil.toArray(arguments)));                                           // 957
-    }                                                                                                                // 958
-    // Call super                                                                                                    // 959
-    var result = _superApply.apply(this, _groundUtil.toArray(arguments));                                            // 960
-    // Save methods                                                                                                  // 961
-    if (_allowMethodResumeMap[name]) {                                                                               // 962
-      _saveMethods();                                                                                                // 963
-    }                                                                                                                // 964
-    // return the result                                                                                             // 965
-    return result;                                                                                                   // 966
-  };                                                                                                                 // 967
-                                                                                                                     // 968
-  _groundUtil.Connection.prototype._outstandingMethodFinished = function _outstandingMethodFinished() {              // 969
-      // Call super                                                                                                  // 970
-      _superOutstandingMethodFinished.apply(this);                                                                   // 971
-      // We save current status of methods                                                                           // 972
-      _saveMethods();                                                                                                // 973
-      // _outstandingMethodFinished dont return anything                                                             // 974
-    };                                                                                                               // 975
-                                                                                                                     // 976
-}                                                                                                                    // 977
+if (!test.isMain) {                                                                                                  // 948
+                                                                                                                     // 949
+  // Add hooks method hooks                                                                                          // 950
+  // We need to know when methods are added and when they have returned                                              // 951
+                                                                                                                     // 952
+  var _superApply = _groundUtil.Connection.prototype.apply;                                                          // 953
+  var _superOutstandingMethodFinished = _groundUtil.Connection.prototype._outstandingMethodFinished;                 // 954
+                                                                                                                     // 955
+  _groundUtil.Connection.prototype.apply = function applyHook(name /* , args, options, callback */) {                // 956
+    // Intercept grounded databases                                                                                  // 957
+    if (_allowMethodResumeMap[name]) {                                                                               // 958
+      test.debug('APPLY', JSON.stringify(_groundUtil.toArray(arguments)));                                           // 959
+    }                                                                                                                // 960
+    // Call super                                                                                                    // 961
+    var result = _superApply.apply(this, _groundUtil.toArray(arguments));                                            // 962
+    // Save methods                                                                                                  // 963
+    if (_allowMethodResumeMap[name]) {                                                                               // 964
+      _saveMethods();                                                                                                // 965
+    }                                                                                                                // 966
+    // return the result                                                                                             // 967
+    return result;                                                                                                   // 968
+  };                                                                                                                 // 969
+                                                                                                                     // 970
+  _groundUtil.Connection.prototype._outstandingMethodFinished = function _outstandingMethodFinished() {              // 971
+      // Call super                                                                                                  // 972
+      _superOutstandingMethodFinished.apply(this);                                                                   // 973
+      // We save current status of methods                                                                           // 974
+      _saveMethods();                                                                                                // 975
+      // _outstandingMethodFinished dont return anything                                                             // 976
+    };                                                                                                               // 977
                                                                                                                      // 978
-/////////////////////// LOAD CHANGES FROM OTHER TABS ///////////////////////////                                     // 979
+}                                                                                                                    // 979
                                                                                                                      // 980
-// The main test mode should not interfere with tab sync                                                             // 981
-if (!test.isMain) {                                                                                                  // 982
-                                                                                                                     // 983
-  // Sync Methods if changed                                                                                         // 984
-  _methodsStorage.addListener('storage', function storageEventListener() {                                           // 985
-    // Method calls are delayed a bit for optimization                                                               // 986
-    _syncMethods('mehods');                                                                                          // 987
-                                                                                                                     // 988
-  });                                                                                                                // 989
+/////////////////////// LOAD CHANGES FROM OTHER TABS ///////////////////////////                                     // 981
+                                                                                                                     // 982
+// The main test mode should not interfere with tab sync                                                             // 983
+if (!test.isMain) {                                                                                                  // 984
+                                                                                                                     // 985
+  // Sync Methods if changed                                                                                         // 986
+  _methodsStorage.addListener('storage', function storageEventListener() {                                           // 987
+    // Method calls are delayed a bit for optimization                                                               // 988
+    _syncMethods('mehods');                                                                                          // 989
                                                                                                                      // 990
-}                                                                                                                    // 991
+  });                                                                                                                // 991
                                                                                                                      // 992
-////////////////////////// ADD DEPRECATION NOTICE //////////////////////////////                                     // 993
-if (typeof GroundDB === 'undefined') {                                                                               // 994
-  GroundDB = function deprecatedGroundDB(name, options) {                                                            // 995
-    // Deprecation notice                                                                                            // 996
-    console.warn('The GroundDB scope is deprecating!! Use Ground.Collection instead');                               // 997
-    return new Ground.Collection(name, options);                                                                     // 998
-  };                                                                                                                 // 999
-}                                                                                                                    // 1000
-                                                                                                                     // 1001
+}                                                                                                                    // 993
+                                                                                                                     // 994
+////////////////////////// ADD DEPRECATION NOTICE //////////////////////////////                                     // 995
+if (typeof GroundDB === 'undefined') {                                                                               // 996
+  GroundDB = function deprecatedGroundDB(name, options) {                                                            // 997
+    // Deprecation notice                                                                                            // 998
+    console.warn('The GroundDB scope is deprecating!! Use Ground.Collection instead');                               // 999
+    return new Ground.Collection(name, options);                                                                     // 1000
+  };                                                                                                                 // 1001
+}                                                                                                                    // 1002
+                                                                                                                     // 1003
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

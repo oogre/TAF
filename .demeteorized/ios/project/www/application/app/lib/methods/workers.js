@@ -38,33 +38,33 @@ Meteor.methods({
 		if(Meteor.isServer){
 			var Future = Npm.require("fibers/future");
 			var myFuture = new Future();
-			var url = "https://passwordwolf.com/api/?upper=off&special=off&length=10&repeat=1";
+			//var url = "https://passwordwolf.com/api/?upper=off&special=off&length=10&repeat=1";
 
 
 
-			HTTP.get(url, {
-				followRedirects : true
-			}, function (error, result) {
-				if(error) myFuture.throw(error);
-				if(result.statusCode != 200) myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
-				try{
-					var body = JSON.parse(result.content);
-					worker.password = body[0].password;
+			//HTTP.get(url, {
+			//	followRedirects : true
+			//}, function (error, result) {
+				//if(error) myFuture.throw(error);
+				//if(result.statusCode != 200) myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
+				//try{
+					//var body = JSON.parse(result.content);
+					worker.password = "gdutaf";
 
 					var account = Accounts.createUser(worker);
 
-					Email.send({
+					/*Email.send({
 						to: worker.email,
 						from: "robot@taf.com",
 						subject: "Welcom on TAF",
 						text: "GO and connect on TAF. email : "+worker.email+" password : "+worker.password
-					});
+					});*/
 
 					myFuture.return(account);
-				}catch(e){
-					myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
-				}
-			});
+				//}catch(e){
+				//	myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
+				//}
+			//});
 			return myFuture.wait();
 		}
 		
@@ -77,48 +77,64 @@ Meteor.methods({
 	},
 	workerSchedule : function( workId, workerId, action, datetime){
 		this.unblock();
-		//STOP WORKER WORKING AT ANY WORK 
 		Works
 		.find({
 			$where : function(){
-				return _.find(this.schedular[workerId], function(schedule){
-					return schedule.start && !schedule.stop;
+				return _.find(this.schedule, function(item){
+					var timetable = item.timetable || [];
+					return item.workerId === workerId && _.last(timetable) && _.last(timetable).start && !_.last(timetable).stop ;
 				});
 			}
 		})
 		.fetch()
 		.map(function(work){
-			var schedular = work.schedular || {};
-			schedular[workerId] = schedular[workerId] || [];
-			schedular[workerId] =	schedular[workerId]
-									.map(function(schedule){
-										schedule.stop = schedule.stop || datetime;
-										return schedule;
-									});
+			var schedule = work.schedule || [];
+			for(var k = schedule.length-1 ; k >= 0 ; k -- ){
+				if(!_.isArray(schedule[k].timetable))continue;
+				var timetable = schedule[k].timetable || [];
+				if(schedule[k].workerId == workerId && _.last(timetable) && _.last(timetable).start && !_.last(timetable).stop){
+					schedule[k].timetable[schedule[k].timetable.length-1].stop = datetime;
+					break;
+				}
+			}
 			Works
 			.update(work._id, {
 				$set : {
-					schedular : schedular
+					schedule : schedule
 				}
 			});
+			
 		});
-		
+		/**/
+
+
 		//START WORKER WORKING
 		var work = Works.findOne(workId);
-		var schedular = work.schedular || {};
-		schedular[workerId] = schedular[workerId] || [];
-		if(action === "start"){
-			schedular[workerId].push({
-				start : datetime
-			});
-		}
+		if(!work) return false;
+		var schedule = work.schedule || [];
 
+		if(action === "start"){
+			for(var k = schedule.length-1 ; k >= 0 ; k -- ){
+				if(schedule[k].workerId === workerId && !schedule[k].start){
+					schedule[k].timetable = schedule[k].timetable || [];
+					schedule[k].timetable.push({start : datetime});
+					break;
+				}
+			}
+		}
+		
 		Workers.update(workerId, {
 			$set : {
-				working : (action === "start" ? workId : false)
+				working : action === "start" ? workId : false
 			}
 		});
-		return Works.update(workId, {$set : {schedular : schedular}});
+
+		Works.update(workId, {
+			$set : {
+				schedule : schedule
+			}
+		});
+		/**/
 	}
 });
 }).call(this);

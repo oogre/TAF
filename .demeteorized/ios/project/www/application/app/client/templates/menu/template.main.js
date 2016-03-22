@@ -84,7 +84,20 @@ Template["mainmenu"] = new Template("Template.mainmenu", (function() {
     }), HTML.CharRef({
       html: "&nbsp;",
       str: " "
-    }), " Déconnection\n				"), "\n			"), "\n		" ];
+    }), " Déconnection\n				"), "\n			"), "\n			", Blaze.If(function() {
+      return Spacebars.call(view.lookup("isAdmin"));
+    }, function() {
+      return [ "\n				", HTML.LI("\n					", HTML.A({
+        href: "#"
+      }, "\n						", HTML.I({
+        "class": "fa fa-fw fa-2x fa-home"
+      }), HTML.CharRef({
+        html: "&nbsp;",
+        str: " "
+      }), " ", Blaze.View("lookup:absoluteUrl", function() {
+        return Spacebars.mustache(view.lookup("absoluteUrl"));
+      }), "\n					"), "\n				"), "\n			" ];
+    }), "\n		" ];
   }, function() {
     return [ "\n			", HTML.LI("\n				", HTML.A({
       href: function() {
@@ -106,7 +119,16 @@ Template["mainmenu"] = new Template("Template.mainmenu", (function() {
     }), HTML.CharRef({
       html: "&nbsp;",
       str: " "
-    }), " Connection\n				"), "\n			"), "\n		" ];
+    }), " Connection\n				"), "\n			"), "\n			", HTML.LI("\n				", HTML.A({
+      href: "#"
+    }, "\n					", HTML.I({
+      "class": "fa fa-fw fa-2x fa-home"
+    }), HTML.CharRef({
+      html: "&nbsp;",
+      str: " "
+    }), " ", Blaze.View("lookup:absoluteUrl", function() {
+      return Spacebars.mustache(view.lookup("absoluteUrl"));
+    }), "\n				"), "\n			"), "\n		" ];
   }), "\n	");
 }));
 

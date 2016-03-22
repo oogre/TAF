@@ -19,7 +19,6 @@ Template.signin.events({
 				}
 				if(err.reason.match("password"))
 					Session.set(Meteor.PWD_ERROR, true);
-				
 				return ;
 			}
 			Router.go("home");

@@ -71,8 +71,10 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
       }), "\n			" ];
     }), "\n		"), "\n		", HTML.TABLE({
       "class": "table",
-      "data-db-table-name": "worker"
+      "data-db-table-name": "works"
     }, "\n				", HTML.THEAD("\n					", HTML.TR("\n						", HTML.TH({
+      "data-db-row-name": "work_myId"
+    }, "\n							ID\n						"), "\n						", HTML.TH({
       "data-db-row-name": "work_rdv"
     }, "\n							RDV\n						"), "\n						", HTML.TH({
       "data-db-row-name": "work_type"
@@ -86,26 +88,28 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
       return [ "\n						", HTML.TR("\n							", HTML.TH({
         colspan: "3"
       }, "Travaux en cours :"), "\n						"), "\n					" ];
-    }), "\n					\n					", Blaze.Each(function() {
+    }), "\n					", Blaze.Each(function() {
       return Spacebars.call(Spacebars.dot(view.lookup("works"), "unfinished"));
     }, function() {
-      return [ "\n						", HTML.TR("\n							", HTML.TD(Blaze.View("lookup:rdv", function() {
-        return Spacebars.mustache(view.lookup("rdv"));
-      })), "\n							", HTML.TD(HTML.A({
+      return [ "\n						", HTML.TR("\n							", HTML.TD(HTML.A({
         href: function() {
           return Spacebars.mustache(view.lookup("pathFor"), Spacebars.kw({
             route: "work.show",
             workId: view.lookup("_id")
           }));
         }
-      }, Blaze.View("lookup:type", function() {
+      }, Blaze.View("lookup:myId", function() {
+        return Spacebars.mustache(view.lookup("myId"));
+      }))), "\n							", HTML.TD(Blaze.View("lookup:rdv", function() {
+        return Spacebars.mustache(view.lookup("rdv"));
+      })), "\n							", HTML.TD(Blaze.View("lookup:type", function() {
         return Spacebars.mustache(view.lookup("type"));
-      })), HTML.BR()), "\n							", Blaze.If(function() {
+      }), HTML.BR()), "\n							", Blaze.If(function() {
         return Spacebars.dataMustache(view.lookup("isConnected"), view.lookup("isChief"));
       }, function() {
         return [ "\n							", HTML.TD(), "\n							" ];
       }), "\n						"), "\n					" ];
-    }), "\n					", Blaze.If(function() {
+    }), "\n\n\n					", Blaze.If(function() {
       return Spacebars.call(Spacebars.dot(view.lookup("works"), "torun"));
     }, function() {
       return [ "\n						", HTML.TR("\n							", HTML.TH({
@@ -114,18 +118,20 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
     }), "\n					", Blaze.Each(function() {
       return Spacebars.call(Spacebars.dot(view.lookup("works"), "torun"));
     }, function() {
-      return [ "\n						", HTML.TR("\n							", HTML.TD(Blaze.View("lookup:rdv", function() {
-        return Spacebars.mustache(view.lookup("rdv"));
-      })), "\n							", HTML.TD(HTML.A({
+      return [ "\n						", HTML.TR("\n							", HTML.TD(HTML.A({
         href: function() {
           return Spacebars.mustache(view.lookup("pathFor"), Spacebars.kw({
             route: "work.show",
             workId: view.lookup("_id")
           }));
         }
-      }, Blaze.View("lookup:type", function() {
+      }, Blaze.View("lookup:myId", function() {
+        return Spacebars.mustache(view.lookup("myId"));
+      }))), "\n							", HTML.TD(Blaze.View("lookup:rdv", function() {
+        return Spacebars.mustache(view.lookup("rdv"));
+      })), "\n							", HTML.TD(Blaze.View("lookup:type", function() {
         return Spacebars.mustache(view.lookup("type"));
-      })), HTML.BR()), "\n							", Blaze.If(function() {
+      }), HTML.BR()), "\n							", Blaze.If(function() {
         return Spacebars.dataMustache(view.lookup("isConnected"), view.lookup("isChief"));
       }, function() {
         return [ "\n							", HTML.TD(Blaze._TemplateWith(function() {
@@ -137,7 +143,7 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
           return Spacebars.include(view.lookupTemplate("buttondestroy"));
         })), "\n							" ];
       }), "\n						"), "\n					" ];
-    }), "\n					", Blaze.If(function() {
+    }), "\n\n					\n					", Blaze.If(function() {
       return Spacebars.call(Spacebars.dot(view.lookup("works"), "finished"));
     }, function() {
       return [ "\n						", HTML.TR("\n							", HTML.TH({
@@ -146,18 +152,20 @@ Template["workIndex"] = new Template("Template.workIndex", (function() {
     }), "\n					", Blaze.Each(function() {
       return Spacebars.call(Spacebars.dot(view.lookup("works"), "finished"));
     }, function() {
-      return [ "\n						", HTML.TR("\n							", HTML.TD(Blaze.View("lookup:rdv", function() {
-        return Spacebars.mustache(view.lookup("rdv"));
-      })), "\n							", HTML.TD(HTML.A({
+      return [ "\n						", HTML.TR("\n							", HTML.TD(HTML.A({
         href: function() {
           return Spacebars.mustache(view.lookup("pathFor"), Spacebars.kw({
             route: "work.show",
             workId: view.lookup("_id")
           }));
         }
-      }, Blaze.View("lookup:type", function() {
+      }, Blaze.View("lookup:myId", function() {
+        return Spacebars.mustache(view.lookup("myId"));
+      }))), "\n							", HTML.TD(Blaze.View("lookup:rdv", function() {
+        return Spacebars.mustache(view.lookup("rdv"));
+      })), "\n							", HTML.TD(Blaze.View("lookup:type", function() {
         return Spacebars.mustache(view.lookup("type"));
-      })), HTML.BR()), "\n							", Blaze.If(function() {
+      }), HTML.BR()), "\n							", Blaze.If(function() {
         return Spacebars.dataMustache(view.lookup("isConnected"), view.lookup("isChief"));
       }, function() {
         return [ "\n							", HTML.TD("\n								", HTML.BUTTON({

@@ -36,18 +36,51 @@ Template.matterselector.helpers({
 			var matter = Session.get(Meteor.MATTER);
 			var inputReset = "select[name='unit'], input[name='quantity'], input[name='matter']";
 			if (matter && matter.quantity && matter.name && (matter.unit||matter.unit==="") && self && self.work){
+				var originId = $("select[name='origin']").val();
+				var destinyId = $("select[name='destiny']").val();
+
 				Session.set(Meteor.MATTER, false);
+
+				if(originId){
+					Meteor.call("matterOriginsTransfert", {
+						workId : self.work._id,
+						quantity : matter.quantity,
+						destinyId : destinyId,
+						originId : originId,
+						dateTime : moment().toISOString()
+					});
+				}
+
 				Meteor.call("workMatter", self.work._id, matter, inputReset, function(){
 					$(inputReset).val("");
 				});
 			}
 		});
+	},
+	origins : function(){
+		var matter = Session.get(Meteor.MATTER);
+		if(matter && matter._id){
+			return Origins.find({
+				matter : matter._id,
+			}).fetch()
+		}
+		return false;
+	},
+	destins : function(){
+		if(this && this.work && this.work.shop && this.work.shop._id){
+			var shop = Shops.findOne(this.work.shop._id);
+			if(shop){
+				return shop.modules;
+			}
+		}
+		return false;
 	}
 });
 Template.matterselector.destroyed = function(){
 Session.set(Meteor.MATTER, false);
 };
 Template.matterselector.rendered = function(){
+	Session.set(Meteor.MATTER, false);
 	Meteor.typeahead.inject();
 	$(".twitter-typeahead").addClass("form-control");
 	$(".typeahead")
@@ -84,6 +117,24 @@ Template.matterselector.events({
 		var matter = Session.get(Meteor.MATTER)||{};
 		matter.unit = event.target.value.toLowerCase();
 		Session.set(Meteor.MATTER, matter);
+	},
+	"change select.barcode" : function(event){
+		if(Meteor.isCordova && event.target.value == "barcode"){
+			cordova.plugins.barcodeScanner.scan(
+				function (result) {
+					$(event.target)
+					.find("option")
+					.each(function(k, elem){
+						if($(elem).html() == result.text){
+							$(event.target).val($(elem).val());
+						}
+					});
+				}, 
+				function (error) {
+					alert("Scanning failed: " + error);
+				}
+			);
+		}
 	}
 });
 }).call(this);

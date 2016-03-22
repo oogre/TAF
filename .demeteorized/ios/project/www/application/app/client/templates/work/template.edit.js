@@ -29,7 +29,7 @@ Template["workEdit"] = new Template("Template.workEdit", (function() {
         shopId: Spacebars.dot(view.lookup("shop"), "_id")
       }));
     },
-    "class": "btn btn-link btn-lg"
+    "class": ""
   }, Blaze.View("lookup:shop.name", function() {
     return Spacebars.mustache(Spacebars.dot(view.lookup("shop"), "name"));
   }), " - ", Blaze.View("lookup:shop.brand", function() {
@@ -46,8 +46,7 @@ Template["workEdit"] = new Template("Template.workEdit", (function() {
     }, function() {
       return [ "\n								", Blaze._TemplateWith(function() {
         return {
-          autoAdd: Spacebars.call(true),
-          notPickable: Spacebars.call(view.lookup("worker_ids"))
+          autoAdd: Spacebars.call(true)
         };
       }, function() {
         return Spacebars.include(view.lookupTemplate("workerselector"));
@@ -59,6 +58,7 @@ Template["workEdit"] = new Template("Template.workEdit", (function() {
     }), "\n						" ];
   }), "\n						", Blaze._TemplateWith(function() {
     return {
+      origine: Spacebars.call("shop"),
       schedular: Spacebars.call(true),
       worker_ids: Spacebars.call(view.lookup("worker_ids")),
       workId: Spacebars.call(view.lookup("_id"))

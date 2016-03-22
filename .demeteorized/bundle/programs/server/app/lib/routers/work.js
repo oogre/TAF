@@ -20,7 +20,7 @@ Router.route("/work/:workId", {
 	data : function(){
 		var work = Works.findOne(this.params.workId);
 		if(!work){
-			return;
+			return false;
 		}
 		work.pictures = Picts.find({
 							_id : {
@@ -47,11 +47,14 @@ Router.route("/work/:workId", {
 		var data = this.data();
 		if(data){
 			Session.set(Meteor.PAGE_TITLE, s.capitalize(data.type)+" chez "+s.capitalize(data.shop.name));	
-		}
-		this.render("work-view");
-		if(Meteor.isChief()){
-			Session.set(Meteor.FILL_CONTEXT_MENU_KEY, true);
-			this.render("work-viewaction", {to : "action"}); //contextmenu.action
+			this.render("work-view");
+			if(Meteor.isChief()){
+				Session.set(Meteor.FILL_CONTEXT_MENU_KEY, true);
+				this.render("work-viewaction", {to : "action"}); //contextmenu.action
+			}
+		}else{
+			Session.set(Meteor.CONTEXT_MENU_KEY, false);
+			return Router.go("home");
 		}
 	}
 });

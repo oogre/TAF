@@ -35,6 +35,12 @@ Units = new Ground.Collection(Units);
 Matters = new Meteor.Collection("matters");
 Matters = new Ground.Collection(Matters);
 
+Origins = new Meteor.Collection("origins");
+Origins = new Ground.Collection(Origins);
+
+Moves = new Meteor.Collection("moves");
+Moves = new Ground.Collection(Moves);
+
 Modules = new Meteor.Collection("modules");
 Modules = new Ground.Collection(Modules);
 

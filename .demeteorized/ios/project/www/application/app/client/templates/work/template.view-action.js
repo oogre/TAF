@@ -7,9 +7,16 @@ Template["work-viewaction"] = new Template("Template.work-viewaction", (function
   }, "\n		", Blaze.If(function() {
     return Spacebars.call(view.lookup("isAdmin"));
   }, function() {
-    return [ "\n			", HTML.LI("\n				", HTML.BUTTON({
-      "class": "btn btn-lg btn-block btn-danger workDestructor"
-    }, "Supprimer"), "\n			"), "\n		" ];
+    return [ "\n			", HTML.LI("\n				", Blaze._TemplateWith(function() {
+      return {
+        method: Spacebars.call("workDestructor"),
+        "class": Spacebars.call("btn-block"),
+        html: Spacebars.call("Supprimer"),
+        _id: Spacebars.call(view.lookup("_id"))
+      };
+    }, function() {
+      return Spacebars.include(view.lookupTemplate("buttondestroy"));
+    }), "\n			"), "\n		" ];
   }), "\n		", Blaze.If(function() {
     return Spacebars.call(view.lookup("reopenable"));
   }, function() {
@@ -24,6 +31,12 @@ Template["work-viewaction"] = new Template("Template.work-viewaction", (function
         "class": "btn btn-lg btn-block btn-default workClose"
       }, "Cloturer"), "\n				" ];
     }), "\n			"), "\n		" ];
+  }), "\n		", Blaze.If(function() {
+    return Spacebars.call(view.lookup("end"));
+  }, function() {
+    return [ "\n			", HTML.LI("\n				", HTML.BUTTON({
+      "class": "btn btn-lg btn-block btn-default print"
+    }, "Imprimer"), "\n			"), "\n		" ];
   }), "\n	") ];
 }));
 

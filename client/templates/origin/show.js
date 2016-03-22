@@ -72,14 +72,41 @@ Template.originshow.events({
 		}		
 	},
 	"change select[name='destiny']" : function(event){
-		var matter = Session.get(Meteor.MATTER)||{};
-		matter.destiny = event.target.value;
-		matter.origin = this.origin._id;
-		Session.set(Meteor.MATTER, matter);
-		if(matter.quantity && matter.destiny){
-			sendmatterOriginsTransfert(matter);
-			$("input[name='quantity'], select[name='destiny']").val("");
-		}
+		var self = this;
+		if(Meteor.isCordova && event.target.value == "barcode"){
+			cordova.plugins.barcodeScanner.scan(
+				function (result) {
+					$(event.target)
+					.find("option")
+					.each(function(k, elem){
+						if($(elem).html() == result.text){
+							$(event.target).val($(elem).val());
+							
+							var matter = Session.get(Meteor.MATTER)||{};
+							matter.destiny = $(elem).val();
+							matter.origin = self.origin._id;
+							Session.set(Meteor.MATTER, matter);
+							if(matter.quantity && matter.destiny){
+								sendmatterOriginsTransfert(matter);
+								$("input[name='quantity'], select[name='destiny']").val("");
+							}
+						}
+					});
+				}, 
+				function (error) {
+					alert("Scanning failed: " + error);
+				}
+			);
+		}else{
+			var matter = Session.get(Meteor.MATTER)||{};
+			matter.destiny = event.target.value;
+			matter.origin = this.origin._id;
+			Session.set(Meteor.MATTER, matter);
+			if(matter.quantity && matter.destiny){
+				sendmatterOriginsTransfert(matter);
+				$("input[name='quantity'], select[name='destiny']").val("");
+			}
+		}		
 	}
 });
 Template.originshow.destroyed = function(){

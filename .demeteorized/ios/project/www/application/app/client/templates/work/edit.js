@@ -18,6 +18,7 @@ Template.workEdit.destroyed = function(){
 	Session.set(Meteor.ADD_MATTER, false);
 };
 
+
 Template.workEdit.helpers({
 	showTasks : function(){
 		if(this && this.type === "maintenance" && this.modules) return true;
@@ -42,11 +43,11 @@ Template.workEdit.helpers({
 		return Session.get(Meteor.ADD_MATTER);
 	},
 	canAddWorker : function(){
-		return Workers.find({
+		return Workers.find(/*{
 			_id : {
-				$nin : this.worker_ids||[]
+				$nin : [] //this.worker_ids||
 			}
-		}).fetch();
+		}*/).fetch();
 	},
 	pictureSelector : function(){
 		return {

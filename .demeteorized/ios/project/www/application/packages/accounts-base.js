@@ -22,9 +22,10 @@ var Hook = Package['callback-hook'].Hook;
 var DDP = Package['ddp-client'].DDP;
 var Mongo = Package.mongo.Mongo;
 var babelHelpers = Package['babel-runtime'].babelHelpers;
+var Symbol = Package['ecmascript-runtime'].Symbol;
+var Map = Package['ecmascript-runtime'].Map;
+var Set = Package['ecmascript-runtime'].Set;
 var Promise = Package.promise.Promise;
-var Map = Package['ecmascript-collections'].Map;
-var Set = Package['ecmascript-collections'].Set;
 
 /* Package-scope variables */
 var AccountsCommon, EXPIRE_TOKENS_INTERVAL_MS, CONNECTION_CLOSE_DELAY_MS, AccountsClient, AccountsTest, Accounts;

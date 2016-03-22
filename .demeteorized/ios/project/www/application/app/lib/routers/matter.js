@@ -20,9 +20,25 @@ Router.route("/matter/edit/:matterId", {
 	action : function () {
 		var data = this.data();
 		if(data){
-			Session.set(Meteor.PAGE_TITLE, "Edition du matérial : "+s.capitalize(data.name));
+			Session.set(Meteor.PAGE_TITLE, "Edition du matériel : "+s.capitalize(data.name));
 		}
 		this.render("matteredit");
+	}
+});
+Router.route("/matter/:matterId", {
+	controller : "ApplicationController",
+	name: "matter.show",
+	data : function(){
+		return {
+			matter : Matters.findOne(this.params.matterId),
+		};
+	},
+	action : function () {
+		var data = this.data();
+		if(data){
+			Session.set(Meteor.PAGE_TITLE, "Détail du matériel : "+s.capitalize(data.matter.name));
+		}
+		this.render("mattershow");
 	}
 });
 

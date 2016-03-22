@@ -77,48 +77,64 @@ Meteor.methods({
 	},
 	workerSchedule : function( workId, workerId, action, datetime){
 		this.unblock();
-		//STOP WORKER WORKING AT ANY WORK 
 		Works
 		.find({
 			$where : function(){
-				return _.find(this.schedular[workerId], function(schedule){
-					return schedule.start && !schedule.stop;
+				return _.find(this.schedule, function(item){
+					var timetable = item.timetable || [];
+					return item.workerId === workerId && _.last(timetable) && _.last(timetable).start && !_.last(timetable).stop ;
 				});
 			}
 		})
 		.fetch()
 		.map(function(work){
-			var schedular = work.schedular || {};
-			schedular[workerId] = schedular[workerId] || [];
-			schedular[workerId] =	schedular[workerId]
-									.map(function(schedule){
-										schedule.stop = schedule.stop || datetime;
-										return schedule;
-									});
+			var schedule = work.schedule || [];
+			for(var k = schedule.length-1 ; k >= 0 ; k -- ){
+				if(!_.isArray(schedule[k].timetable))continue;
+				var timetable = schedule[k].timetable || [];
+				if(schedule[k].workerId == workerId && _.last(timetable) && _.last(timetable).start && !_.last(timetable).stop){
+					schedule[k].timetable[schedule[k].timetable.length-1].stop = datetime;
+					break;
+				}
+			}
 			Works
 			.update(work._id, {
 				$set : {
-					schedular : schedular
+					schedule : schedule
 				}
 			});
+			
 		});
-		
+		/**/
+
+
 		//START WORKER WORKING
 		var work = Works.findOne(workId);
-		var schedular = work.schedular || {};
-		schedular[workerId] = schedular[workerId] || [];
-		if(action === "start"){
-			schedular[workerId].push({
-				start : datetime
-			});
-		}
+		if(!work) return false;
+		var schedule = work.schedule || [];
 
+		if(action === "start"){
+			for(var k = schedule.length-1 ; k >= 0 ; k -- ){
+				if(schedule[k].workerId === workerId && !schedule[k].start){
+					schedule[k].timetable = schedule[k].timetable || [];
+					schedule[k].timetable.push({start : datetime});
+					break;
+				}
+			}
+		}
+		
 		Workers.update(workerId, {
 			$set : {
-				working : (action === "start" ? workId : false)
+				working : action === "start" ? workId : false
 			}
 		});
-		return Works.update(workId, {$set : {schedular : schedular}});
+
+		Works.update(workId, {
+			$set : {
+				schedule : schedule
+			}
+		});
+		/**/
 	}
 });
 }).call(this);

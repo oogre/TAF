@@ -18,11 +18,6 @@ Template.workEdit.destroyed = function(){
 	Session.set(Meteor.ADD_MATTER, false);
 };
 
-Template.workEdit.rendered = function(){
-	if (Meteor.isCordova) {
-		console.log(cordova.plugins.barcodeScanner);
-	}
-}
 
 Template.workEdit.helpers({
 	showTasks : function(){

@@ -43,6 +43,33 @@ Meteor.methods({
 			Router.go("matter.index");
 		}
 		return true;
+	},
+	addOriginToMatter : function(matterId, ref){
+		if (! Meteor.userId()) {
+			return new Meteor.Error("not-authorized");
+		}
+		this.unblock();
+		Origins.insert({
+			ref : ref,
+			matter : matterId
+		});
+
+		return true;
+	},
+	matterOriginsTransfert : function(data){
+		if (! Meteor.userId()) {
+			return new Meteor.Error("not-authorized");
+		}
+		this.unblock();
+		
+		if(!data.originId)return false;
+		Moves.insert({
+			workId : data.workId,
+			originId : data.originId,
+			destinyId : data.destinyId,
+			dateTime : data.dateTime,
+			quantity : data.quantity
+		});
 	}
 });
 }).call(this);

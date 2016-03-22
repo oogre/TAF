@@ -15,17 +15,15 @@ Template["workerindex"] = new Template("Template.workerindex", (function() {
     }, "\n				", HTML.THEAD("\n					", HTML.TR("\n						", HTML.TH({
       "data-db-row-name": "worker_name"
     }, "\n							Nom\n						"), "\n						", Blaze.If(function() {
-      return Spacebars.call(view.lookup("schedular"));
-    }, function() {
-      return [ "\n							", HTML.TH("\n								Travail\n							"), "\n						" ];
-    }), "\n						", Blaze.If(function() {
-      return Spacebars.call(view.lookup("schedularSummary"));
-    }, function() {
-      return [ "\n							", HTML.TH("\n								Temps de travail - hh:mm\n							"), "\n						" ];
-    }), "\n						", Blaze.If(function() {
-      return Spacebars.call(view.lookup("actions"));
+      return Spacebars.call(view.lookup("isEditAndDestroyVisible"));
     }, function() {
       return [ "\n							", HTML.TH("\n								Actions\n							"), "\n						" ];
+    }, function() {
+      return [ "\n							", HTML.TH("\n								Temps\n							"), "\n\n							", Blaze.Unless(function() {
+        return Spacebars.call(view.lookup("summary"));
+      }, function() {
+        return [ "\n								", HTML.TH("\n									Travail\n								"), "\n							" ];
+      }), "\n						" ];
     }), "\n					"), "\n				"), "\n				", HTML.TBODY("\n					", Blaze.Each(function() {
       return Spacebars.call(view.lookup("workers"));
     }, function() {
@@ -50,7 +48,7 @@ Template["workeritem"] = new Template("Template.workeritem", (function() {
         workerId: view.lookup("_id")
       }));
     },
-    "class": "btn btn-lg btn-link"
+    "class": ""
   }, "\n				", Spacebars.With(function() {
     return Spacebars.call(view.lookup("profile"));
   }, function() {
@@ -61,40 +59,8 @@ Template["workeritem"] = new Template("Template.workeritem", (function() {
     }), " \n				" ];
   }, function() {
     return "\n					...\n				";
-  }), "\n			"), "\n		"), "\n			\n		", Blaze.If(function() {
-    return Spacebars.call(view.lookup("schedular"));
-  }, function() {
-    return [ "\n			", HTML.TD("\n				", Blaze.If(function() {
-      return Spacebars.call(view.lookup("working"));
-    }, function() {
-      return [ "\n					", HTML.BUTTON({
-        "class": "btn btn-lg btn-danger btn-block schedule stop"
-      }, "\n						", HTML.I({
-        "class": "fa fa-cog fa-spin"
-      }), HTML.CharRef({
-        html: "&nbsp;",
-        str: " "
-      }), " Arrêter\n					"), "\n				" ];
-    }, function() {
-      return [ "\n					", HTML.BUTTON({
-        "class": "btn btn-lg btn-default btn-block schedule start"
-      }, "\n						", HTML.I({
-        "class": "fa fa-play"
-      }), HTML.CharRef({
-        html: "&nbsp;",
-        str: " "
-      }), " Commencer\n					"), "\n				" ];
-    }), "\n			"), "\n		" ];
-  }), "\n		", Blaze.If(function() {
-    return Spacebars.call(view.lookup("schedularSummary"));
-  }, function() {
-    return [ "\n			", HTML.TD({
-      "class": "td-lg"
-    }, "\n				", Blaze.View("lookup:schedularSummary", function() {
-      return Spacebars.mustache(view.lookup("schedularSummary"));
-    }), "\n			"), "\n		" ];
-  }), "\n		\n		", Blaze.If(function() {
-    return Spacebars.call(view.lookup("actions"));
+  }), "\n			"), "\n		"), "\n				\n		", Blaze.If(function() {
+    return Spacebars.call(view.lookup("isEditAndDestroyVisible"));
   }, function() {
     return [ "\n				", HTML.TD("\n					", Blaze.If(function() {
       return Spacebars.call(view.lookup("isChief"));
@@ -116,6 +82,46 @@ Template["workeritem"] = new Template("Template.workeritem", (function() {
     }, function() {
       return Spacebars.include(view.lookupTemplate("buttondestroy"));
     }), "\n				"), "\n		" ];
+  }, function() {
+    return [ "\n			", HTML.TD({
+      "class": "td-lg timetable"
+    }, "\n				", HTML.UL("\n					", Blaze.Each(function() {
+      return Spacebars.call(view.lookup("timetable"));
+    }, function() {
+      return [ "\n					 ", HTML.LI(Blaze.View("lookup:humanizer", function() {
+        return Spacebars.mustache(view.lookup("humanizer"), Spacebars.dot(view.lookup("."), "start"), Spacebars.dot(view.lookup("."), "stop"));
+      })), "\n					" ];
+    }), "\n					", HTML.LI("Total : ", HTML.STRONG(Blaze.View("lookup:summarize", function() {
+      return Spacebars.mustache(view.lookup("summarize"), view.lookup("timetable"));
+    }))), "\n				"), "\n			"), "\n			\n			", Blaze.Unless(function() {
+      return Spacebars.call(view.lookup("summary"));
+    }, function() {
+      return [ "\n			", HTML.TD("\n				", Blaze.If(function() {
+        return Spacebars.call(view.lookup("schedular"));
+      }, function() {
+        return [ "\n					", Blaze.If(function() {
+          return Spacebars.call(view.lookup("working"));
+        }, function() {
+          return [ "\n						", HTML.BUTTON({
+            "class": "btn btn-lg btn-danger btn-block schedule stop"
+          }, "\n							", HTML.I({
+            "class": "fa fa-cog fa-spin"
+          }), HTML.CharRef({
+            html: "&nbsp;",
+            str: " "
+          }), " Arrêter\n						"), "\n					" ];
+        }, function() {
+          return [ "\n						", HTML.BUTTON({
+            "class": "btn btn-lg btn-default btn-block schedule start"
+          }, "\n							", HTML.I({
+            "class": "fa fa-play"
+          }), HTML.CharRef({
+            html: "&nbsp;",
+            str: " "
+          }), " Commencer\n						"), "\n					" ];
+        }), "\n				" ];
+      }), "\n			"), "\n			" ];
+    }), "\n		" ];
   }), "\n	");
 }));
 

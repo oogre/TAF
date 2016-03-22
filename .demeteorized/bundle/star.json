@@ -1,6 +1,6 @@
 {
   "format": "site-archive-pre1",
-  "builtBy": "Meteor METEOR@1.2.0.2",
+  "builtBy": "Meteor METEOR@1.2.1",
   "programs": [
     {
       "name": "web.browser",
@@ -12,8 +12,8 @@
       "arch": "web.cordova",
       "path": "programs/web.cordova/program.json",
       "cordovaDependencies": {
-        "cordova-plugin-camera": "1.2.0",
-        "cordova-plugin-geolocation": "1.0.1",
+        "cordova-plugin-camera": "2.1.0",
+        "cordova-plugin-geolocation": "2.1.0",
         "cordova-plugin-console": "1.0.1",
         "cordova-plugin-device": "1.0.1",
         "cordova-plugin-legacy-whitelist": "1.1.0",
@@ -21,7 +21,8 @@
         "cordova-plugin-statusbar": "1.0.0",
         "cordova-plugin-splashscreen": "2.1.0",
         "cordova-plugin-file": "2.1.0",
-        "cordova-plugin-file-transfer": "1.2.0"
+        "cordova-plugin-file-transfer": "1.2.0",
+        "phonegap-plugin-barcodescanner": "3.0.0"
       }
     },
     {
@@ -30,5 +31,5 @@
       "path": "programs/server/boot.js"
     }
   ],
-  "meteorRelease": "METEOR@1.2.0.2"
+  "meteorRelease": "METEOR@1.2.1"
 }

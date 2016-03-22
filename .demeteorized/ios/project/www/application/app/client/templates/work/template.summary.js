@@ -59,8 +59,8 @@ Template["workSummary"] = new Template("Template.workSummary", (function() {
     "class": "col-sm-10"
   }, "\n						", Blaze._TemplateWith(function() {
     return {
-      schedularSummary: Spacebars.call(true),
-      worker_ids: Spacebars.call(view.lookup("worker_ids")),
+      origine: Spacebars.call("shop"),
+      summary: Spacebars.call(true),
       workId: Spacebars.call(view.lookup("_id"))
     };
   }, function() {
@@ -120,24 +120,100 @@ Template["workSummary"] = new Template("Template.workSummary", (function() {
   }), "\n				"), "\n			"), "\n\n			", HTML.Raw("<hr>"), "\n\n			", HTML.FIELDSET({
     "class": "row"
   }, "\n				", HTML.Raw('<label class="col-sm-2">Signature</label>'), "\n				", HTML.DIV({
-    "class": "form-group col-sm-5"
-  }, "\n					", Blaze._TemplateWith(function() {
-    return {
-      work: Spacebars.call(view.lookup(".")),
-      client: Spacebars.call(true)
-    };
+    "class": "signature form-group col-sm-5"
+  }, "\n					", Blaze.If(function() {
+    return Spacebars.dataMustache(view.lookup("saved"), "Client");
   }, function() {
-    return Spacebars.include(view.lookupTemplate("workSignature"));
-  }), "\n				"), "\n				", HTML.DIV({
-    "class": "form-group col-sm-5"
-  }, "\n					", Blaze._TemplateWith(function() {
-    return {
-      work: Spacebars.call(view.lookup(".")),
-      client: Spacebars.call(false)
-    };
+    return [ "\n						", HTML.DIV({
+      "class": "input-group col-sm-12"
+    }, "\n							", HTML.LABEL({
+      "class": "input-group-addon",
+      "for": "client_name"
+    }, "Client"), "\n							", HTML.DIV({
+      "class": "modules form-control input-lg no-padding"
+    }, "\n								", HTML.IMG({
+      src: function() {
+        return Spacebars.mustache(view.lookup("saved"), "Client");
+      }
+    }), "\n							"), "\n						"), "\n					" ];
   }, function() {
-    return Spacebars.include(view.lookupTemplate("workSignature"));
-  }), "\n				"), "\n			"), "\n\n			", HTML.Raw("<hr>"), "\n\n		"), "\n	");
+    return [ "\n						", HTML.DIV({
+      "class": "input-group col-sm-12"
+    }, "\n							", HTML.LABEL({
+      "class": "input-group-addon",
+      "for": "client_name"
+    }, "Nom client"), "\n							", HTML.INPUT({
+      "class": "form-control input-lg",
+      type: "text",
+      id: "client_name",
+      name: "client_name"
+    }), "\n							", HTML.SPAN({
+      "class": "input-group-btn",
+      id: "basic-addon1"
+    }, "\n							 	", HTML.BUTTON(HTML.Attrs({
+      "class": "btn btn-lg btn-default sign Client "
+    }, function() {
+      return Spacebars.attrMustache(view.lookup("disable"), "Client");
+    }), "\n									Sign\n								"), "\n							"), "\n						"), "\n						", Blaze.If(function() {
+      return Spacebars.dataMustache(view.lookup("popupedSig"), "Client");
+    }, function() {
+      return [ "\n							", Blaze._TemplateWith(function() {
+        return {
+          work: Spacebars.call(view.lookup(".")),
+          client: Spacebars.call(true)
+        };
+      }, function() {
+        return Spacebars.include(view.lookupTemplate("workSignature"));
+      }), "\n						" ];
+    }), "\n					" ];
+  }), "\n					\n				"), "\n				", HTML.DIV({
+    "class": "signature form-group col-sm-5"
+  }, "\n					", Blaze.If(function() {
+    return Spacebars.dataMustache(view.lookup("saved"), "ADF");
+  }, function() {
+    return [ "\n						", HTML.DIV({
+      "class": "input-group col-sm-12"
+    }, "\n							", HTML.LABEL({
+      "class": "input-group-addon",
+      "for": "adf_name"
+    }, "Tech"), "\n							", HTML.DIV({
+      "class": "modules form-control input-lg no-padding"
+    }, "\n								", HTML.IMG({
+      src: function() {
+        return Spacebars.mustache(view.lookup("saved"), "ADF");
+      }
+    }), "\n							"), "\n						"), "\n					" ];
+  }, function() {
+    return [ "\n						", HTML.DIV({
+      "class": "input-group col-sm-12"
+    }, "\n							", HTML.LABEL({
+      "class": "input-group-addon",
+      "for": "client_name"
+    }, "Nom tech"), "\n							", HTML.INPUT({
+      "class": "form-control input-lg",
+      type: "text",
+      id: "adf_name",
+      name: "adf_name"
+    }), "\n							", HTML.SPAN({
+      "class": "input-group-btn",
+      id: "basic-addon1"
+    }, "\n								", HTML.BUTTON(HTML.Attrs({
+      "class": "btn btn-lg btn-default sign ADF"
+    }, function() {
+      return Spacebars.attrMustache(view.lookup("disable"), "ADF");
+    }), "\n									Sign\n								"), "\n							"), "\n						"), "\n						", Blaze.If(function() {
+      return Spacebars.dataMustache(view.lookup("popupedSig"), "ADF");
+    }, function() {
+      return [ "\n							", Blaze._TemplateWith(function() {
+        return {
+          work: Spacebars.call(view.lookup(".")),
+          client: Spacebars.call(false)
+        };
+      }, function() {
+        return Spacebars.include(view.lookupTemplate("workSignature"));
+      }), "\n						" ];
+    }), "\n					" ];
+  }), "					\n				"), "\n			"), "\n\n			", HTML.Raw("<hr>"), "\n\n		"), "\n	");
 }));
 
 }).call(this);

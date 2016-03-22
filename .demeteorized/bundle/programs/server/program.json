@@ -69,6 +69,29 @@
       "path": "packages/id-map.js"
     },
     {
+      "node_modules": "npm/babel-compiler/node_modules",
+      "sourceMap": "packages/babel-compiler.js.map",
+      "path": "packages/babel-compiler.js"
+    },
+    {
+      "sourceMap": "packages/ecmascript.js.map",
+      "path": "packages/ecmascript.js"
+    },
+    {
+      "sourceMap": "packages/babel-runtime.js.map",
+      "path": "packages/babel-runtime.js"
+    },
+    {
+      "node_modules": "npm/ecmascript-runtime/node_modules",
+      "sourceMap": "packages/ecmascript-runtime.js.map",
+      "path": "packages/ecmascript-runtime.js"
+    },
+    {
+      "node_modules": "npm/promise/node_modules",
+      "sourceMap": "packages/promise.js.map",
+      "path": "packages/promise.js"
+    },
+    {
       "sourceMap": "packages/random.js.map",
       "path": "packages/random.js"
     },
@@ -176,15 +199,6 @@
       "path": "packages/ddp-client.js"
     },
     {
-      "node_modules": "npm/babel-compiler/node_modules",
-      "sourceMap": "packages/babel-compiler.js.map",
-      "path": "packages/babel-compiler.js"
-    },
-    {
-      "sourceMap": "packages/ecmascript.js.map",
-      "path": "packages/ecmascript.js"
-    },
-    {
       "sourceMap": "packages/rate-limit.js.map",
       "path": "packages/rate-limit.js"
     },
@@ -195,20 +209,6 @@
     {
       "sourceMap": "packages/callback-hook.js.map",
       "path": "packages/callback-hook.js"
-    },
-    {
-      "sourceMap": "packages/babel-runtime.js.map",
-      "path": "packages/babel-runtime.js"
-    },
-    {
-      "node_modules": "npm/promise/node_modules",
-      "sourceMap": "packages/promise.js.map",
-      "path": "packages/promise.js"
-    },
-    {
-      "node_modules": "npm/ecmascript-collections/node_modules",
-      "sourceMap": "packages/ecmascript-collections.js.map",
-      "path": "packages/ecmascript-collections.js"
     },
     {
       "node_modules": "npm/ddp-server/node_modules",
@@ -427,6 +427,10 @@
       "path": "app/lib/methods/module.js"
     },
     {
+      "sourceMap": "app/lib/methods/origins.js.map",
+      "path": "app/lib/methods/origins.js"
+    },
+    {
       "sourceMap": "app/lib/methods/picture.js.map",
       "path": "app/lib/methods/picture.js"
     },
@@ -461,6 +465,10 @@
     {
       "sourceMap": "app/lib/routers/module.js.map",
       "path": "app/lib/routers/module.js"
+    },
+    {
+      "sourceMap": "app/lib/routers/origin.js.map",
+      "path": "app/lib/routers/origin.js"
     },
     {
       "sourceMap": "app/lib/routers/shop.js.map",

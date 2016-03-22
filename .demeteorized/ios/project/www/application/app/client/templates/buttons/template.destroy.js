@@ -6,7 +6,9 @@ Template["buttondestroy"] = new Template("Template.buttondestroy", (function() {
     return Spacebars.call(view.lookup("isBoss"));
   }, function() {
     return [ "\n		", HTML.BUTTON({
-      "class": "btn btn-lg btn-danger",
+      "class": function() {
+        return [ "btn btn-lg btn-danger ", Spacebars.mustache(view.lookup("class")) ];
+      },
       "data-method": function() {
         return Spacebars.mustache(view.lookup("method"));
       },
@@ -16,9 +18,17 @@ Template["buttondestroy"] = new Template("Template.buttondestroy", (function() {
       "data-selector": function() {
         return Spacebars.mustache(view.lookup("selector"));
       }
-    }, HTML.I({
-      "class": "fa fa-trash"
-    })), "\n	" ];
+    }, "\n			", Blaze.If(function() {
+      return Spacebars.call(view.lookup("html"));
+    }, function() {
+      return [ "\n				", Blaze.View("lookup:html", function() {
+        return Spacebars.mustache(view.lookup("html"));
+      }), " \n			" ];
+    }, function() {
+      return [ "\n				", HTML.I({
+        "class": "fa fa-trash"
+      }), "\n			" ];
+    }), "\n		"), "\n	" ];
   });
 }));
 

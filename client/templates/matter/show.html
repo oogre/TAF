@@ -34,6 +34,11 @@
 					 	<button class="btn btn-lg btn-default add" {{disable}}>
 							Ajouter
 						</button>
+						{{#if isMobile}}
+							<button class="btn btn-lg btn-warning barcode">
+								~ Scan ~
+							</button>
+						{{/if}}
 					</span>
 				</div>
 			</div>

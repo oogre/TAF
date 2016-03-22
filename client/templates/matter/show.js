@@ -35,5 +35,18 @@ Template.mattershow.events({
 		if(!ref)return false;
 		Meteor.call("addOriginToMatter", this.matter._id, ref);
 		return false;
+	},
+	"click .barcode" : function(event){
+		if(Meteor.isCordova){
+			cordova.plugins.barcodeScanner.scan(
+				function (result) {
+					$("input#ref").val(result.text);
+					Session.set(Meteor.ORIGIN_REF, result.text);
+				}, 
+				function (error) {
+					alert("Scanning failed: " + error);
+				}
+			);
+		}
 	}
 });

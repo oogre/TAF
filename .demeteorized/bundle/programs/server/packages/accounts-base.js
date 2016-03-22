@@ -15,9 +15,10 @@ var DDPServer = Package['ddp-server'].DDPServer;
 var MongoInternals = Package.mongo.MongoInternals;
 var Mongo = Package.mongo.Mongo;
 var babelHelpers = Package['babel-runtime'].babelHelpers;
+var Symbol = Package['ecmascript-runtime'].Symbol;
+var Map = Package['ecmascript-runtime'].Map;
+var Set = Package['ecmascript-runtime'].Set;
 var Promise = Package.promise.Promise;
-var Map = Package['ecmascript-collections'].Map;
-var Set = Package['ecmascript-collections'].Set;
 
 /* Package-scope variables */
 var AccountsCommon, EXPIRE_TOKENS_INTERVAL_MS, CONNECTION_CLOSE_DELAY_MS, AccountsServer, Accounts, AccountsTest;
@@ -427,7 +428,7 @@ AccountsServer = (function (_AccountsCommon) {                                  
       // Meteor.user() in a publish function will always use the value                                             //
       // from when the function first runs. This is likely not what the                                            //
       // user expects. The way to make this work in a publish is to do                                             //
-      // Meteor.find(this.userId()).observe and recompute when the user                                            //
+      // Meteor.find(this.userId).observe and recompute when the user                                              //
       // record changes.                                                                                           //
       var currentInvocation = DDP._CurrentInvocation.get();                                                        // 78
       if (!currentInvocation) throw new Error("Meteor.userId can only be invoked in method calls. Use this.userId in publish functions.");

@@ -7,8 +7,11 @@
 							placeholder="Matériel" autocomplete="off" spellcheck="off" 
 							data-source="matters" data-highlight="true" required/>
 					{{#if origins}}
-						<select name="origin" class="form-control input-lg">
+						<select name="origin" class="form-control input-lg barcode">
 							<option  disabled selected>origin</option>
+							{{#if isMobile}}
+								<option value="barcode">~ Scan ~</option>
+							{{/if}}
 							{{#each origins}}
 								<option value="{{this._id}}">{{this.ref}}</option>
 							{{/each}}

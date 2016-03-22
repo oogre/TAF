@@ -7,8 +7,11 @@
 				<label class="input-group-addon autowidth" for="matter">
 					<input 	class="typeahead input-lg" name="matter" id="matter" type="text" disabled value="{{this.matter.name}}"/>
 						
-					<select name="destiny" class="form-control input-lg">
+					<select name="destiny" class="form-control input-lg barcode">
 						<option disabled selected value="">destination</option>
+						{{#if isMobile}}
+							<option value="barcode">~ Scan ~</option>
+						{{/if}}
 						{{#each destins}}
 							<option value="{{this._id}}">{{this.ref}}</option>
 						{{/each}}

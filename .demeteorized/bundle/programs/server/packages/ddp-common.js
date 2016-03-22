@@ -403,64 +403,67 @@ function randomToken() {                                                        
   return Random.hexString(20);                                                                       // 37
 };                                                                                                   // 38
                                                                                                      // 39
-// Returns the random stream with the specified name, in the specified scope.                        // 40
-// If scope is null (or otherwise falsey) then we will use Random, which will                        // 41
-// give us as random numbers as possible, but won't produce the same                                 // 42
-// values across client and server.                                                                  // 43
-// However, scope will normally be the current DDP method invocation, so                             // 44
-// we'll use the stream with the specified name, and we should get consistent                        // 45
-// values on the client and server sides of a method call.                                           // 46
-DDPCommon.RandomStream.get = function (scope, name) {                                                // 47
-  if (!name) {                                                                                       // 48
-    name = "default";                                                                                // 49
-  }                                                                                                  // 50
-  if (!scope) {                                                                                      // 51
-    // There was no scope passed in;                                                                 // 52
-    // the sequence won't actually be reproducible.                                                  // 53
-    return Random;                                                                                   // 54
-  }                                                                                                  // 55
-  var randomStream = scope.randomStream;                                                             // 56
-  if (!randomStream) {                                                                               // 57
-    scope.randomStream = randomStream = new DDPCommon.RandomStream({                                 // 58
-      seed: scope.randomSeed                                                                         // 59
-    });                                                                                              // 60
-  }                                                                                                  // 61
-  return randomStream._sequence(name);                                                               // 62
-};                                                                                                   // 63
-                                                                                                     // 64
-                                                                                                     // 65
-// Creates a randomSeed for passing to a method call.                                                // 66
-// Note that we take enclosing as an argument,                                                       // 67
-// though we expect it to be DDP._CurrentInvocation.get()                                            // 68
-// However, we often evaluate makeRpcSeed lazily, and thus the relevant                              // 69
-// invocation may not be the one currently in scope.                                                 // 70
-// If enclosing is null, we'll use Random and values won't be repeatable.                            // 71
-DDPCommon.makeRpcSeed = function (enclosing, methodName) {                                           // 72
-  var stream = DDPCommon.RandomStream.get(enclosing, '/rpc/' + methodName);                          // 73
-  return stream.hexString(20);                                                                       // 74
-};                                                                                                   // 75
-                                                                                                     // 76
-_.extend(DDPCommon.RandomStream.prototype, {                                                         // 77
-  // Get a random sequence with the specified name, creating it if does not exist.                   // 78
-  // New sequences are seeded with the seed concatenated with the name.                              // 79
-  // By passing a seed into Random.create, we use the Alea generator.                                // 80
-  _sequence: function (name) {                                                                       // 81
-    var self = this;                                                                                 // 82
-                                                                                                     // 83
-    var sequence = self.sequences[name] || null;                                                     // 84
-    if (sequence === null) {                                                                         // 85
-      var sequenceSeed = self.seed.concat(name);                                                     // 86
-      for (var i = 0; i < sequenceSeed.length; i++) {                                                // 87
-        if (_.isFunction(sequenceSeed[i])) {                                                         // 88
-          sequenceSeed[i] = sequenceSeed[i]();                                                       // 89
-        }                                                                                            // 90
-      }                                                                                              // 91
-      self.sequences[name] = sequence = Random.createWithSeeds.apply(null, sequenceSeed);            // 92
-    }                                                                                                // 93
-    return sequence;                                                                                 // 94
-  }                                                                                                  // 95
-});                                                                                                  // 96
-                                                                                                     // 97
+// Returns the random stream with the specified name, in the specified                               // 40
+// scope. If a scope is passed, then we use that to seed a (not                                      // 41
+// cryptographically secure) PRNG using the fast Alea algorithm.  If                                 // 42
+// scope is null (or otherwise falsey) then we use a generated seed.                                 // 43
+//                                                                                                   // 44
+// However, scope will normally be the current DDP method invocation,                                // 45
+// so we'll use the stream with the specified name, and we should get                                // 46
+// consistent values on the client and server sides of a method call.                                // 47
+DDPCommon.RandomStream.get = function (scope, name) {                                                // 48
+  if (!name) {                                                                                       // 49
+    name = "default";                                                                                // 50
+  }                                                                                                  // 51
+  if (!scope) {                                                                                      // 52
+    // There was no scope passed in; the sequence won't actually be                                  // 53
+    // reproducible. but make it fast (and not cryptographically                                     // 54
+    // secure) anyways, so that the behavior is similar to what you'd                                // 55
+    // get by passing in a scope.                                                                    // 56
+    return Random.insecure;                                                                          // 57
+  }                                                                                                  // 58
+  var randomStream = scope.randomStream;                                                             // 59
+  if (!randomStream) {                                                                               // 60
+    scope.randomStream = randomStream = new DDPCommon.RandomStream({                                 // 61
+      seed: scope.randomSeed                                                                         // 62
+    });                                                                                              // 63
+  }                                                                                                  // 64
+  return randomStream._sequence(name);                                                               // 65
+};                                                                                                   // 66
+                                                                                                     // 67
+                                                                                                     // 68
+// Creates a randomSeed for passing to a method call.                                                // 69
+// Note that we take enclosing as an argument,                                                       // 70
+// though we expect it to be DDP._CurrentInvocation.get()                                            // 71
+// However, we often evaluate makeRpcSeed lazily, and thus the relevant                              // 72
+// invocation may not be the one currently in scope.                                                 // 73
+// If enclosing is null, we'll use Random and values won't be repeatable.                            // 74
+DDPCommon.makeRpcSeed = function (enclosing, methodName) {                                           // 75
+  var stream = DDPCommon.RandomStream.get(enclosing, '/rpc/' + methodName);                          // 76
+  return stream.hexString(20);                                                                       // 77
+};                                                                                                   // 78
+                                                                                                     // 79
+_.extend(DDPCommon.RandomStream.prototype, {                                                         // 80
+  // Get a random sequence with the specified name, creating it if does not exist.                   // 81
+  // New sequences are seeded with the seed concatenated with the name.                              // 82
+  // By passing a seed into Random.create, we use the Alea generator.                                // 83
+  _sequence: function (name) {                                                                       // 84
+    var self = this;                                                                                 // 85
+                                                                                                     // 86
+    var sequence = self.sequences[name] || null;                                                     // 87
+    if (sequence === null) {                                                                         // 88
+      var sequenceSeed = self.seed.concat(name);                                                     // 89
+      for (var i = 0; i < sequenceSeed.length; i++) {                                                // 90
+        if (_.isFunction(sequenceSeed[i])) {                                                         // 91
+          sequenceSeed[i] = sequenceSeed[i]();                                                       // 92
+        }                                                                                            // 93
+      }                                                                                              // 94
+      self.sequences[name] = sequence = Random.createWithSeeds.apply(null, sequenceSeed);            // 95
+    }                                                                                                // 96
+    return sequence;                                                                                 // 97
+  }                                                                                                  // 98
+});                                                                                                  // 99
+                                                                                                     // 100
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

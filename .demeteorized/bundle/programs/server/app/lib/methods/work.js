@@ -13,25 +13,36 @@ Meteor.methods({
 		if (! Meteor.userId()) {
 			return new Meteor.Error("not-authorized");
 		}
+
+		var worker = Workers.findOne(Meteor.userId());
+
+		var date = moment().format("YYMMDD");
+		var workCreatedToday = [date, 0];
+
+		worker.workCreatedToday = (worker.workCreatedToday && worker.workCreatedToday[0]==date) ? worker.workCreatedToday : workCreatedToday;
+		
+
+		var myId = worker.profile.firstname+"_"+worker.profile.lastname+"_"+moment().format("YYMMDD");
+
 		this.unblock();
-		var schedular = (function(keys){
-			var obj ={};
-			(keys||[]).map(function(key){
-				obj[key] = [];
-			});
-			return obj;
-		}(workers));
+
 
 		var result;
 		if(_.isArray(rdv)){
 			result = rdv.map(function(_rdv){
+				worker.workCreatedToday[1]++;
+				Workers.update(worker._id, {
+					$set : { 
+						workCreatedToday : worker.workCreatedToday
+					}
+				});
 				return Works.insert({
 					shop : shop,
 					type : type,
 					rdv : _rdv,
 					worker_ids : workers,
 					modules : modules,
-					schedular : schedular
+					myId : myId+"_"+worker.workCreatedToday[1]
 				});
 			})[0];
 		}else{
@@ -41,7 +52,13 @@ Meteor.methods({
 				rdv : rdv,
 				worker_ids : workers,
 				modules : modules,
-				schedular : schedular
+				myId : myId+"_"+worker.workCreatedToday[1]
+			});
+			worker.workCreatedToday[1]++;
+			Workers.update(worker._id, {
+				$set : { 
+					workCreatedToday : worker.workCreatedToday
+				}
 			});
 		}
 
@@ -51,49 +68,66 @@ Meteor.methods({
 		return result;
 	},
 	workAddWorker : function(workId, workerId){
-		var works = Works.findOne(workId);
 		this.unblock();
-		Workers.update({
-			_id : {
-				$in : workerId
-			}
-		}, {
-			$set : {
-				working : false
-			}
-		});
-		return Works.update(workId, {
-			$set : {
-				worker_ids : (works.worker_ids||[]).concat(workerId)
-			}
+		var work = Works.findOne(workId);
+		workerId.map(function(id){
+			work.schedule = (work.schedule||[]).map(function(item){
+				if(item.workerId == id){
+					item.timetable = (item.timetable||[]).map(function(elem){
+						if(elem.start && !elem.stop){
+							elem.stop = moment().toISOString()
+						}
+						return elem;
+					});
+				}
+				return item;
+			});
+			work.schedule.push({workerId : id});
+
+			Workers.update(id, {
+				$set : {
+					working : false
+				}
+			});
+
+
+			Works.update(workId, {
+				$set : {
+					schedule : 	work.schedule
+				}
+			});
 		});
 	},
 	workCloser : function(workId, end){
 		this.unblock();
 		/* STOP ALL WORKING + SAVE END DATE */
 		var work = Works.findOne(workId);
-		work.schedular = work.schedular||{};
-		var workerIds = _.keys(work.schedular);
-		Workers.update({
-			_id : {
-				$in : workerIds
-			}
-		}, {
-			$set : {
-				working : false
-			}
-		});
 		
-		workerIds
-		.map(function(workerId){
-			work.schedular[workerId] = work.schedular[workerId].map(function(schedule){
-				schedule.stop = schedule.stop || end;
-				return schedule;
+		_
+		.chain(work.schedule || [])
+		.pluck('workerId')
+		.uniq()
+		.map(function(id){
+			Workers.update(id, {
+				$set : {
+					working : false
+				}
 			});
-		});
+		});		
+
+		work.schedule = (work.schedule||[])
+						.map(function(item){
+							item.timetable = (item.timetable||[]).map(function(elem){
+								if(elem.start && !elem.stop){
+									elem.stop = end;
+								}
+								return elem;
+							})
+							return item;
+						});
 		return Works.update(work._id, {
 			$set : {
-				schedular : work.schedular,
+				schedule : work.schedule,
 				end : end
 			}
 		});
@@ -123,6 +157,15 @@ Meteor.methods({
 			return new Meteor.Error("not-authorized");
 		}
 		this.unblock();
+
+		Workers.update({
+			working : id
+		}, {
+			$set : {
+				working : false
+			}
+		});
+
 		Works.remove(id);
 		if(Meteor.isSimulation){
 			Router.go("home");
@@ -197,6 +240,9 @@ Meteor.methods({
 			work.matters[index].quantity = parseFloat(work.matters[index].quantity)||0;
 			matter.quantity = parseFloat(matter.quantity)||0;
 			work.matters[index].quantity += matter.quantity;
+			if(work.matters[index].quantity == 0){
+				work.matters.splice(index, 1);
+			}
 		}
 		Works.update(workId, {
 			$set : {

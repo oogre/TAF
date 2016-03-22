@@ -22,7 +22,9 @@ Template["shopview"] = new Template("Template.shopview", (function() {
     "class": "col-sm-10"
   }, "\n			", HTML.DIV({
     "class": "col-sm-12"
-  }, "\n				", HTML.ADDRESS("\n					", HTML.STRONG(Blaze.View("lookup:shop.name", function() {
+  }, "\n				", HTML.ADDRESS("\n					", HTML.STRONG(Blaze.View("lookup:zone", function() {
+    return Spacebars.mustache(view.lookup("zone"));
+  })), HTML.Raw("<br>"), "\n					", HTML.STRONG(Blaze.View("lookup:shop.name", function() {
     return Spacebars.mustache(Spacebars.dot(view.lookup("shop"), "name"));
   }), " - ", Blaze.View("lookup:shop.brand", function() {
     return Spacebars.mustache(Spacebars.dot(view.lookup("shop"), "brand"));
@@ -38,7 +40,7 @@ Template["shopview"] = new Template("Template.shopview", (function() {
     }), " ", Blaze.View("lookup:city", function() {
       return Spacebars.mustache(view.lookup("city"));
     }), "\n					" ];
-  }), "\n				"), "\n			"), "\n		"), "\n	"), HTML.Raw("\n\n	<hr>\n	\n	"), HTML.DIV({
+  }), HTML.Raw("<br>"), "\n					\n				"), "\n			"), "\n		"), "\n	"), HTML.Raw("\n\n	<hr>\n	\n	"), HTML.DIV({
     "class": "row"
   }, "\n		", HTML.Raw('<label class="col-sm-2">Contact</label>'), "\n		", HTML.DIV({
     "class": "col-sm-10"

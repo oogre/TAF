@@ -20,8 +20,8 @@ Meteor.startup(function () {
 	Meteor.publish("picts", function() {
 		return Picts.find({});
 	});
-	Meteor.publish("matters&units", function() {
-		return [Matters.find({}), Units.find({})];
+	Meteor.publish("mattersOriginsUnits", function() {
+		return [Matters.find({}), Origins.find({}), Units.find({}), Moves.find({})];
 	});
 	Meteor.publish("workers", function() {
 		return Workers.find({});

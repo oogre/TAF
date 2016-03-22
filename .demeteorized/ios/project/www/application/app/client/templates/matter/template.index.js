@@ -31,9 +31,17 @@ Template["matteritem"] = new Template("Template.matteritem", (function() {
     }
   }, "\n		", HTML.TD({
     "class": "td-lg"
-  }, "\n			", Blaze.View("lookup:name", function() {
+  }, "\n			", HTML.A({
+    href: function() {
+      return Spacebars.mustache(view.lookup("pathFor"), Spacebars.kw({
+        route: "matter.show",
+        matterId: view.lookup("_id")
+      }));
+    },
+    "class": ""
+  }, "\n				", Blaze.View("lookup:name", function() {
     return Spacebars.mustache(view.lookup("name"));
-  }), "\n		"), "\n		", HTML.TD("\n			", Blaze.If(function() {
+  }), "\n			"), "\n		"), "\n		", HTML.TD("\n			", Blaze.If(function() {
     return Spacebars.call(view.lookup("isChief"));
   }, function() {
     return [ "\n				", HTML.A({
@@ -44,15 +52,15 @@ Template["matteritem"] = new Template("Template.matteritem", (function() {
         }));
       },
       "class": "btn btn-lg btn-default"
-    }, "\n					Modifier\n				"), "\n			" ];
-  }), "\n			", Blaze._TemplateWith(function() {
-    return {
-      method: Spacebars.call("matterDestroyer"),
-      _id: Spacebars.call(view.lookup("_id"))
-    };
-  }, function() {
-    return Spacebars.include(view.lookupTemplate("buttondestroy"));
-  }), "\n		"), "\n	");
+    }, "\n					Modifier\n				"), "\n				", Blaze._TemplateWith(function() {
+      return {
+        method: Spacebars.call("matterDestroyer"),
+        _id: Spacebars.call(view.lookup("_id"))
+      };
+    }, function() {
+      return Spacebars.include(view.lookupTemplate("buttondestroy"));
+    }), "\n			" ];
+  }), "\n			\n		"), "\n	");
 }));
 
 }).call(this);

@@ -54,7 +54,7 @@ var mapWorkToEvent = function (works) {
 					color = "#333";
 				}
 				return {
-					title: work.shop.name,
+					title: work.myId + " : " + work.shop.name,
 					start: work.rdv,
 					end: work.end || moment().toISOString(),
 					color: color,

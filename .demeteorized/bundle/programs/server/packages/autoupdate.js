@@ -43,7 +43,7 @@ var Autoupdate, ClientVersions;
 //                                                                              // 17
 // The server publishes a `meteor_autoupdate_clientVersions`                    // 18
 // collection. There are two documents in this collection, a document           // 19
-// with _id 'version' which represnets the non refreshable client assets,       // 20
+// with _id 'version' which represents the non refreshable client assets,       // 20
 // and a document with _id 'version-refreshable' which represents the           // 21
 // refreshable client assets. Each document has a 'version' field               // 22
 // which is equivalent to the hash of the relevant assets. The refreshable      // 23

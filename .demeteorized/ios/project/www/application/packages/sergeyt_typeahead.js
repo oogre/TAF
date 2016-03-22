@@ -2428,60 +2428,56 @@ var isprefetch;
         }                                                                                                           // 2396
         function buildHintFromInput($input, www) {                                                                  // 2397
             return $input.clone().addClass(www.classes.hint).removeData().css(www.css.hint).css(getBackgroundStyles($input)).prop("readonly", true).removeAttr("id name placeholder required").attr({
-                autocomplete: "off",                                                                                // 2399
-                spellcheck: "false",                                                                                // 2400
-                tabindex: -1                                                                                        // 2401
-            });                                                                                                     // 2402
-        }                                                                                                           // 2403
-        function prepInput($input, www) {                                                                           // 2404
-            $input.data(keys.attrs, {                                                                               // 2405
-                dir: $input.attr("dir"),                                                                            // 2406
-                autocomplete: $input.attr("autocomplete"),                                                          // 2407
-                spellcheck: $input.attr("spellcheck"),                                                              // 2408
-                style: $input.attr("style")                                                                         // 2409
-            });                                                                                                     // 2410
-            $input.addClass(www.classes.input).attr({                                                               // 2411
-                autocomplete: "off",                                                                                // 2412
-                spellcheck: false                                                                                   // 2413
-            });                                                                                                     // 2414
-            try {                                                                                                   // 2415
-                !$input.attr("dir") && $input.attr("dir", "auto");                                                  // 2416
-            } catch (e) {}                                                                                          // 2417
-            return $input;                                                                                          // 2418
-        }                                                                                                           // 2419
-        function getBackgroundStyles($el) {                                                                         // 2420
-            return {                                                                                                // 2421
-                backgroundAttachment: $el.css("background-attachment"),                                             // 2422
-                backgroundClip: $el.css("background-clip"),                                                         // 2423
-                backgroundColor: $el.css("background-color"),                                                       // 2424
-                backgroundImage: $el.css("background-image"),                                                       // 2425
-                backgroundOrigin: $el.css("background-origin"),                                                     // 2426
-                backgroundPosition: $el.css("background-position"),                                                 // 2427
-                backgroundRepeat: $el.css("background-repeat"),                                                     // 2428
-                backgroundSize: $el.css("background-size")                                                          // 2429
-            };                                                                                                      // 2430
-        }                                                                                                           // 2431
-        function revert($input) {                                                                                   // 2432
-            var www, $wrapper;                                                                                      // 2433
-            www = $input.data(keys.www);                                                                            // 2434
-            $wrapper = $input.parent().filter(www.selectors.wrapper);                                               // 2435
-            _.each($input.data(keys.attrs), function(val, key) {                                                    // 2436
-                _.isUndefined(val) ? $input.removeAttr(key) : $input.attr(key, val);                                // 2437
-            });                                                                                                     // 2438
+                tabindex: -1                                                                                        // 2399
+            });                                                                                                     // 2400
+        }                                                                                                           // 2401
+        function prepInput($input, www) {                                                                           // 2402
+            $input.data(keys.attrs, {                                                                               // 2403
+                dir: $input.attr("dir"),                                                                            // 2404
+                autocomplete: $input.attr("autocomplete"),                                                          // 2405
+                spellcheck: $input.attr("spellcheck"),                                                              // 2406
+                style: $input.attr("style")                                                                         // 2407
+            });                                                                                                     // 2408
+            $input.addClass(www.classes.input);                                                                     // 2409
+            try {                                                                                                   // 2410
+                !$input.attr("dir") && $input.attr("dir", "auto");                                                  // 2411
+            } catch (e) {}                                                                                          // 2412
+            return $input;                                                                                          // 2413
+        }                                                                                                           // 2414
+        function getBackgroundStyles($el) {                                                                         // 2415
+            return {                                                                                                // 2416
+                backgroundAttachment: $el.css("background-attachment"),                                             // 2417
+                backgroundClip: $el.css("background-clip"),                                                         // 2418
+                backgroundColor: $el.css("background-color"),                                                       // 2419
+                backgroundImage: $el.css("background-image"),                                                       // 2420
+                backgroundOrigin: $el.css("background-origin"),                                                     // 2421
+                backgroundPosition: $el.css("background-position"),                                                 // 2422
+                backgroundRepeat: $el.css("background-repeat"),                                                     // 2423
+                backgroundSize: $el.css("background-size")                                                          // 2424
+            };                                                                                                      // 2425
+        }                                                                                                           // 2426
+        function revert($input) {                                                                                   // 2427
+            var www, $wrapper;                                                                                      // 2428
+            www = $input.data(keys.www);                                                                            // 2429
+            $wrapper = $input.parent().filter(www.selectors.wrapper);                                               // 2430
+            _.each($input.data(keys.attrs), function(val, key) {                                                    // 2431
+                _.isUndefined(val) ? $input.removeAttr(key) : $input.attr(key, val);                                // 2432
+            });                                                                                                     // 2433
             $input.removeData(keys.typeahead).removeData(keys.www).removeData(keys.attr).removeClass(www.classes.input);
-            if ($wrapper.length) {                                                                                  // 2440
-                $input.detach().insertAfter($wrapper);                                                              // 2441
-                $wrapper.remove();                                                                                  // 2442
-            }                                                                                                       // 2443
-        }                                                                                                           // 2444
-        function $elOrNull(obj) {                                                                                   // 2445
-            var isValid, $el;                                                                                       // 2446
-            isValid = _.isJQuery(obj) || _.isElement(obj);                                                          // 2447
-            $el = isValid ? $(obj).first() : [];                                                                    // 2448
-            return $el.length ? $el : null;                                                                         // 2449
-        }                                                                                                           // 2450
-    })();                                                                                                           // 2451
-});                                                                                                                 // 2452
+            if ($wrapper.length) {                                                                                  // 2435
+                $input.detach().insertAfter($wrapper);                                                              // 2436
+                $wrapper.remove();                                                                                  // 2437
+            }                                                                                                       // 2438
+        }                                                                                                           // 2439
+        function $elOrNull(obj) {                                                                                   // 2440
+            var isValid, $el;                                                                                       // 2441
+            isValid = _.isJQuery(obj) || _.isElement(obj);                                                          // 2442
+            $el = isValid ? $(obj).first() : [];                                                                    // 2443
+            return $el.length ? $el : null;                                                                         // 2444
+        }                                                                                                           // 2445
+    })();                                                                                                           // 2446
+});                                                                                                                 // 2447
+                                                                                                                    // 2448
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -2832,7 +2828,7 @@ function resolve_helper(view, name, opts) {                                     
 	// use view.template.__helpers to determine that                                                                   // 331
 	// since meteor 1.2 Blaze._getTemplateHelper wraps                                                                 // 332
 	// the helper function binding it to template context                                                              // 333
-	var fn = view.template.__helpers.get(name);                                                                        // 334
+	var fn = view.template.__helpers.get(name) || view.template[name];                                                 // 334
 	if (!$.isFunction(fn)) {                                                                                           // 335
 		return null;                                                                                                      // 336
 	}                                                                                                                  // 337
