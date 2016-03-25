@@ -27,18 +27,13 @@
 <template name="matteritem">
 	<tr data-matter-id="{{_id}}">
 		<td class="td-lg">
-			<a href="{{pathFor route='matter.show' matterId=_id}}" class="">
+			<a href="{{pathFor route='matter.show' id=_id}}" class="">
 				{{name}}
 			</a>
 		</td>
 		<td>
-			{{#if isChief }}
-				<a href="{{pathFor route='matter.edit' matterId=_id}}" class="btn btn-lg btn-default">
-					Modifier
-				</a>
-				{{>buttondestroy method="matterDestroyer" _id=_id}}
-			{{/if}}
-			
+			{{>buttonmodifier route="matter.edit" _id=_id}}
+			{{>buttondestroy method="matterDestroyer" _id=_id}}
 		</td>
 	</tr>
 </template>

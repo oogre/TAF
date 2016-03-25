@@ -44,8 +44,8 @@ Template.workerindex.helpers({
 			return Workers.find();
 		}
 	},
-	isEditAndDestroyVisible : function(){
-		return Router.current().route._path == "/worker" && Meteor.user().profile.role >= 80;
+	isWorkerIndex : function(){
+		return Router.current().route._path == "/worker";
 	}
 });
 
@@ -62,8 +62,8 @@ Template.workerindex.events({
 	}
 });
 Template.workeritem.helpers({
-	isEditAndDestroyVisible : function(){
-		return Router.current().route._path == "/worker" && Meteor.user().profile.role >= 80;
+	isWorkerIndex : function(){
+		return Router.current().route._path == "/worker";
 	},
 	humanizer : function(start, stop){
 		var t = "";

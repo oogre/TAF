@@ -22,7 +22,7 @@ var uploadServerInit = function(){
 		checkCreateDirectories : true, //create the directories for you
 		getDirectory: function(fileInfo, formData) {
 			if (formData && formData.directoryName) {
-				return formData.directoryName;
+				return "/"+formData.directoryName+"/";
 			}
 			return "";
 		},
@@ -31,9 +31,10 @@ var uploadServerInit = function(){
 			var filename = (new Date()).getTime() + "." + ext;
 			if (formData && formData._id) filename = formData._id + "-" + filename;
 			if (formData && formData.prefix) filename = formData.prefix + "-" + filename;
-			return filename;
+			return 	filename;
 		},
 		finished: function(fileInfo, formData) {
+
 			if (formData && formData._id) {
 				if(formData.next === "workSignature"){
 					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo);

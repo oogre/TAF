@@ -67,3 +67,11 @@ Meteor.geocode = function(addres, next){
 		}
 	});
 };
+
+Meteor.timeDistToZone = function(timeInSeconds){
+	var timeDist = 2 * Math.ceil(timeInSeconds / 900) * 900;
+	timeDist = moment.duration(timeDist , "seconds");
+	var hours = Math.floor(timeDist.asHours());
+	var min = (timeDist.minutes() / 60)  * 100;
+	return timeInSeconds ? hours+"."+min : "";
+};

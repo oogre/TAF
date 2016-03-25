@@ -5,6 +5,7 @@
 /*global Npm : false */
 
 Meteor.pdfkit = function(param){
+	var pgCounter = 1 ;
 	var _param = {
 		dest : process.env.PWD + "/.uploads/pdf/",
 		filename : "default.pdf",
@@ -47,11 +48,13 @@ Meteor.pdfkit = function(param){
 	};
 	param = _.extend(_param, param);
 
-	//var PDFKit = Npm.require("pdfkit");//PDFDocument
+//	var PDFKit = Npm.require("pdfkit");//PDFDocument
 	var doc = new PDFDocument({
 		bufferPages: true,
 		size : param.page.size
 	});
+
+	var flagOnePage = true;
 
 	//doc.pipe(fs.createWriteStream(param.dest));
 
@@ -79,20 +82,34 @@ Meteor.pdfkit = function(param){
 		},
 		footer : false
 	};
-
-	/*
-		var maxDocY = doc.page.height - doc.page.margins.bottom;
-		var _dataTitle = false;
-		var _dataFooter = false;
-		var _dataHeader = false;
-		var _dataFolio = false;
-	*/
 	
+
 	return {
+		pgCounter : function(){
+			return pgCounter;
+		},
 		doc : function(){
 			return doc;
 		},
+		addPage : function(){
+			doc.addPage();
+			doc.page.margins = param.page.margins;
+
+			if(flagOnePage){
+				flagOnePage = false;
+				doc.param.maxLinePerPage += 6;
+			}
+			pgCounter ++;
+			return this;
+		},
 		end : function(next){
+			var range = doc.bufferedPageRange();
+			for (var p = range.start ; p < range.count ; p++){
+				doc.switchToPage(p);
+				doc.text(range.count, 63, 104);
+			}
+			doc.flushPages();
+
 			var fs = Npm.require("fs");
 			param.dest += "/"+ param.filename;
 			param.dest = param.dest.replace("//", "/");
@@ -114,7 +131,7 @@ Meteor.pdfkit = function(param){
 				}
 			});
 
-			doc.writeSync(param.dest);
+			doc.write(param.dest);
 			var url = "/upload/pdf/"+param.filename;
 			return _.isFunction(next) ? next(url) : url;
 		},

@@ -33,7 +33,7 @@ Template.workIndex.helpers({
 			else{
 				return {
 					date : moment().format("MMMYYYY"),
-					data : "date="+moment().format("YYYY-MM-01")
+					data : ""
 				}
 			}
 		};

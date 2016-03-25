@@ -4,20 +4,20 @@
 			{{#each pager}}
 				{{#if first}}
 					<li>
-						<a href="{{pathFor route='shop.view' shopId=shopId query=query.data}}" aria-label="Previous">
+						<a href="{{pathFor route='shop.view' id=shopId query=query.data}}" aria-label="Previous">
 							<i class="fa fa-angle-double-left"></i>&nbsp;{{query.date}}
 						</a>
 					</li>
 				{{else}}
 					{{#if last}}
 						<li>
-							<a href="{{pathFor route='shop.view' shopId=shopId query=query.data}}" aria-label="Next">
+							<a href="{{pathFor route='shop.view' id=shopId query=query.data}}" aria-label="Next">
 								{{query.date}}&nbsp;<i class="fa fa-angle-double-right"></i>
 							</a>
 						</li>
 					{{else}}
 						<li class="{{active}}">
-							<a href="{{pathFor route='shop.view' shopId=shopId query=query.data}}">
+							<a href="{{pathFor route='shop.view' id=shopId query=query.data}}">
 								<i class="fa fa-angle-double-down"></i>
 							</a>
 						</li>
@@ -37,11 +37,9 @@
 						<th data-db-row-name="work_type">
 							Type
 						</th>
-						{{#if isConnected isChief}}
 						<th>
 							Actions
 						</th>
-						{{/if}}
 					</tr>
 				</thead>
 				<tbody>
@@ -56,9 +54,7 @@
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
 							<td>{{rdv}}</td>
 							<td>{{type}}<br/></td>
-							{{#if isConnected isChief}}
 							<td></td>
-							{{/if}}
 						</tr>
 					{{/each}}
 
@@ -73,9 +69,7 @@
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
 							<td>{{rdv}}</td>
 							<td>{{type}}<br/></td>
-							{{#if isConnected isChief}}
 							<td>{{>buttondestroy method="workDestructor" _id=_id}}</td>
-							{{/if}}
 						</tr>
 					{{/each}}
 
@@ -90,18 +84,19 @@
 							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
 							<td>{{rdv}}</td>
 							<td>{{type}}<br/></td>
-							{{#if isConnected isChief}}
 							<td>
-								<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-primary">
-									<i class="fa fa-file-pdf-o"></i>
-								</button>
-								{{#if entretien}}
-									<button data-work-id="{{_id}}" class="maintenanceToPdf btn btn-md btn-danger">
+								{{#if isConnected isChief}}
+									<button data-work-id="{{_id}}" class="workToPdf btn btn-md btn-primary">
 										<i class="fa fa-file-pdf-o"></i>
 									</button>
+									{{#if entretien}}
+										<button data-work-id="{{_id}}" class="maintenanceToPdf btn btn-md btn-danger">
+											<i class="fa fa-file-pdf-o"></i>
+										</button>
+									{{/if}}
+
 								{{/if}}
 							</td>
-							{{/if}}
 						</tr>
 					{{/each}}
 				</tbody>

@@ -47,6 +47,48 @@ Template.originshow.helpers({
 				$not : this.origin._id
 			}
 		}).fetch();
+	},
+	q : function(){
+
+		var splited = Router.current().url.split("?")
+		return splited.length>1 ? "?"+splited[1] : ""
+	},
+	pager : function(){
+		var self = this;
+		console.log(this);
+		var max = 3;
+		var result = [];
+		var getQuery = function(key){
+			var date = moment(self.date);
+			if(key==1){
+				return {
+					date : moment([date.year(), date.month()]).subtract(1, "month").format("MMMYYYY"),
+					data : "date="+moment([date.year(), date.month()]).subtract(1, "month").format("YYYY-MM-01")
+				}
+			}
+			else if(key==max){
+				return {
+					date : moment([date.year(), date.month()]).add(1, "month").format("MMMYYYY"),
+					data : "date="+moment([date.year(), date.month()]).add(1, "month").format("YYYY-MM-01")
+				}
+			}
+			else{
+				return {
+					date : moment().format("MMMYYYY"),
+					data : ""
+				}
+			}
+		};
+		for(var key = 1; key<=max ; key++){
+			result.push({
+				first : key==1,
+				last : key==max,
+				key : key,
+				query : getQuery(key),
+				originId : self.origin._id
+			});
+		}
+		return result;
 	}
 });
 function sendmatterOriginsTransfert(matter){

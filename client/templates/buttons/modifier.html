@@ -1,0 +1,23 @@
+<template name="buttonmodifier">
+	{{#if isConnected}}
+		{{#if disableischief}}
+			<a href="{{pathFor route=route id=_id}}" class="btn btn-lg btn-default {{class}}">
+				{{#if html}}
+					{{html}} 
+				{{else}}
+					Modifier
+				{{/if}}
+			</a>
+		{{else}}
+			{{#if isChief }}
+				<a href="{{pathFor route=route id=_id}}" class="btn btn-lg btn-default {{class}}">
+					{{#if html}}
+						{{html}} 
+					{{else}}
+						Modifier
+					{{/if}}
+				</a>
+			{{/if}}
+		{{/if}}
+	{{/if}}
+</template>

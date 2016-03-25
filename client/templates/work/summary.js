@@ -59,7 +59,6 @@ Template.workSummary.events({
 		}else{
 			v &= 2;
 		}
-		console.log(v);
 		Session.set(Meteor.SIGNATURE_NAMED, v);
 	},
 	"keyup #adf_name" : function(event){
@@ -69,7 +68,6 @@ Template.workSummary.events({
 		}else{
 			v &= 1;
 		}
-		console.log(v);
 		Session.set(Meteor.SIGNATURE_NAMED, v);
 	}
 });

@@ -2,12 +2,14 @@
 	<h3>Actions</h3>
 	<ul class="list-unstyled text-center">
 		<li>
-			<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='user.edit' workerId=currentUser._id}}">Modifier votre compte</a>
+			{{>buttonmodifier route="user.edit" _id=currentUser._id html="Modifier votre compte" class="btn-block" disableischief=true}}
 		</li>
-		{{#if isBoss}}
-			<li>
-				<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='user.new'}}" {{connected}}>Créer un travailleur</a>
-			</li>
+		{{#if isConnected}}
+			{{#if isBoss}}
+				<li>
+					<a class="btn btn-lg btn-block btn-default" href="{{pathFor route='user.new'}}">Créer un travailleur</a>
+				</li>
+			{{/if}}
 		{{/if}}
 	</ul>
 </template>

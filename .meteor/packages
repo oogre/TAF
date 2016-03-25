@@ -21,7 +21,6 @@ email
 googlemaps
 mdg:geolocation
 hammer
-pascoual:pdfkit
 ground:db
 
 
@@ -39,3 +38,4 @@ random
 ejson
 spacebars
 check
+pascoual:pdfkitx

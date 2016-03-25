@@ -70,16 +70,12 @@
 <template name="shopitem">
 	<tr data-shop-id="{{_id}}">
 		<td class="td-lg">
-			<a href="{{pathFor route='shop.view' shopId=_id}}" class="btn btn-lg btn-link">
+			<a href="{{pathFor route='shop.view' id=_id}}" class="btn btn-lg btn-link">
 				{{brand}}
 			</a>
 		</td>
 		<td>
-			{{#if isChief }}
-				<a href="{{pathFor route='shop.edit' shopId=_id}}" class="btn btn-lg btn-default">
-					Modifier
-				</a>
-			{{/if}}
+			{{>buttonmodifier route="shop.edit" _id=_id}}
 			{{>buttondestroy method="shopDestroyer" _id=_id}}
 		</td>
 	</tr>

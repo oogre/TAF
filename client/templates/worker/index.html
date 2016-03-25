@@ -1,38 +1,37 @@
 <template name="workerindex">
 	{{#if workers}}
-	<div class="row">
-		<div class="col-sm-12">
-			<table class="table" data-db-table-name="worker" >
-				<thead>
-					<tr>
-						<th data-db-row-name="worker_name">
-							Nom
-						</th>
-						{{#if isEditAndDestroyVisible }}
-							<th>
-								Actions
+		<div class="row">
+			<div class="col-sm-12">
+				<table class="table" data-db-table-name="worker" >
+					<thead>
+						<tr>
+							<th data-db-row-name="worker_name">
+								Nom
 							</th>
-						{{else}}
-							<th>
-								Temps
-							</th>
-
-							{{#unless summary}}
+							{{#if isWorkerIndex }}
 								<th>
-									Travail
+									Actions
 								</th>
-							{{/unless}}
-						{{/if}}
-					</tr>
-				</thead>
-				<tbody>
-					{{#each workers}}
-						{{>workeritem}}
-					{{/each}}
-				</tbody>
-			</table>
+							{{else}}
+								<th>
+									Temps
+								</th>
+								{{#unless summary}}
+									<th>
+										Travail
+									</th>
+								{{/unless}}
+							{{/if}}
+						</tr>
+					</thead>
+					<tbody>
+						{{#each workers}}
+							{{>workeritem}}
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
 		</div>
-	</div>
 	{{/if}}
 </template>
 
@@ -48,38 +47,36 @@
 				{{/with}}
 			</a>
 		</td>
-				
-		{{#if isEditAndDestroyVisible }}
-				<td>
-					{{#if isChief }}
-						<a class="btn btn-lg btn-default" href="{{pathFor route='user.edit' workerId=_id}}">Modifier</a>
-					{{/if}}
-					{{>buttondestroy method="workerDestroyer" _id=_id}}
-				</td>
+		{{#if isWorkerIndex}}	
+			<td>
+				{{>buttonmodifier route="user.edit" _id=_id}}
+				{{>buttondestroy method="workerDestroyer" _id=_id}}
+			</td>
 		{{else}}
 			<td class="td-lg timetable">
 				<ul>
 					{{#each timetable}}
-					 <li>{{humanizer this.start this.stop}}</li>
+					 	<li>{{humanizer this.start this.stop}}</li>
 					{{/each}}
-					<li>Total : <strong>{{summarize timetable}}</strong></li>
+					<li>
+						Total : <strong>{{summarize timetable}}</strong>
+					</li>
 				</ul>
 			</td>
-			
 			{{#unless summary}}
-			<td>
-				{{#if schedular}}
-					{{#if working }}
-						<button class="btn btn-lg btn-danger btn-block schedule stop">
-							<i class="fa fa-cog fa-spin"></i>&nbsp; Arrêter
-						</button>
-					{{else}}
-						<button class="btn btn-lg btn-default btn-block schedule start">
-							<i class="fa fa-play"></i>&nbsp; Commencer
-						</button>
+				<td>
+					{{#if schedular}}
+						{{#if working }}
+							<button class="btn btn-lg btn-danger btn-block schedule stop">
+								<i class="fa fa-cog fa-spin"></i>&nbsp; Arrêter
+							</button>
+						{{else}}
+							<button class="btn btn-lg btn-default btn-block schedule start">
+								<i class="fa fa-play"></i>&nbsp; Commencer
+							</button>
+						{{/if}}
 					{{/if}}
-				{{/if}}
-			</td>
+				</td>
 			{{/unless}}
 		{{/if}}
 	</tr>

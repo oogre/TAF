@@ -1,8 +1,8 @@
 
 <template name="originshow">
 	<div class="row matterTransfert">
-		<label class="col-sm-2">Transferts</label>
-		<div class="col-sm-10">
+		<label class="col-xs-2">Transferts</label>
+		<div class="col-xs-10">
 			<div class="input-group col-sm-12">
 				<label class="input-group-addon autowidth" for="matter">
 					<input 	class="typeahead input-lg" name="matter" id="matter" type="text" disabled value="{{this.matter.name}}"/>
@@ -30,123 +30,167 @@
 	<div class="row">
 		<label class="col-sm-2">Traçabilité</label>
 		<div class="col-sm-10">
-			<div class="col-sm-6">
-				Sorties
-				<table class="table" data-db-table-name="Origin" >
-					<thead>
-						<tr>
-							<th>
-								Quantité
-							</th>
-							<th>
-								Travails / Clients
-							</th>
-							<th>
-								Dest. Réf.
-							</th>
-							<th>
-								Date
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{{#each movesFrom}}
-							{{setCurrent destinyId}}
-							<tr>
-								<td class="td-lg">
-									<strong>{{quantity}} {{unit}}</strong>
-								</td>
-								<td>
-									{{#if work}}
-										<a href="{{pathFor route='work.show' workId=work._id}}" class="">
-											{{work.myId}}
+			<div class="row">
+				<div class="col-sm-12">
+					<ul class="pagination pagination-lg pull-right no-margin">
+						{{#each pager}}
+							{{#if first}}
+								<li>
+									<a href="{{pathFor route='origin.show' originId=originId query=query.data}}" aria-label="Previous">
+										{{query.date}}&nbsp;<i class="fa fa-angle-double-left"></i>&nbsp;
+									</a>
+								</li>
+							{{else}}
+								{{#if last}}
+									<li>
+										<a href="{{pathFor route='origin.show' originId=originId query=query.data}}" aria-label="Next">
+											{{query.date}}&nbsp;<i class="fa fa-angle-double-right"></i>
 										</a>
-									{{else}}
-									-
-									{{/if}}
-									<br/>
-									{{#if shop}}
-										<a href="{{pathFor route='shop.view' shopId=shop._id}}" class="">
-											{{shop.name}} - {{shop.brand}}
+									</li>
+								{{else}}
+									<li class="{{active}}">
+										<a href="{{pathFor route='origin.show' originId=originId query=query.data}}">
+											<i class="fa fa-angle-double-down"></i>
 										</a>
-									{{else}}
-									-
-									{{/if}}
-								</td>
-								<td>
-									{{#if module}}
-										{{module.serial}} {{module.type}} {{module.name}}
-									{{else}}
-										{{#if origine}}
-											<a href="{{pathFor route='origin.show' originId=origine._id}}" class="">
-												{{origine.ref}}
-											</a>
-										{{/if}}
-									{{/if}}
-								</td>
-								<td>
-									<small>{{formatize dateTime}}</small>
-								</td>
-							</tr>
+									</li>
+								{{/if}}
+							{{/if}}
 						{{/each}}
-					</tbody>
-				</table>
+					</ul>
+				</div>
 			</div>
-
-
-			<div class="col-sm-6">
-				Entrées
-				<table class="table" data-db-table-name="Origin" >
-					<thead>
-						<tr>
-							<th>
-								Quantité
-							</th>
-							<th>
-								Clients
-							</th>
-							<th>
-								Orig. Réf.
-							</th>
-							<th>
-								Date
-							</th>
-						</tr>
-					</thead>
-					<tbody>
-						{{#each movesTo}}
-							{{setCurrent originId}}
+			<div class="row">
+				<label class="col-xs-2">Sorties</label>
+				<div class="col-xs-10">
+					<table class="table" data-db-table-name="Origin" >
+						<thead>
 							<tr>
-								<td class="td-lg">
-									<strong>{{quantity}} {{unit}}</strong>
-								</td>
-								<td>
-									{{#if shop}}
-										<a href="{{pathFor route='shop.view' shopId=shop._id}}" class="">
-											{{shop.name}} - {{shop.brand}}
-										</a>
-									{{else}}
-										-
-									{{/if}}
-								</td>
-								<td>
-									{{#if module}}
-										{{module.serial}}
-									{{else}}
-										{{#if origine}}
-											<a href="{{pathFor route='origin.show' originId=origine._id}}" class="">
-												{{origine.ref}}
-											</a>
-										{{/if}}
-									{{/if}}
-								</td>
-								<td>
-									<small>{{formatize dateTime}}</small>
-								</td>
+								<th>
+									Quantité
+								</th>
+								<th>
+									Travails / Clients
+								</th>
+								<th>
+									Dest. Réf.
+								</th>
+								<th>
+									Date
+								</th>
+								<th>
+									Action
+								</th>
 							</tr>
-						{{/each}}
-					</tbody>
-				</table>
+						</thead>
+						<tbody>
+							{{#each movesFrom}}
+								{{setCurrent destinyId}}
+								<tr>
+									<td class="td-lg">
+										<strong>{{quantity}} {{unit}}</strong>
+									</td>
+									<td>
+										{{#if work}}
+											<a href="{{pathFor route='work.show' workId=work._id}}" class="">
+												{{work.myId}}
+											</a>
+										{{else}}
+										-
+										{{/if}}
+										<br/>
+										{{#if shop}}
+											<a href="{{pathFor route='shop.view' id=shop._id}}" class="">
+												{{shop.name}} - {{shop.brand}}
+											</a>
+										{{else}}
+										-
+										{{/if}}
+									</td>
+									<td>
+										{{#if module}}
+											{{module.serial}} {{module.type}} {{module.name}}
+										{{else}}
+											{{#if origine}}
+												<a href="{{pathFor route='origin.show' originId=origine._id query=q}}" class="">
+													{{origine.ref}}
+												</a>
+											{{/if}}
+										{{/if}}
+									</td>
+									<td>
+										<small>{{formatize dateTime}}</small>
+									</td>
+
+									<td>
+										{{>buttondestroy method="moveDestroyer" _id=_id}}
+									</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="row">
+				<label class="col-xs-2">Entrées</label>
+				<div class="col-xs-10">
+					<table class="table" data-db-table-name="Origin" >
+						<thead>
+							<tr>
+								<th>
+									Quantité
+								</th>
+								<th>
+									Clients
+								</th>
+								<th>
+									Orig. Réf.
+								</th>
+								<th>
+									Date
+								</th>
+								<th>
+									Action
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each movesTo}}
+								{{setCurrent originId}}
+								<tr>
+									<td class="td-lg">
+										<strong>{{quantity}} {{unit}}</strong>
+									</td>
+									<td>
+										{{#if shop}}
+											<a href="{{pathFor route='shop.view' id=shop._id}}" class="">
+												{{shop.name}} - {{shop.brand}}
+											</a>
+										{{else}}
+											-
+										{{/if}}
+									</td>
+									<td>
+										{{#if module}}
+											{{module.serial}}
+										{{else}}
+											{{#if origine}}
+												<a href="{{pathFor route='origin.show' originId=origine._id query=q}}" class="">
+													{{origine.ref}}
+												</a>
+											{{/if}}
+										{{/if}}
+									</td>
+									<td>
+										<small>{{formatize dateTime}}</small>
+									</td>
+									<td>
+										{{>buttondestroy method="moveDestroyer" _id=_id}}
+									</td>
+								</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>		
 			</div>
 		</div>
 	</div>
