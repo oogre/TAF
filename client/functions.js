@@ -64,6 +64,57 @@ Meteor.b64toBlob = function(b64, onsuccess, onerror) {
 	img.src = b64;
 };
 
+Meteor.geocode = function(addres, next){
+	var getGeocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=[ADDRES]";
+	getGeocodeUrl = getGeocodeUrl
+					.replace("[ADDRES]", addres);
+					
+	HTTP.get(getGeocodeUrl, {
+		followRedirects : true
+	}, function (error, result) {
+		if(error) return next(error);
+		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
+		try{
+			var body = result.content;
+			var location = JSON.parse(body).results[0].geometry.location;
+			return next(null, location);
+		}catch(e){
+			return next(new Meteor.Error("geocode_parsing_error"));
+		}
+	});
+};
+
+Meteor.getLocationInfo = function(address, next){
+	if(!Match.test(next, Function)){
+		next = function(err, data){
+			if(error) return console.log(error);
+			console.log(data);
+		}
+	}
+	if(typeof(google) == "undefined"){
+		GoogleMaps.init(
+		{
+			"sensor": true,
+			"language": "fr"
+		});
+	}
+	Meteor.geocode(address, function(error, location){
+		if(error) return next(error, null);
+		Meteor.getLocation(function(error, origin){
+			if(error) return next(error, null);
+			Meteor.routing(origin, location, function(error, route){
+				if(error) return next(error, null);
+				var duration = route.routes[0].legs[0].duration.value;
+				next(null, {
+					location : location,
+					timeDist : duration,
+					zone : Meteor.timeDistToZone(duration)
+				});		
+			});
+		});
+	});
+};
+
 Meteor.timeDistToZone = function(timeInSeconds){
 	var timeDist = 2 * Math.ceil(timeInSeconds / 900) * 900;
 	timeDist = moment.duration(timeDist , "seconds");

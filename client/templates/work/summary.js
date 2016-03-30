@@ -39,7 +39,7 @@ Template.workSummary.helpers({
 		}else{
 			return Session.get(Meteor.SIGNATURE_NAMED) & 2 ? "" : "disabled";
 		}
-
+		
 	}
 });
 

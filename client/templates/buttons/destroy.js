@@ -13,10 +13,16 @@ Template.buttondestroy.events({
 			var selector = $(event.target).attr("data-selector");
 			if(_.isJson(selector)){
 				selector = JSON.parse(selector);
-				Meteor.call(method, selector);
+				Meteor.call(method, selector, function(error, data){
+					if(error) return Session.set("errorMessage", error);
+					Session.set("successMessage", data);
+				});
 			}
 			else{
-				Meteor.call(method, _id);
+				Meteor.call(method, _id, function(error, data){
+					if(error) return Session.set("errorMessage", error);
+					Session.set("successMessage", data);
+				});
 			}
 		}
 		return false;		

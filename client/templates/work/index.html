@@ -81,7 +81,15 @@
 					{{/if}}
 					{{#each works.finished}}
 						<tr>
-							<td><a href="{{pathFor route='work.show' workId=_id}}" >{{myId}}</a></td>
+							<td>
+								<a href="{{pathFor route='work.show' workId=_id}}" >
+									{{#if myId}}
+										{{myId}}
+									{{else}}
+										{{_id}}
+									{{/if}}
+								</a>
+							</td>
 							<td>{{rdv}}</td>
 							<td>{{type}}<br/></td>
 							<td>

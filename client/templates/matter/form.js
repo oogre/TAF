@@ -64,22 +64,39 @@ Template.matterform.events({
 			name : name.value.toLowerCase(),
 			unit : unit.value,
 		};
-		var next = function(error){
-			if(error){
-				console.log(error);
-			}
-			else{
+		
+		if(_id.value){
+			Meteor.call("matterUpdator", _id.value, data, "button[type='submit']", function(error, data){
+				if(error){
+					Session.set("errorMessage", error.reason);
+					$(button)
+					.removeClass("btn-primary")
+					.addClass("btn-danger");
+					return;
+				}
 				$(button)
 				.removeClass("btn-primary")
+				.removeClass("btn-danger")
 				.addClass("btn-success");
 				Router.go("matter.index");
-			}
-		};
-
-		if(_id.value){
-			Meteor.call("matterUpdator", _id.value, data, "button[type='submit']", next);
+				Session.set("successMessage", "Le matériel à été modifier : <a class='btn btn-lg btn-link' href='"+Router.path("matter.show", {id : data})+"'>Voir</a>" );
+			});
 		}else{
-			Meteor.call("matterCreator", data, "button[type='submit']", next);	
+			Meteor.call("matterCreator", data, "button[type='submit']" , function(error, data){
+				if(error){
+					Session.set("errorMessage", error.reason);
+					$(button)
+					.removeClass("btn-primary")
+					.addClass("btn-danger");
+					return;
+				}
+				$(button)
+				.removeClass("btn-primary")
+				.removeClass("btn-danger")
+				.addClass("btn-success");
+				Router.go("matter.index");
+				Session.set("successMessage", "Le matériel à été ajouter : <a class='btn btn-lg btn-link' href='"+Router.path("matter.view", {id : data})+"'>Voir</a>" );
+			});	
 		}
 		
 

@@ -80,7 +80,6 @@ Template.position.rendered = function(){
 		GoogleMaps.init(
 		{	
 			"sensor": true,
-			//"key": Meteor.google.key,
 			"language": "fr"
 		},
 		function(){
@@ -125,13 +124,6 @@ Template.position.rendered = function(){
 			$(window).resize(function() {
 				resize(Session.get(Meteor.MAP_LARGE), Session.get(Meteor.MAP_FOLLOW_CENTER));
 			});
-
-			if(!shop.timeDist){
-				Meteor.routing(Meteor.QG.location, shop.location, function(error, route){
-					if(error) return console.log(error);
-					Meteor.call("shopUpdateTimeDist", shop._id, route.routes[0].legs[0].duration.value);
-				});	
-			}
 		});
 	}
 };

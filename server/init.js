@@ -77,6 +77,10 @@ var rolesInit = function(){
 var unitsInit = function(){
 	if(Units.find().count() === 0 ){
 		Units.insert({
+			name : "-",
+			shortname : ""
+		});
+		Units.insert({
 			name : "gramme",
 			shortname : "g"
 		});
@@ -134,5 +138,11 @@ Meteor.startup(function () {
 	uploadServerInit();
 	rolesInit();
 	unitsInit();
+	Meteor.QG = {
+		location: {
+			lat: 50.6797964,
+			lng: 5.532689
+		}
+	};
 	process.env.KEY_GOOGLE = process.env.KEY_GOOGLE || "AIzaSyCVOeZt_PwTAqSjIv-7DBc5JZCuiZTp-Co";
 });

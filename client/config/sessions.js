@@ -32,10 +32,13 @@ Meteor.SIGNATURE				= "signature";
 Meteor.MATTER					= "matter";
 Meteor.PWD_ERROR				= "pwdError";
 Meteor.USER_ERROR				= "userError";
-Meteor.DATE_CONF				= "dateConf";
 Meteor.SIGNATURE_OPEN			= "signatureOpen";
 Meteor.SIGNATURE_NAMED			= "signatureNamed";
 Meteor.ORIGIN_REF				= "originRef";
+Meteor.MOVES_DATE				= "movesDate";
+Meteor.ERROR_MESSAGE			= "errorMessage";
+Meteor.SUCCESS_MESSAGE			= "successMessage";
+
 
 Session.setDefault(Meteor.PAGE_TITLE, false);
 Session.setDefault(Meteor.MENU_KEY, false);
@@ -67,14 +70,15 @@ Session.setDefault(Meteor.SIGNATURE, {});
 Session.setDefault(Meteor.SIGNATURE_OPEN, false);
 Session.setDefault(Meteor.SIGNATURE_NAMED, 0);
 Session.setDefault(Meteor.ORIGIN_REF, "");
-Session.setDefault(Meteor.DATE_CONF, moment().toISOString());
-Session.set(Meteor.DATE_CONF, moment().toISOString());
+Session.setDefault(Meteor.ERROR_MESSAGE, false);
+Session.setDefault(Meteor.SUCCESS_MESSAGE, false);
+
+var date = moment();
 Session.setDefault(Meteor.CALENDAR_CONF, {
-	defaultDate : moment().toISOString(),
+	defaultDate : date.toISOString(),
 	defaultView : "basicDay"
 });
-Session.set(Meteor.CALENDAR_CONF, {
-	defaultDate : moment().toISOString(),
-	defaultView : "basicDay"
-});
+Session.setDefault(Meteor.MOVES_DATE, date.toISOString());
+
+
 

@@ -68,6 +68,35 @@ Meteor.geocode = function(addres, next){
 	});
 };
 
+Meteor.getLocationInfo = function(address, next){
+	if(!Match.test(next, Function)){
+		next = function(err, data){
+			if(error) return console.log(error);
+			console.log(data);
+		}
+	}
+	Meteor.geocode(address, function(error, location){
+		if(error) return next(error, null);
+		var getDistanceUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=[ORIGIN_LOCATION]&destinations=[DESTINATION_LOCATION]&language=fr-FR&key=[APIKEY]";
+		getDistanceUrl = getDistanceUrl
+						.replace("[ORIGIN_LOCATION]", Meteor.QG.location.lat+","+Meteor.QG.location.lng)
+						.replace("[DESTINATION_LOCATION]", location.lat+","+location.lng)
+						.replace("[APIKEY]", process.env.KEY_GOOGLE);
+		HTTP.get(getDistanceUrl, {
+			followRedirects : true
+		}, function (error, result) {
+			if(error) return next(error, null);
+			if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode), null);
+			var duration = result.data.rows[0].elements[0].duration.value;
+			next(null, {
+				location : location,
+				timeDist : duration,
+				zone : Meteor.timeDistToZone(duration)
+			});
+		});
+	});
+};
+
 Meteor.timeDistToZone = function(timeInSeconds){
 	var timeDist = 2 * Math.ceil(timeInSeconds / 900) * 900;
 	timeDist = moment.duration(timeDist , "seconds");

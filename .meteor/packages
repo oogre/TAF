@@ -12,7 +12,6 @@ rzymek:fullcalendar
 momentjs:moment
 sergeyt:typeahead
 tomi:upload-server
-tomi:upload-jquery
 underscorestring:underscore.string
 http
 mdg:camera
@@ -24,7 +23,6 @@ hammer
 ground:db
 
 
-standard-minifiers
 meteor-base
 mobile-experience
 mongo
@@ -39,3 +37,5 @@ ejson
 spacebars
 check
 pascoual:pdfkitx
+standard-minifier-css
+standard-minifier-js

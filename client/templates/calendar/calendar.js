@@ -54,7 +54,7 @@ var mapWorkToEvent = function (works) {
 					color = "#333";
 				}
 				return {
-					title: work.myId + " : " + work.shop.name,
+					title: (work.myId || work._id) + " : " + work.shop.name,
 					start: work.rdv,
 					end: work.end || moment().toISOString(),
 					color: color,
@@ -88,7 +88,7 @@ Template.calendar.rendered = function () {
 		eventAfterAllRender : function(view){
 			Session.set(Meteor.CALENDAR_CONF, {
 				defaultView : view.name,
-				defaultDate : view.calendar.getDate().format()
+				defaultDate : moment(view.calendar.getDate().format()).toISOString()
 			});
 		}
 	});

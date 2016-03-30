@@ -42,7 +42,7 @@ Template.matterselector.helpers({
 				Session.set(Meteor.MATTER, false);
 
 				if(originId){
-					Meteor.call("matterOriginsTransfert", {
+					Meteor.call("moveCreator", {
 						workId : self.work._id,
 						quantity : matter.quantity,
 						destinyId : destinyId,

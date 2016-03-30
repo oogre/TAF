@@ -72,26 +72,40 @@ Template.shopform.events({
 									undefined
 						)
 		};
-		var next = function(error){
-			if(error){
-				console.log(error);
-			}
-			else{
-				$(button)
-				.removeClass("btn-primary")
-				.addClass("btn-success");
-				Router.go("shop.index");
-			}
-		};
 
 		if(_id.value){
-			Meteor.call("shopUpdator", _id.value, data, "button[type='submit']", next);
+			Meteor.call("shopUpdator", _id.value, data, "button[type='submit']", function(error, data){
+				if(error){
+					Session.set("errorMessage", error.reason);
+					$(button)
+					.removeClass("btn-primary")
+					.addClass("btn-danger");
+					return;
+				}
+				$(button)
+				.removeClass("btn-primary")
+				.removeClass("btn-danger")
+				.addClass("btn-success");
+				Router.go("shop.index");
+				Session.set("successMessage", "Le client à été modifier : <a class='btn btn-lg btn-link' href='"+Router.path("shop.view", {id : data})+"'>Voir</a>" );
+			});	
 		}else{
-			Meteor.call("shopCreator", data, "button[type='submit']", next);	
+			Meteor.call("shopCreator", data, "button[type='submit']", function(error, data){
+				if(error){
+					Session.set("errorMessage", error.reason);
+					$(button)
+					.removeClass("btn-primary")
+					.addClass("btn-danger");
+					return;
+				}
+				$(button)
+				.removeClass("btn-primary")
+				.removeClass("btn-danger")
+				.addClass("btn-success");
+				Router.go("shop.index");
+				Session.set("successMessage", "Le client à été ajouter : <a class='btn btn-lg btn-link' href='"+Router.path("shop.view", {id : data})+"'>Voir</a>" );
+			});	
 		}
-		
-
 		return false;
-
 	}
 });

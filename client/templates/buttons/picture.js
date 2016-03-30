@@ -46,7 +46,7 @@ function uploadImage(photo, selector){
 	formData.append("_id", selector._id);
 	formData.append("collection", selector.collection);
 	
-	if(!Meteor.status().connected){
+	if(Meteor.status().connected){
 		Meteor.call("pictureCreator", photo, {
 			collection : formData.collection,
 			_id : formData._id,

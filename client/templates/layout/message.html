@@ -1,0 +1,17 @@
+<template name="errorMessage">
+	{{#if warning}}
+		<div class="alert alert-warning">
+	        <a href="#" class="close" data-dismiss="alert">&times;</a>
+	        <strong>Attention !</strong> {{{message}}}
+	    </div>
+    {{/if}}
+</template>
+
+<template name="successMessage">
+	{{#if warning}}
+		<div class="alert alert-success">
+	        <a href="#" class="close" data-dismiss="alert">&times;</a>
+	        <strong>Super !</strong> {{{message}}}
+	    </div>
+    {{/if}}
+</template>

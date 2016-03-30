@@ -1,9 +1,6 @@
 
 var shop, module, origine, work;
 Template.originshow.helpers({
-	value : function(){
-		console.log(this);
-	},
 	formatize : function(dateTime){
 		return moment(dateTime).format("DD MMM YYYY");
 	},
@@ -55,7 +52,6 @@ Template.originshow.helpers({
 	},
 	pager : function(){
 		var self = this;
-		console.log(this);
 		var max = 3;
 		var result = [];
 		var getQuery = function(key){
@@ -92,7 +88,8 @@ Template.originshow.helpers({
 	}
 });
 function sendmatterOriginsTransfert(matter){
-	Meteor.call("matterOriginsTransfert", {
+	console.log(matter);
+	Meteor.call("moveCreator", {
 						workId : null,
 						quantity : matter.quantity,
 						destinyId : matter.destiny,
@@ -110,8 +107,11 @@ Template.originshow.events({
 		Session.set(Meteor.MATTER, matter);
 		if(matter.quantity && matter.destiny){
 			sendmatterOriginsTransfert(matter);
+			$("input[name='quantity'], select[name='destiny']").val("");	
+		}else if(matter.destiny){
+			Session.set(Meteor.MATTER, false);
 			$("input[name='quantity'], select[name='destiny']").val("");
-		}		
+		}
 	},
 	"change select[name='destiny']" : function(event){
 		var self = this;

@@ -13,6 +13,7 @@ Meteor.startup(function () {
 			Meteor.subscribe("modules"); 
 			Meteor.subscribe("workers");
 			Meteor.subscribe("works&wikis", Session.get(Meteor.CALENDAR_CONF).defaultDate);
+			Meteor.subscribe("moves", Session.get(Meteor.MOVES_DATE));
 			Meteor.subscribe("mattersOriginsUnits");
 		}
 	});
