@@ -41,7 +41,7 @@
 </template>
 
 <template name="moduleitem">
-	<tr data-shop-id="{{_id}}">
+	<tr data-shop-id="{{id}}">
 		<td class="td-lg">
 			{{#if serial}}
 				{{serial}} - 
@@ -50,8 +50,8 @@
 		</td>
 		<td>
 			{{#unless view}}
-				{{>buttonmodifier route="module.edit" _id=_id class="pull-right"}}
-				{{>buttondestroy method="moduleDestroyer" _id=_id}}
+				{{>buttonmodifier route="module.edit" _id=id class="pull-right"}}
+				{{>buttondestroy method="moduleDestroyer" _id=id}}
 			{{/unless}}
 		</td>
 	</tr>

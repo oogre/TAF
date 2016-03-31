@@ -107,7 +107,6 @@ function uploadImage(workId, prefix, photo){
 			processData: false
 		})
 		.fail(function(){
-			console.log("FAIL");
 			Meteor.call("workSignature", workId, prefix, photo, function(error, data){
 				if(error) return Session.set("errorMessage", error.reason );
 				Session.set("successMessage", data );

@@ -14,6 +14,8 @@ Template.shopmodules.helpers({
 					.shop
 					.modules || [])
 					.map(function(module, key){
+						module.id = module._id;
+						delete module._id;
 						module.key = key;
 						module.shopId = shopId;
 						return module;
@@ -40,7 +42,7 @@ Template.shopmodule.helpers({
 	selector : function(){
 		return JSON.stringify({
 			shopId : this.shopId,
-			moduleId : this._id,
+			moduleId : this.id,
 			key : this.key
 		});
 	}

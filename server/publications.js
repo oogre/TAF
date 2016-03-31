@@ -42,8 +42,26 @@ Meteor.startup(function () {
 			}
 		});
 	}),
-	Meteor.publish("works&wikis", function(date) {
-		var date = moment(date || undefined);
+	Meteor.publish("works&wikis", function(data) {
+		if(_.isObject(data)){
+			var works =	Works
+						.find({
+							"shop._id" : data.shopId
+						});
+			var wikis = Wikis.find({
+						_id : {
+							$in : 	_(works.fetch())
+									.chain()
+									.pluck("wikis")
+									.flatten()
+									.without(undefined, null)
+									.value()
+						}
+					});
+			return [works, wikis];
+		}
+
+		var date = moment(data || undefined);
 		date = moment([date.year(), date.month()]);
 
 		var start = moment(date.toISOString()).subtract(2, "month").startOf('month').toISOString();

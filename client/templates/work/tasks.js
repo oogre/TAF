@@ -19,6 +19,8 @@ Template.workmodules.helpers({
 					.map(function(module, key){
 						module.key = key;
 						module.shopId = shopId;
+						module.id = module._id;
+						delete module._id;
 						return module;
 					});
 		}else if(this.work && this.work.modules){
@@ -36,6 +38,8 @@ Template.workmodules.helpers({
 							task.abortUpdateTask = abortUpdateTask;
 							return task;
 						});
+						module.id = module._id;
+						delete module._id;
 						return module;
 					});
 		}
@@ -148,7 +152,6 @@ Template.workmodule.events({
 		var moduleKey = moduleKey_taskId.pop();
 		Meteor.call("workTaskChecker", this.workId, moduleKey, taskId, false, function(error, data){
 			if(error) return Session.set("errorMessage", error.reason );
-			Session.set("successMessage", data );
 		});
 		return false;
 	},
@@ -159,7 +162,6 @@ Template.workmodule.events({
 		var value = _.isString($(event.target).val()) ? $(event.target).val() : false;
 		Meteor.call("workTaskChecker", this.workId, moduleKey, taskId, value, function(error, data){
 			if(error) return Session.set("errorMessage", error.reason );
-			Session.set("successMessage", data );
 		});
 		return false;
 	}

@@ -16,3 +16,12 @@ Template.moduleselector.events({
 		return false;
 	}
 });
+Template.moduleselector.helpers({
+	modules : function(){
+			return this.modules.map(function(mod){
+				mod.id = mod._id
+				delete  mod._id;
+				return mod
+			});
+		}
+});

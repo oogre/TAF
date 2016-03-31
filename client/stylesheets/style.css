@@ -213,3 +213,6 @@ label.vertical-label>div{
 	float: left;
 	max-width: 100px;
 }
+.multiselect-container{
+	position: relative;
+}
