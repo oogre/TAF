@@ -48,8 +48,8 @@ function uploadImage(photo, selector){
 	
 	if(!Meteor.status().connected){
 		Meteor.call("pictureCreator", photo, {
-			collection : formData.collection,
-			_id : formData._id,
+			collection : selector.collection,
+			_id : selector._id,
 		}, function(error, data){
 			if(error) return Session.set("errorMessage", error.reason );
 			Session.set("successMessage", data );
@@ -70,8 +70,8 @@ function uploadImage(photo, selector){
 		})
 		.fail(function(){
 			Meteor.call("pictureCreator", photo, {
-				collection : formData.collection,
-				_id : formData._id,
+				collection : selector.collection,
+				_id : selector._id,
 			}, function(error, data){
 				if(error) return Session.set("errorMessage", error.reason );
 				Session.set("successMessage", data );
