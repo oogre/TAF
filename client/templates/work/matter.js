@@ -48,6 +48,9 @@ Template.matterselector.helpers({
 						destinyId : destinyId,
 						originId : originId,
 						dateTime : moment().toISOString()
+					}, function(error, data){
+						if(error) return Session.set("errorMessage", error.reason);
+						Session.set("successMessage", data);
 					});
 				}
 

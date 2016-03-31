@@ -95,6 +95,9 @@ function sendmatterOriginsTransfert(matter){
 						destinyId : matter.destiny,
 						originId : matter.origin,
 						dateTime : moment().toISOString()
+					}, function(error, data){
+						if(error) return Session.set("errorMessage", error.reason);
+						Session.set("successMessage", data);
 					});
 	Session.set(Meteor.MATTER, false);
 }

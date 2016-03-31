@@ -33,7 +33,10 @@ Template.mattershow.events({
 	"click .add" : function(event){
 		var ref = $("input#ref").val().trim();
 		if(!ref)return false;
-		Meteor.call("originCreator", this.matter._id, ref);
+		Meteor.call("originCreator", this.matter._id, ref, function(error, data){
+			if(error) return Session.set("errorMessage", error.reason);
+			Session.set("successMessage", data);
+		});
 		return false;
 	},
 	"click .barcode" : function(event){

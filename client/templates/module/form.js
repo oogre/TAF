@@ -53,24 +53,17 @@ Template.moduleform.events({
 			name : name.value.toLowerCase(),
 			type : type.value.toLowerCase()
 		};
-		var next = function(error){
-			if(error){
-				console.log(error);
-			}
-			else{
-				$(button)
-				.removeClass("btn-primary")
-				.addClass("btn-success");
-				Router.go("module.index");
-			}
+		var next = function(error, data){
+			if(error) return Session.set("errorMessage", error.reason);
+			Session.set("successMessage", data);
+			$(button)
+			.removeClass("btn-primary")
+			.addClass("btn-success");
+			Router.go("module.index");
 		};
 
-		if(_id.value){
-			Meteor.call("moduleUpdator", _id.value, data, "button[type='submit']", next);
-		}
-		else{
-			Meteor.call("moduleCreator", data, "button[type='submit']", next);
-		}
+		if(_id.value) Meteor.call("moduleUpdator", _id.value, data, "button[type='submit']", next);
+		else Meteor.call("moduleCreator", data, "button[type='submit']", next);
 
 		return false;
 

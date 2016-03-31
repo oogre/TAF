@@ -57,8 +57,9 @@ Template.shopmodule.events({
 		return false;
 	},
 	"blur #serial" : function(event){
-		Meteor.call("shopModuleUpdator", this.shopId, this.key, {
-			serial : event.target.value
+		Meteor.call("shopModuleSetSerial", this.shopId, this.key, event.target.value, function(error, data){
+			if(error) return Session.set("errorMessage", error.reason );
+			Session.set("successMessage", data );
 		});
 		Session.set(Meteor.MODULE_OPEN, false);
 	}

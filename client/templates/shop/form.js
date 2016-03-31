@@ -25,7 +25,9 @@ Template.shopform.events({
 		var TVA = $(event.target).val();
 		if(TVA){
 			Meteor.call("checkTVA", TVA, function(error, data){
-				if(error)console.log(error);
+				if(error) return Session.set("errorMessage", error.reason);
+				Session.set("errorMessage", false);
+				Session.set("successMessage", "Numéros de TVA identifié, formulaire auto-complété");
 				template.find("#tva").value = data.TVA.toLowerCase();
 				template.find("#name").value = data.name.toLowerCase();
 				template.find("#address_street").value = data.address.street.toLowerCase();

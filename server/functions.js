@@ -5,7 +5,7 @@
 /*global Meteor : false */
 /*global process : false */
 
-Meteor.checkTVA = function(tva){
+Meteor.checkTVA = function(tva, next){
 	var Future = Npm.require("fibers/future");
 	var myFuture = new Future();
 	tva = tva.replace(/\ |\./g, "");
@@ -41,7 +41,7 @@ Meteor.checkTVA = function(tva){
 				}
 			});
 		}catch(e){
-			myFuture.throw(new Meteor.Error("non_valid_VAT"));
+			myFuture.throw(new Meteor.Error("non_valid_VAT", "Numéros de TVA non valide"));
 		}
 	});
 	return myFuture.wait();
