@@ -39,10 +39,11 @@ var initSelector = function(workers, autoAdd){
 		selectAllText : "Tout le monde",
 		nonSelectedText : "Aucun Homme",
 		onChange: function(option, checked) {
-			if(checked){
-				if(autoAdd){
-					Meteor.call("workAddWorker", workId, $("#workers").val());
-				}
+			if(checked && autoAdd){
+				Meteor.call("workAddWorker", workId, $("#workers").val(), function(error, data){
+					if(error) return Session.set("errorMessage", error.reason );
+					Session.set("successMessage", data );
+				});
 			}
 		}
 	})

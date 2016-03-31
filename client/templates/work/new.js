@@ -64,7 +64,7 @@ Template["work-new"].events({
 			var modules = Template.workmodule.modules();
 
 			Meteor.call("workCreator", shop, template.find("#workType").value, rdv, workers, modules, function(error, workId){
-				if(error) return console.log(error);
+				if(error) return Session.set("errorMessage", error.reason );
 				Router.go("work.show", {workId : workId});
 			});
 		});

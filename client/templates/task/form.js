@@ -74,16 +74,14 @@ Template.taskform.events({
 			value : $(value).hasClass("checked"),
 			moduletype : moduletype.value.toLowerCase()
 		};
-		var next = function(error){
-			if(error){
-				console.log(error);
-			}
-			else{
-				$(button)
-				.removeClass("btn-primary")
-				.addClass("btn-success");
-				Router.go("task.index");
-			}
+		var next = function(error, data){
+			if(error) return Session.set("errorMessage", error.reason);
+			
+			$(button)
+			.removeClass("btn-primary")
+			.addClass("btn-success");
+			Router.go("task.index");
+			Session.set("successMessage", data);
 		};
 
 		if(_id.value){

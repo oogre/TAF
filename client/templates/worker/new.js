@@ -51,12 +51,13 @@ Template.workernew.events({
 					country : address_country.value.toLowerCase()
 				}
 			}
-		}, function(error){	
-			if(error) return console.log(error);
+		}, function(error, data){	
+			if(error) return Session.set("errorMessage", error.reason );
 			$(savUser)
 			.removeClass("btn-primary")
 			.addClass("btn-success");
 			Router.go("home");
+			Session.set("successMessage", data );
 		});
 
 		return false;

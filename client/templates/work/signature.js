@@ -89,7 +89,11 @@ function uploadImage(workId, prefix, photo){
 	formData.append("prefix", prefix);
 	formData.append("next", "workSignature");
 	if(!Meteor.status().connected){
-		Meteor.call("workSignature", workId, prefix, photo);
+		Meteor.call("workSignature", workId, prefix, photo, function(error, data){
+			if(error) return Session.set("errorMessage", error.reason );
+			Session.set("successMessage", data );
+		});
+		
 		return ;
 	}
 	Meteor.b64toBlob(photo, function success(blob) {
@@ -103,9 +107,13 @@ function uploadImage(workId, prefix, photo){
 			processData: false
 		})
 		.fail(function(){
-			Meteor.call("workSignature", workId, prefix, photo);
+			console.log("FAIL");
+			Meteor.call("workSignature", workId, prefix, photo, function(error, data){
+				if(error) return Session.set("errorMessage", error.reason );
+				Session.set("successMessage", data );
+			});
 		});
 	}, function error(err){
-		if(err) throw new Meteor.Error(err);
+		if(error) return Session.set("errorMessage", error.reason );
 	});
 }

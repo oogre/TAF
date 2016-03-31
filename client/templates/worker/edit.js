@@ -69,15 +69,12 @@ Template.workeredit.events({
 			},
 			role : parseInt(role.value),
 			phone : phone.value.toLowerCase()
-		}, function(error){
-			if(error){
-				console.log(error);
-			}
-			else{
-				$(savUser)
-				.removeClass("btn-primary")
-				.addClass("btn-success");
-			}
+		}, function(error, data){
+			if(error) return Session.set("errorMessage", error.reason );
+			$(savUser)
+			.removeClass("btn-primary")
+			.addClass("btn-success");
+			Session.set("successMessage", data );
 		});
 
 		return false;

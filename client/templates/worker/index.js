@@ -37,11 +37,19 @@ Template.workerindex.helpers({
 						}else{
 							knownId.push(worker._id);
 						}
+
+						worker.id = worker._id ;
+						delete worker._id;
 						return worker;
 					})
 					.reverse();
 		}else{
-			return Workers.find();
+			return 	Workers.find().fetch()
+					.map(function(worker){ 
+						worker.id = worker._id ;
+						delete worker._id;
+						return worker;
+					});
 		}
 	},
 	isWorkerIndex : function(){

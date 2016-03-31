@@ -16,8 +16,9 @@ Template.wikiform.events({
 		if(!wiki.description){
 			return;
 		}
-		Meteor.call("wikiCreator", this.workId, wiki, function(err){
-			if(err) throw new Meteor.Error(err);
+		Meteor.call("wikiCreator", this.workId, wiki, function(err, data){
+			if(err) return Session.set("errorMessage", error.reason);
+			Session.set("successMessage", data);
 			Meteor.subscribe("works&wikis", Session.get(Meteor.CALENDAR_CONF).defaultDate);
 			template.find("textarea").value = "";
 		});

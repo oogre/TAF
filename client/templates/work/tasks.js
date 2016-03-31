@@ -146,7 +146,10 @@ Template.workmodule.events({
 		var moduleKey_taskId = id.split("_");
 		var taskId = moduleKey_taskId.pop();
 		var moduleKey = moduleKey_taskId.pop();
-		Meteor.call("workTaskChecker", this.workId, moduleKey, taskId, false);
+		Meteor.call("workTaskChecker", this.workId, moduleKey, taskId, false, function(error, data){
+			if(error) return Session.set("errorMessage", error.reason );
+			Session.set("successMessage", data );
+		});
 		return false;
 	},
 	"blur .module input[name='checkbox']" : function(event){
@@ -154,7 +157,10 @@ Template.workmodule.events({
 		var taskId = moduleKey_taskId.pop();
 		var moduleKey = moduleKey_taskId.pop();
 		var value = _.isString($(event.target).val()) ? $(event.target).val() : false;
-		Meteor.call("workTaskChecker", this.workId, moduleKey, taskId, value);
+		Meteor.call("workTaskChecker", this.workId, moduleKey, taskId, value, function(error, data){
+			if(error) return Session.set("errorMessage", error.reason );
+			Session.set("successMessage", data );
+		});
 		return false;
 	}
 });

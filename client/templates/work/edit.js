@@ -61,7 +61,10 @@ Template.workEdit.events({
 	"click .moduleAdd" : function(){
 		if(Session.equals(Meteor.ADD_MODULE, true)){
 			var modules = Template.workmodule.modules();
-			Meteor.call("workModuleTaskUpdator", this._id, modules);
+			Meteor.call("workModuleTaskUpdator", this._id, modules, function(error, data){
+				if(error) return Session.set("errorMessage", error.reason);
+				Session.set("successMessage", data);
+			});
 			Session.set(Meteor.SHOP_ID, false);
 		}else{
 			Session.set(Meteor.SHOP_ID, this.shop._id);
@@ -75,14 +78,6 @@ Template.workEdit.events({
 	},
 	"click .matterAdd" : function(){
 		Session.set(Meteor.ADD_MATTER, !Session.get(Meteor.ADD_MATTER));
-		return false;
-	},
-	"click .workClose" : function(event){
-		var workId = $(event.target).parents("[data-work-id]").first().attr("data-work-id");
-		Meteor.call("workCloser", workId, moment().toISOString(), function(error){
-			if(error) return console.log(error);
-			Router.go("work.show", {workId : workId});
-		});
 		return false;
 	}
 });

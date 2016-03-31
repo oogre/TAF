@@ -54,7 +54,9 @@ Template.matterselector.helpers({
 					});
 				}
 
-				Meteor.call("workMatter", self.work._id, matter, inputReset, function(){
+				Meteor.call("workMatter", self.work._id, matter, inputReset, function(error, data){
+					if(error) return Session.set("errorMessage", error.reason );
+					Session.set("successMessage", data);
 					$(inputReset).val("");
 				});
 			}

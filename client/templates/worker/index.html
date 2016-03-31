@@ -36,10 +36,10 @@
 </template>
 
 <template name="workeritem">
-	<tr data-worker-id="{{_id}}">
+	<tr data-worker-id="{{id}}">
 		
 		<td class="td-lg">
-			<a href="{{pathFor route='worker.view' workerId=_id}}" class="">
+			<a href="{{pathFor route='worker.view' workerId=id}}" class="">
 				{{#with profile}}
 					{{firstname}} {{lastname}} 
 				{{else}}
@@ -49,8 +49,8 @@
 		</td>
 		{{#if isWorkerIndex}}	
 			<td>
-				{{>buttonmodifier route="user.edit" _id=_id}}
-				{{>buttondestroy method="workerDestroyer" _id=_id}}
+				{{>buttonmodifier route="user.edit" _id=id}}
+				{{>buttondestroy method="workerDestroyer" _id=id}}
 			</td>
 		{{else}}
 			<td class="td-lg timetable">

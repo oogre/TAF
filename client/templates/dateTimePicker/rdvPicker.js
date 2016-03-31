@@ -62,7 +62,10 @@ Template.rdvPicker.rendered = function(){
 	});
 	if(this.data.rdv){
 		$("#rendezvous").on("dp.change",function (event) {
-			Meteor.call("workRdvUpadtor", self.data.workId, event.date.toISOString());
+			Meteor.call("workRdvUpadtor", self.data.workId, event.date.toISOString(), function(error, data){
+				if(error) return Session.set("errorMessage", error.reason );
+				Session.set("successMessage", data );
+			});
 		});
 	}
 };
