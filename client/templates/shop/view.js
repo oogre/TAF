@@ -25,7 +25,7 @@ Template.shopview.events({
 	},
 	"click .maintenanceToPdf" : function(event){
 		var workId = $(event.target).attr("data-work-id");
-		Meteor.call("maintenanceToPdf", workId, function(err, file){
+		Meteor.call("workToPdf", workId, function(err, file){
 			if(err)console.error(err);
 			else window.open(file);
 		});

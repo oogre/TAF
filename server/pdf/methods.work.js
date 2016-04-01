@@ -56,6 +56,7 @@ Meteor.methods({
 		work.schedule = work.schedule || [];
 		pictures = pictures || [];
 		wikis = wikis || [];
+		work.modules = work.modules || [];
 
 		var workers = Workers
 						.find({
@@ -92,6 +93,19 @@ Meteor.methods({
 						})
 						.flatten()
 						.value();
+
+		var moduleTask = [];
+
+		work.modules.map(function(module){
+			module.tasks = module.tasks || [];
+			module.tasks.map(function(task, k){
+				moduleTask.push({
+					id : k === 0 ? (module.serial+" : "+module.type+" - "+module.name) : " - ",
+					task : task.name,
+					value : _.isBoolean(task.checked) ? (task.checked ? "V" : " ") : task.checked
+				});
+			});
+		});
 
 /*
 		for(var i = 0 ; i < 11; i ++){
@@ -241,7 +255,6 @@ Meteor.methods({
 				content : [{
 						size : 6, 
 						text : [{
-							bold : true,
 							align : "center",
 							value : "<b>Description</b>"
 						}]
@@ -265,6 +278,43 @@ Meteor.methods({
 						text : [{
 							align : "center",
 							value : "Travaux réalisées : constatation, cause, action prise, remarque"
+						}]
+					}
+				]
+			});
+		};
+
+
+		var moduleHeader = function(){
+			pdf
+			.template("newSection", {})
+			.template("row", {
+				content : [{
+						size :7, 
+						text : [{
+							align : "center",
+							value : "Récapitulatif de l'entretien"
+						}]
+					}
+				]
+			}).template("row", {
+				content : [{
+						size :3, 
+						text : [{
+							align : "center",
+							value : "<b>Identifiant</b>"
+						}]
+					},{
+						size :3, 
+						text : [{
+							align : "center",
+							value : "<b>Tâche</b>"
+						}]
+					},{
+						size :1, 
+						text : [{
+							align : "center",
+							value : "<b>Résultat</b>"
 						}]
 					}
 				]
@@ -554,22 +604,22 @@ Meteor.methods({
 					size :3, 
 					text : [{
 						align : "left",
-						value : "Client : "
+						value : "Client :"
 					},{
 						align : "center",
-						value : "Nom + Signature"
+						value : "<b>Nom + Signature</b>"
 					}]
 				},{
 					size :2, 
 					text : [{
 						align : "center",
-						value : "Atelier du froid"
+						value : "<b>Atelier du froid</b>"
 					}]
 				},{
 					size :2, 
 					text : [{
 						align : "center",
-						value : "Contrôle Management"
+						value : "<b>Contrôle Management</b>"
 					}]
 				}
 			]
@@ -610,6 +660,46 @@ Meteor.methods({
 				}]
 			}]
 		});
+
+		if(work.type == "maintenance"){
+			pdf.addPage();
+			lineCpt = 0 ;
+			header();
+			
+			moduleHeader();
+
+			for(var moduleTaskLineCpt = 0 ; moduleTaskLineCpt < pdf.doc().param.minLinePerCat || moduleTaskLineCpt < moduleTask.length ; moduleTaskLineCpt ++){
+				if(lineCpt >= pdf.doc().param.maxLinePerPage){
+					pdf.addPage();
+					lineCpt = 0 ;
+					header();
+					moduleHeader();
+				}
+				var item = moduleTask[moduleTaskLineCpt] || {};
+				pdf.template("row", {
+					content : [{
+						size : 3, 
+						text : [{
+							align : "center",
+							value : item.id || " "
+						}]
+					},{
+						size : 3, 
+						text : [{
+							align : "center",
+							value : item.task || " "
+						}]
+					},{
+						size : 1, 
+						text : [{
+							align : "center",
+							value : item.value || " "
+						}]
+					}]
+				});
+				lineCpt ++;
+			}
+		}
 
 		pdf
 		.end(function(file){
