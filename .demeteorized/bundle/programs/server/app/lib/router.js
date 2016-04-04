@@ -30,7 +30,38 @@ var IR_BeforeHooks = {
 	},
 	resetMenu: function() { 
 		Session.set(Meteor.FILL_CONTEXT_MENU_KEY, false);
+		if(Router.current().route._path != "/shop"){
+			Session.set(Meteor.CONTEXT_MENU_KEY, false);
+		}
+		Session.set(Meteor.SUCCESS_MESSAGE, false);
+		Session.set(Meteor.ERROR_MESSAGE, false);
+
 		Session.set(Meteor.ADD_WORKER, false);
+		/*Session.set(Meteor.MAP_LARGE, false);
+   		Session.set(Meteor.MAP_FOLLOW_CENTER, true);
+   		Session.set(Meteor.MAP_READY, false);
+   		Session.set(Meteor.MAP_ROUTING_DURATION, false);
+   		Session.set(Meteor.MAP_ROUTING, false);
+   		Session.set(Meteor.ORIGIN_REF, "");
+   		Session.set(Meteor.MODULE_OPEN, false);
+   		Session.set(Meteor.MATTER, false);
+   		Session.set(Meteor.USER_ERROR, false);
+ 		Session.set(Meteor.PWD_ERROR, false);
+ 		Session.set(Meteor.CONTACT_LIST , [""]);
+ 		Session.set(Meteor.SHOP_ID, false);
+ 		Session.set(Meteor.NEW_SHOP_KEY, false);
+ 		Session.set(Meteor.TASK_INPUT_TEXT, false);
+ 		Session.set(Meteor.WIKI_OPEN_LIST, false);
+ 		Session.set(Meteor.SHOP_ID, false);
+   		Session.set(Meteor.ADD_MODULE, false);
+   		Session.set(Meteor.ADD_MATTER, false);
+   		Session.set(Meteor.WIKI_CURRENT_KEY, false);
+   		Session.set(Meteor.SIGNATURE, {});
+   		Session.set(Meteor.SIGNATURE_OPEN, false);
+   		Session.set(Meteor.SIGNATURE_NAMED, 0);
+   		Session.set(Meteor.TASK_SELECTED, {});
+   		Session.set(Meteor.MODULE_SELECTED, false);
+   		Session.set(Meteor.CHANGE_PWD_KEY, false);*/
 	}
 };
 
@@ -86,5 +117,3 @@ Router.configure({
 
 
 }).call(this);
-
-//# sourceMappingURL=router.js.map

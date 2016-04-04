@@ -40,5 +40,3 @@ UI.registerHelper("isMobile", function() {
 	return Meteor.isCordova;
 });
 }).call(this);
-
-//# sourceMappingURL=rights.js.map

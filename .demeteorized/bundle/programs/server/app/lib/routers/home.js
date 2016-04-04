@@ -11,7 +11,10 @@ Router.route("/", {
 		{
 			return this.render("loadingTemplate");
 		}
-
+		/*
+		console.log(this);
+		console.log(this.ready());
+		*/
 		Session.set(Meteor.PAGE_TITLE, "TAF");
 		this.render("workIndex");
 		if(Meteor.isWorker()){
@@ -21,5 +24,3 @@ Router.route("/", {
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=home.js.map

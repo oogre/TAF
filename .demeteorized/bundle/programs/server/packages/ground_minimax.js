@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var _ = Package.underscore._;
 var EJSON = Package.ejson.EJSON;
 var Dictionary = Package['ground:dictionary'].Dictionary;
@@ -17,113 +19,113 @@ var MiniMax;
 //                                                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                                                                                  //
-(function () {                                                                                                   // 1
-                                                                                                                 // 2
-////////////////////////////////////////////////////////////////////////////////////////////////////////////     // 3
-//                                                                                                        //     // 4
-// packages/ground:minimax/ejson.minimax.js                                                               //     // 5
-//                                                                                                        //     // 6
-////////////////////////////////////////////////////////////////////////////////////////////////////////////     // 7
-                                                                                                          //     // 8
-/*                                                                                                        // 1   // 9
-                                                                                                          // 2   // 10
-                                                                                                          // 3   // 11
-                    __  ____       _ __  ___                                                              // 4   // 12
-                   /  |/  (_)___  (_)  |/  /___ __  __                                                    // 5   // 13
-                  / /|_/ / / __ \/ / /|_/ / __ `/ |/_/                                                    // 6   // 14
-                 / /  / / / / / / / /  / / /_/ />  <                                                      // 7   // 15
-                /_/  /_/_/_/ /_/_/_/  /_/\__,_/_/|_|                                                      // 8   // 16
-                                                                                                          // 9   // 17
-  Minify and Maxify by RaiX aka Morten N.O. Nørgaard Henriksen (mh@gi-software.com)                       // 10  // 18
-                                                                                                          // 11  // 19
-  MiniMax.minify( Object )                                                                                // 12  // 20
-                                                                                                          // 13  // 21
-  MiniMax.maxify( array )                                                                                 // 14  // 22
-                                                                                                          // 15  // 23
-  MiniMax.stringify( object )                                                                             // 16  // 24
-                                                                                                          // 17  // 25
-  MiniMax.parse( string )                                                                                 // 18  // 26
-                                                                                                          // 19  // 27
-  // For faster lookup                                                                                    // 20  // 28
-  var keywords = {                                                                                        // 21  // 29
-    '_id': 0,                                                                                             // 22  // 30
-    'test': 1,                                                                                            // 23  // 31
-    'comment': 2,                                                                                         // 24  // 32
-    'list': 3,                                                                                            // 25  // 33
-    'note': 4                                                                                             // 26  // 34
-  };                                                                                                      // 27  // 35
-                                                                                                          // 28  // 36
-  var keywordsList = [ '_id', 'test', 'comment', 'list', 'note' ];                                        // 29  // 37
-                                                                                                          // 30  // 38
-  var headers = [0, [0, 1, 2], [0, 3, -5] ];                                                              // 31  // 39
-                                                                                                          // 32  // 40
-  var data = []; */                                                                                       // 33  // 41
-                                                                                                          // 34  // 42
-  // if(!Array.isArray) {                                                                                 // 35  // 43
-  //   Array.isArray = function (vArg) {                                                                  // 36  // 44
-  //     return Object.prototype.toString.call(vArg) === '[object Array]';                                // 37  // 45
-  //   };                                                                                                 // 38  // 46
-  // }                                                                                                    // 39  // 47
-                                                                                                          // 40  // 48
-  // Create the export scope                                                                              // 41  // 49
-  MiniMax = function(options) {                                                                           // 42  // 50
-    var self = this;                                                                                      // 43  // 51
-                                                                                                          // 44  // 52
-    // Make sure we are on an instance                                                                    // 45  // 53
-    if (!(self instanceof MiniMax))                                                                       // 46  // 54
-      return new MiniMax(options);                                                                        // 47  // 55
-                                                                                                          // 48  // 56
-    // Make sure options is set                                                                           // 49  // 57
-    options = options || {};                                                                              // 50  // 58
-                                                                                                          // 51  // 59
-    // Setting this true will add all values and dates to the dictionary                                  // 52  // 60
-    // This can in some cases save                                                                        // 53  // 61
-    self.progressive = (options.progressive === false)? false : true;                                     // 54  // 62
-                                                                                                          // 55  // 63
-    // Set the default Dictionary                                                                         // 56  // 64
-    // If the user added initial dictionary then add those                                                // 57  // 65
-    self.dictionary = new Dictionary(_.union([false, true, null, undefined], options.dictionary || [] )); // 58  // 66
-  };                                                                                                      // 59  // 67
-                                                                                                          // 60  // 68
-  MiniMax.prototype.minify = function(maxObj, skipFunctions) {                                            // 61  // 69
-    var self = this;                                                                                      // 62  // 70
-    var headers = [0];                                                                                    // 63  // 71
-                                                                                                          // 64  // 72
-    // Start dictionary                                                                                   // 65  // 73
-    var dict = new Dictionary(self.dictionary);                                                           // 66  // 74
-                                                                                                          // 67  // 75
-    var getHeader = function(newHeader) {                                                                 // 68  // 76
-      var headerId = null;                                                                                // 69  // 77
-      for (var i = 1; i < headers.length; i++) {                                                          // 70  // 78
-        var orgHeader = headers[i];                                                                       // 71  // 79
-        // We only need to iterate over the intersection to get a match                                   // 72  // 80
-        var minLength = Math.min(orgHeader.length, newHeader.length);                                     // 73  // 81
-        var isMatch = true;                                                                               // 74  // 82
-        for (var a = 0; a < minLength; a++) {                                                             // 75  // 83
-          // We break if not a match                                                                      // 76  // 84
-          if (orgHeader[a] !== newHeader[a]) {                                                            // 77  // 85
-            isMatch = false;                                                                              // 78  // 86
-            break;                                                                                        // 79  // 87
-          }                                                                                               // 80  // 88
-        }                                                                                                 // 81  // 89
-        if (isMatch) {                                                                                    // 82  // 90
-          // We check to see if                                                                           // 83  // 91
-          // We are equal or in another header                                                            // 84  // 92
-          // eg. headers = [1, 2, 3] newHeader=[1, 2, 3] return id                                        // 85  // 93
-          // eg. headers = [1, 2, 3, 4] newHeader=[1, 2, 3] return id                                     // 86  // 94
-          headerId = i;                                                                                   // 87  // 95
-          // We could maybe contain another header - so we extend the org. and use                        // 88  // 96
-          // that eg. headers = [1, 2, 3] newHeader=[1, 2, 3, 4] then                                     // 89  // 97
-          // set headers=newHeader and return id                                                          // 90  // 98
-          if (newHeader.length > minLength) {                                                             // 91  // 99
-            headers[i] = newHeader;                                                                       // 92  // 100
-          }                                                                                               // 93  // 101
-        }                                                                                                 // 94  // 102
-        // Stop when we found a match                                                                     // 95  // 103
-        if (headerId !== null) {                                                                          // 96  // 104
-          break;                                                                                          // 97  // 105
-        }                                                                                                 // 98  // 106
-      }                                                                                                   // 99  // 107
+(function () {
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                        //
+// packages/ground:minimax/ejson.minimax.js                                                               //
+//                                                                                                        //
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                          //
+/*                                                                                                        // 1
+                                                                                                          // 2
+                                                                                                          // 3
+                    __  ____       _ __  ___                                                              // 4
+                   /  |/  (_)___  (_)  |/  /___ __  __                                                    // 5
+                  / /|_/ / / __ \/ / /|_/ / __ `/ |/_/                                                    // 6
+                 / /  / / / / / / / /  / / /_/ />  <                                                      // 7
+                /_/  /_/_/_/ /_/_/_/  /_/\__,_/_/|_|                                                      // 8
+                                                                                                          // 9
+  Minify and Maxify by RaiX aka Morten N.O. Nørgaard Henriksen (mh@gi-software.com)                       // 10
+                                                                                                          // 11
+  MiniMax.minify( Object )                                                                                // 12
+                                                                                                          // 13
+  MiniMax.maxify( array )                                                                                 // 14
+                                                                                                          // 15
+  MiniMax.stringify( object )                                                                             // 16
+                                                                                                          // 17
+  MiniMax.parse( string )                                                                                 // 18
+                                                                                                          // 19
+  // For faster lookup                                                                                    // 20
+  var keywords = {                                                                                        // 21
+    '_id': 0,                                                                                             // 22
+    'test': 1,                                                                                            // 23
+    'comment': 2,                                                                                         // 24
+    'list': 3,                                                                                            // 25
+    'note': 4                                                                                             // 26
+  };                                                                                                      // 27
+                                                                                                          // 28
+  var keywordsList = [ '_id', 'test', 'comment', 'list', 'note' ];                                        // 29
+                                                                                                          // 30
+  var headers = [0, [0, 1, 2], [0, 3, -5] ];                                                              // 31
+                                                                                                          // 32
+  var data = []; */                                                                                       // 33
+                                                                                                          // 34
+  // if(!Array.isArray) {                                                                                 // 35
+  //   Array.isArray = function (vArg) {                                                                  // 36
+  //     return Object.prototype.toString.call(vArg) === '[object Array]';                                // 37
+  //   };                                                                                                 // 38
+  // }                                                                                                    // 39
+                                                                                                          // 40
+  // Create the export scope                                                                              // 41
+  MiniMax = function(options) {                                                                           // 42
+    var self = this;                                                                                      // 43
+                                                                                                          // 44
+    // Make sure we are on an instance                                                                    // 45
+    if (!(self instanceof MiniMax))                                                                       // 46
+      return new MiniMax(options);                                                                        // 47
+                                                                                                          // 48
+    // Make sure options is set                                                                           // 49
+    options = options || {};                                                                              // 50
+                                                                                                          // 51
+    // Setting this true will add all values and dates to the dictionary                                  // 52
+    // This can in some cases save                                                                        // 53
+    self.progressive = (options.progressive === false)? false : true;                                     // 54
+                                                                                                          // 55
+    // Set the default Dictionary                                                                         // 56
+    // If the user added initial dictionary then add those                                                // 57
+    self.dictionary = new Dictionary(_.union([false, true, null, undefined], options.dictionary || [] )); // 58
+  };                                                                                                      // 59
+                                                                                                          // 60
+  MiniMax.prototype.minify = function(maxObj, skipFunctions) {                                            // 61
+    var self = this;                                                                                      // 62
+    var headers = [0];                                                                                    // 63
+                                                                                                          // 64
+    // Start dictionary                                                                                   // 65
+    var dict = new Dictionary(self.dictionary);                                                           // 66
+                                                                                                          // 67
+    var getHeader = function(newHeader) {                                                                 // 68
+      var headerId = null;                                                                                // 69
+      for (var i = 1; i < headers.length; i++) {                                                          // 70
+        var orgHeader = headers[i];                                                                       // 71
+        // We only need to iterate over the intersection to get a match                                   // 72
+        var minLength = Math.min(orgHeader.length, newHeader.length);                                     // 73
+        var isMatch = true;                                                                               // 74
+        for (var a = 0; a < minLength; a++) {                                                             // 75
+          // We break if not a match                                                                      // 76
+          if (orgHeader[a] !== newHeader[a]) {                                                            // 77
+            isMatch = false;                                                                              // 78
+            break;                                                                                        // 79
+          }                                                                                               // 80
+        }                                                                                                 // 81
+        if (isMatch) {                                                                                    // 82
+          // We check to see if                                                                           // 83
+          // We are equal or in another header                                                            // 84
+          // eg. headers = [1, 2, 3] newHeader=[1, 2, 3] return id                                        // 85
+          // eg. headers = [1, 2, 3, 4] newHeader=[1, 2, 3] return id                                     // 86
+          headerId = i;                                                                                   // 87
+          // We could maybe contain another header - so we extend the org. and use                        // 88
+          // that eg. headers = [1, 2, 3] newHeader=[1, 2, 3, 4] then                                     // 89
+          // set headers=newHeader and return id                                                          // 90
+          if (newHeader.length > minLength) {                                                             // 91
+            headers[i] = newHeader;                                                                       // 92
+          }                                                                                               // 93
+        }                                                                                                 // 94
+        // Stop when we found a match                                                                     // 95
+        if (headerId !== null) {                                                                          // 96
+          break;                                                                                          // 97
+        }                                                                                                 // 98
+      }                                                                                                   // 99
       // Or none of the above we add a new header                                                         // 100
       if (headerId === null) {                                                                            // 101
         headerId = headers.push(newHeader) - 1;                                                           // 102
@@ -294,10 +296,10 @@ MiniMax.parse = function(str) {                                                 
   return defaultMiniMax.parse(str);                                                                       // 267
 };                                                                                                        // 268
                                                                                                           // 269
-////////////////////////////////////////////////////////////////////////////////////////////////////////////     // 278
-                                                                                                                 // 279
-}).call(this);                                                                                                   // 280
-                                                                                                                 // 281
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}).call(this);
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -305,10 +307,11 @@ MiniMax.parse = function(str) {                                                 
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['ground:minimax'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['ground:minimax'] = {}, {
   MiniMax: MiniMax
-};
+});
 
 })();
-
-//# sourceMappingURL=ground_minimax.js.map

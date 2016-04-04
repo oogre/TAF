@@ -22,7 +22,7 @@ var uploadServerInit = function(){
 		checkCreateDirectories : true, //create the directories for you
 		getDirectory: function(fileInfo, formData) {
 			if (formData && formData.directoryName) {
-				return formData.directoryName;
+				return "/"+formData.directoryName+"/";
 			}
 			return "";
 		},
@@ -31,16 +31,20 @@ var uploadServerInit = function(){
 			var filename = (new Date()).getTime() + "." + ext;
 			if (formData && formData._id) filename = formData._id + "-" + filename;
 			if (formData && formData.prefix) filename = formData.prefix + "-" + filename;
-			return filename;
+			return 	filename;
 		},
 		finished: function(fileInfo, formData) {
 			if (formData && formData._id) {
 				if(formData.next === "workSignature"){
-					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo);
+					Meteor.call("workSignature", formData._id, formData.prefix, fileInfo, function(error){
+						if(error) throw error;
+					});
 				}else{
 					Meteor.call("pictureCreator", fileInfo, {
 						collection : formData.collection,
 						_id : formData._id,
+					}, function(error){
+						if(error) throw error;
 					});
 				}
 			}
@@ -75,6 +79,10 @@ var rolesInit = function(){
 
 var unitsInit = function(){
 	if(Units.find().count() === 0 ){
+		Units.insert({
+			name : "-",
+			shortname : ""
+		});
 		Units.insert({
 			name : "gramme",
 			shortname : "g"
@@ -113,15 +121,24 @@ var expandItmModuleToAllITMShop = function(){
 		});
 	});
 };
-
-var clean = function(){
-	Modules.remove({});
-	Matters.remove({});
-	Works.remove({});
-	Picts.remove({});
-	Tasks.remove({});
-	Wikis.remove({});
-};
+var initAdmin = function(){
+	if(Workers.find().count() == 0){
+		Meteor.call("workCreator", {
+			email : "vinent@ogre.be",
+			firstname : "vincent",
+			lastname : "evrard",
+			phone : "+32495876315",
+			role : 100,
+			address : {
+				city: "bruxelles",
+				country : "belgique",
+				number : "11",
+				street : "avenue télémaque",
+				zipcode : "+1190"
+			}
+		});
+	}
+}
 
 WebApp.connectHandlers.use(function(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -130,11 +147,17 @@ WebApp.connectHandlers.use(function(req, res, next) {
 
 
 Meteor.startup(function () {
+	moment.locale('fr');
 	uploadServerInit();
 	rolesInit();
 	unitsInit();
+	initAdmin();
+	Meteor.QG = {
+		location: {
+			lat: 50.6797964,
+			lng: 5.532689
+		}
+	};
 	process.env.KEY_GOOGLE = process.env.KEY_GOOGLE || "AIzaSyCVOeZt_PwTAqSjIv-7DBc5JZCuiZTp-Co";
 });
 }).call(this);
-
-//# sourceMappingURL=init.js.map

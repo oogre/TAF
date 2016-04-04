@@ -122,5 +122,3 @@ Meteor.startup(function () {
 	SyncedCron.start();
 });
 }).call(this);
-
-//# sourceMappingURL=cron.js.map

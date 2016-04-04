@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var _ = Package.underscore._;
 var MongoID = Package['mongo-id'].MongoID;
 var MongoInternals = Package.mongo.MongoInternals;
@@ -26,19 +28,19 @@ var _groundUtil, Ground;
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
                                                                      //
-/* global _groundUtil:true */                                        // 1
-/* global Ground:true */                                             // 2
-// Define the utillity scope                                         // 3
-_groundUtil = {};                                                    // 4
-                                                                     // 5
-// New ground scope                                                  // 6
-Ground = {};                                                         // 7
-                                                                     // 8
-// Meteor.Collection or Mongo.Collection                             // 9
-_groundUtil.Collection = (typeof Mongo !== 'undefined')?             // 10
-        Mongo.Collection: Meteor.Collection;                         // 11
-                                                                     // 12
-                                                                     // 13
+/* global _groundUtil:true */
+/* global Ground:true */
+// Define the utillity scope
+_groundUtil = {};
+
+// New ground scope
+Ground = {};
+
+// Meteor.Collection or Mongo.Collection
+_groundUtil.Collection = (typeof Mongo !== 'undefined')?
+        Mongo.Collection: Meteor.Collection;
+
+
 ///////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -56,8 +58,8 @@ _groundUtil.Collection = (typeof Mongo !== 'undefined')?             // 10
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
                                                                      //
-// Define server specifics                                           // 1
-                                                                     // 2
+// Define server specifics
+
 ///////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -65,11 +67,12 @@ _groundUtil.Collection = (typeof Mongo !== 'undefined')?             // 10
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['ground:util'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['ground:util'] = {}, {
   _groundUtil: _groundUtil,
   Ground: Ground
-};
+});
 
 })();
-
-//# sourceMappingURL=ground_util.js.map

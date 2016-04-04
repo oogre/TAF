@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var _ = Package.underscore._;
 var ECMAScript = Package.ecmascript.ECMAScript;
 var DDPRateLimiter = Package['ddp-rate-limiter'].DDPRateLimiter;
@@ -14,22 +16,77 @@ var DDP = Package['ddp-client'].DDP;
 var DDPServer = Package['ddp-server'].DDPServer;
 var MongoInternals = Package.mongo.MongoInternals;
 var Mongo = Package.mongo.Mongo;
-var babelHelpers = Package['babel-runtime'].babelHelpers;
+var meteorInstall = Package.modules.meteorInstall;
+var Buffer = Package.modules.Buffer;
+var process = Package.modules.process;
 var Symbol = Package['ecmascript-runtime'].Symbol;
 var Map = Package['ecmascript-runtime'].Map;
 var Set = Package['ecmascript-runtime'].Set;
+var meteorBabelHelpers = Package['babel-runtime'].meteorBabelHelpers;
 var Promise = Package.promise.Promise;
 
 /* Package-scope variables */
-var AccountsCommon, EXPIRE_TOKENS_INTERVAL_MS, CONNECTION_CLOSE_DELAY_MS, AccountsServer, Accounts, AccountsTest;
+var Accounts, EXPIRE_TOKENS_INTERVAL_MS, CONNECTION_CLOSE_DELAY_MS;
 
-(function(){
+var require = meteorInstall({"node_modules":{"meteor":{"accounts-base":{"server_main.js":["./accounts_server.js","./accounts_rate_limit.js","./url_server.js",function(require,exports,module){
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                 //
+// packages/accounts-base/server_main.js                                                                           //
+//                                                                                                                 //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                                   //
+exports.__esModule = true;                                                                                         //
+exports.AccountsServer = undefined;                                                                                //
+                                                                                                                   //
+var _accounts_server = require("./accounts_server.js");                                                            // 1
+                                                                                                                   //
+require("./accounts_rate_limit.js");                                                                               // 2
+                                                                                                                   //
+require("./url_server.js");                                                                                        // 3
+                                                                                                                   //
+/**                                                                                                                //
+ * @namespace Accounts                                                                                             //
+ * @summary The namespace for all server-side accounts-related methods.                                            //
+ */                                                                                                                //
+Accounts = new _accounts_server.AccountsServer(Meteor.server);                                                     // 9
+                                                                                                                   //
+// Users table. Don't use the normal autopublish, since we want to hide                                            //
+// some fields. Code to autopublish this is in accounts_server.js.                                                 //
+// XXX Allow users to configure this collection name.                                                              //
+                                                                                                                   //
+/**                                                                                                                //
+ * @summary A [Mongo.Collection](#collections) containing user documents.                                          //
+ * @locus Anywhere                                                                                                 //
+ * @type {Mongo.Collection}                                                                                        //
+ * @importFromPackage meteor                                                                                       //
+*/                                                                                                                 //
+Meteor.users = Accounts.users;                                                                                     // 21
+                                                                                                                   //
+exports.                                                                                                           //
+// Since this file is the main module for the server version of the                                                //
+// accounts-base package, properties of non-entry-point modules need to                                            //
+// be re-exported in order to be accessible to modules that import the                                             //
+// accounts-base package.                                                                                          //
+AccountsServer = _accounts_server.AccountsServer;                                                                  // 28
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+}],"accounts_common.js":["babel-runtime/helpers/classCallCheck",function(require,exports){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                 //
 // packages/accounts-base/accounts_common.js                                                                       //
 //                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                                   //
+exports.__esModule = true;                                                                                         //
+exports.AccountsCommon = undefined;                                                                                //
+                                                                                                                   //
+var _classCallCheck2 = require("babel-runtime/helpers/classCallCheck");                                            //
+                                                                                                                   //
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);                                                   //
+                                                                                                                   //
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }                  //
                                                                                                                    //
 /**                                                                                                                //
  * @summary Super-constructor for AccountsClient and AccountsServer.                                               //
@@ -40,9 +97,10 @@ var AccountsCommon, EXPIRE_TOKENS_INTERVAL_MS, CONNECTION_CLOSE_DELAY_MS, Accoun
  * - connection {Object} Optional DDP connection to reuse.                                                         //
  * - ddpUrl {String} Optional URL for creating a new DDP connection.                                               //
  */                                                                                                                //
-AccountsCommon = (function () {                                                                                    // 10
+                                                                                                                   //
+var AccountsCommon = exports.AccountsCommon = function () {                                                        //
   function AccountsCommon(options) {                                                                               // 11
-    babelHelpers.classCallCheck(this, AccountsCommon);                                                             //
+    (0, _classCallCheck3["default"])(this, AccountsCommon);                                                        //
                                                                                                                    //
     // Currently this is read directly by packages like accounts-password                                          //
     // and accounts-ui-unstyled.                                                                                   //
@@ -50,18 +108,18 @@ AccountsCommon = (function () {                                                 
                                                                                                                    //
     // Note that setting this.connection = null causes this.users to be a                                          //
     // LocalCollection, which is not what we want.                                                                 //
-    this.connection = undefined;                                                                                   // 18
+    this.connection = undefined;                                                                                   // 11
     this._initConnection(options || {});                                                                           // 19
                                                                                                                    //
     // There is an allow call in accounts_server.js that restricts writes to                                       //
     // this collection.                                                                                            //
-    this.users = new Mongo.Collection("users", {                                                                   // 23
+    this.users = new Mongo.Collection("users", {                                                                   // 11
       _preventAutopublish: true,                                                                                   // 24
       connection: this.connection                                                                                  // 25
     });                                                                                                            //
                                                                                                                    //
     // Callback exceptions are printed with Meteor._debug and ignored.                                             //
-    this._onLoginHook = new Hook({                                                                                 // 29
+    this._onLoginHook = new Hook({                                                                                 // 11
       bindEnvironment: false,                                                                                      // 30
       debugPrintExceptions: "onLogin callback"                                                                     // 31
     });                                                                                                            //
@@ -77,27 +135,29 @@ AccountsCommon = (function () {                                                 
    * @locus Anywhere but publish functions                                                                         //
    */                                                                                                              //
                                                                                                                    //
-  AccountsCommon.prototype.userId = (function () {                                                                 // 10
-    function userId() {                                                                                            // 44
+                                                                                                                   //
+  AccountsCommon.prototype.userId = function () {                                                                  // 10
+    function userId() {                                                                                            //
       throw new Error("userId method not implemented");                                                            // 45
     }                                                                                                              //
                                                                                                                    //
     return userId;                                                                                                 //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   /**                                                                                                              //
    * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.              //
    * @locus Anywhere but publish functions                                                                         //
    */                                                                                                              //
                                                                                                                    //
-  AccountsCommon.prototype.user = (function () {                                                                   // 10
-    function user() {                                                                                              // 52
+                                                                                                                   //
+  AccountsCommon.prototype.user = function () {                                                                    // 10
+    function user() {                                                                                              //
       var userId = this.userId();                                                                                  // 53
       return userId ? this.users.findOne(userId) : null;                                                           // 54
     }                                                                                                              //
                                                                                                                    //
     return user;                                                                                                   //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   // Set up config for the accounts system. Call this on both the client                                           //
   // and the server.                                                                                               //
@@ -135,8 +195,9 @@ AccountsCommon = (function () {                                                 
    * @param {String} options.oauthSecretKey When using the `oauth-encryption` package, the 16 byte key using to encrypt sensitive account credentials in the database, encoded in base64.  This option may only be specifed on the server.  See packages/oauth-encryption/README.md for details.
    */                                                                                                              //
                                                                                                                    //
-  AccountsCommon.prototype.config = (function () {                                                                 // 10
-    function config(options) {                                                                                     // 92
+                                                                                                                   //
+  AccountsCommon.prototype.config = function () {                                                                  // 10
+    function config(options) {                                                                                     //
       var self = this;                                                                                             // 93
                                                                                                                    //
       // We don't want users to accidentally only call Accounts.config on the                                      //
@@ -144,7 +205,7 @@ AccountsCommon = (function () {                                                 
       // the "create account" button from accounts-ui if forbidClientAccountCreation                               //
       // is set, or redirecting Google login to a specific-domain page) without                                    //
       // having their full effects.                                                                                //
-      if (Meteor.isServer) {                                                                                       // 100
+      if (Meteor.isServer) {                                                                                       // 92
         __meteor_runtime_config__.accountsConfigCalled = true;                                                     // 101
       } else if (!__meteor_runtime_config__.accountsConfigCalled) {                                                //
         // XXX would be nice to "crash" the client and replace the UI with an error                                //
@@ -155,7 +216,7 @@ AccountsCommon = (function () {                                                 
       // We need to validate the oauthSecretKey option at the time                                                 //
       // Accounts.config is called. We also deliberately don't store the                                           //
       // oauthSecretKey in Accounts._options.                                                                      //
-      if (_.has(options, "oauthSecretKey")) {                                                                      // 112
+      if (_.has(options, "oauthSecretKey")) {                                                                      // 92
         if (Meteor.isClient) throw new Error("The oauthSecretKey option may only be specified on the server");     // 113
         if (!Package["oauth-encryption"]) throw new Error("The oauth-encryption package must be loaded to set oauthSecretKey");
         Package["oauth-encryption"].OAuthEncryption.loadKey(options.oauthSecretKey);                               // 117
@@ -171,7 +232,7 @@ AccountsCommon = (function () {                                                 
       });                                                                                                          //
                                                                                                                    //
       // set values in Accounts._options                                                                           //
-      _.each(VALID_KEYS, function (key) {                                                                          // 131
+      _.each(VALID_KEYS, function (key) {                                                                          // 92
         if (key in options) {                                                                                      // 132
           if (key in self._options) {                                                                              // 133
             throw new Error("Can't set `" + key + "` more than once");                                             // 134
@@ -182,7 +243,7 @@ AccountsCommon = (function () {                                                 
     }                                                                                                              //
                                                                                                                    //
     return config;                                                                                                 //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   /**                                                                                                              //
    * @summary Register a callback to be called after a login attempt succeeds.                                     //
@@ -190,13 +251,14 @@ AccountsCommon = (function () {                                                 
    * @param {Function} func The callback to be called when login is successful.                                    //
    */                                                                                                              //
                                                                                                                    //
-  AccountsCommon.prototype.onLogin = (function () {                                                                // 10
-    function onLogin(func) {                                                                                       // 146
+                                                                                                                   //
+  AccountsCommon.prototype.onLogin = function () {                                                                 // 10
+    function onLogin(func) {                                                                                       //
       return this._onLoginHook.register(func);                                                                     // 147
     }                                                                                                              //
                                                                                                                    //
     return onLogin;                                                                                                //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   /**                                                                                                              //
    * @summary Register a callback to be called after a login attempt fails.                                        //
@@ -204,16 +266,17 @@ AccountsCommon = (function () {                                                 
    * @param {Function} func The callback to be called after the login has failed.                                  //
    */                                                                                                              //
                                                                                                                    //
-  AccountsCommon.prototype.onLoginFailure = (function () {                                                         // 10
-    function onLoginFailure(func) {                                                                                // 155
+                                                                                                                   //
+  AccountsCommon.prototype.onLoginFailure = function () {                                                          // 10
+    function onLoginFailure(func) {                                                                                //
       return this._onLoginFailureHook.register(func);                                                              // 156
     }                                                                                                              //
                                                                                                                    //
     return onLoginFailure;                                                                                         //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
-  AccountsCommon.prototype._initConnection = (function () {                                                        // 10
-    function _initConnection(options) {                                                                            // 159
+  AccountsCommon.prototype._initConnection = function () {                                                         // 10
+    function _initConnection(options) {                                                                            //
       if (!Meteor.isClient) {                                                                                      // 160
         return;                                                                                                    // 161
       }                                                                                                            //
@@ -226,7 +289,7 @@ AccountsCommon = (function () {                                                 
       // but it has to be here because it's needed to create the                                                   //
       // Meteor.users collection.                                                                                  //
                                                                                                                    //
-      if (options.connection) {                                                                                    // 172
+      if (options.connection) {                                                                                    // 159
         this.connection = options.connection;                                                                      // 173
       } else if (options.ddpUrl) {                                                                                 //
         this.connection = DDP.connect(options.ddpUrl);                                                             // 175
@@ -245,28 +308,28 @@ AccountsCommon = (function () {                                                 
     }                                                                                                              //
                                                                                                                    //
     return _initConnection;                                                                                        //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
-  AccountsCommon.prototype._getTokenLifetimeMs = (function () {                                                    // 10
-    function _getTokenLifetimeMs() {                                                                               // 192
+  AccountsCommon.prototype._getTokenLifetimeMs = function () {                                                     // 10
+    function _getTokenLifetimeMs() {                                                                               //
       return (this._options.loginExpirationInDays || DEFAULT_LOGIN_EXPIRATION_DAYS) * 24 * 60 * 60 * 1000;         // 193
     }                                                                                                              //
                                                                                                                    //
     return _getTokenLifetimeMs;                                                                                    //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
-  AccountsCommon.prototype._tokenExpiration = (function () {                                                       // 10
-    function _tokenExpiration(when) {                                                                              // 197
+  AccountsCommon.prototype._tokenExpiration = function () {                                                        // 10
+    function _tokenExpiration(when) {                                                                              //
       // We pass when through the Date constructor for backwards compatibility;                                    //
       // `when` used to be a number.                                                                               //
       return new Date(new Date(when).getTime() + this._getTokenLifetimeMs());                                      // 200
     }                                                                                                              //
                                                                                                                    //
     return _tokenExpiration;                                                                                       //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
-  AccountsCommon.prototype._tokenExpiresSoon = (function () {                                                      // 10
-    function _tokenExpiresSoon(when) {                                                                             // 203
+  AccountsCommon.prototype._tokenExpiresSoon = function () {                                                       // 10
+    function _tokenExpiresSoon(when) {                                                                             //
       var minLifetimeMs = .1 * this._getTokenLifetimeMs();                                                         // 204
       var minLifetimeCapMs = MIN_TOKEN_LIFETIME_CAP_SECS * 1000;                                                   // 205
       if (minLifetimeMs > minLifetimeCapMs) minLifetimeMs = minLifetimeCapMs;                                      // 206
@@ -274,10 +337,10 @@ AccountsCommon = (function () {                                                 
     }                                                                                                              //
                                                                                                                    //
     return _tokenExpiresSoon;                                                                                      //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   return AccountsCommon;                                                                                           //
-})();                                                                                                              //
+}();                                                                                                               //
                                                                                                                    //
 var Ap = AccountsCommon.prototype;                                                                                 // 212
                                                                                                                    //
@@ -287,60 +350,103 @@ var Ap = AccountsCommon.prototype;                                              
 /**                                                                                                                //
  * @summary Get the current user id, or `null` if no user is logged in. A reactive data source.                    //
  * @locus Anywhere but publish functions                                                                           //
+ * @importFromPackage meteor                                                                                       //
  */                                                                                                                //
-Meteor.userId = function () {                                                                                      // 221
-  return Accounts.userId();                                                                                        // 222
+Meteor.userId = function () {                                                                                      // 222
+  return Accounts.userId();                                                                                        // 223
 };                                                                                                                 //
                                                                                                                    //
 /**                                                                                                                //
  * @summary Get the current user record, or `null` if no user is logged in. A reactive data source.                //
  * @locus Anywhere but publish functions                                                                           //
+ * @importFromPackage meteor                                                                                       //
  */                                                                                                                //
-Meteor.user = function () {                                                                                        // 229
-  return Accounts.user();                                                                                          // 230
+Meteor.user = function () {                                                                                        // 231
+  return Accounts.user();                                                                                          // 232
 };                                                                                                                 //
                                                                                                                    //
 // how long (in days) until a login token expires                                                                  //
-var DEFAULT_LOGIN_EXPIRATION_DAYS = 90;                                                                            // 234
+var DEFAULT_LOGIN_EXPIRATION_DAYS = 90;                                                                            // 236
 // Clients don't try to auto-login with a token that is going to expire within                                     //
 // .1 * DEFAULT_LOGIN_EXPIRATION_DAYS, capped at MIN_TOKEN_LIFETIME_CAP_SECS.                                      //
 // Tries to avoid abrupt disconnects from expiring tokens.                                                         //
-var MIN_TOKEN_LIFETIME_CAP_SECS = 3600; // one hour                                                                // 238
+var MIN_TOKEN_LIFETIME_CAP_SECS = 3600; // one hour                                                                // 240
 // how often (in milliseconds) we check for expired tokens                                                         //
-EXPIRE_TOKENS_INTERVAL_MS = 600 * 1000; // 10 minutes                                                              // 240
+EXPIRE_TOKENS_INTERVAL_MS = 600 * 1000; // 10 minutes                                                              // 242
 // how long we wait before logging out clients when Meteor.logoutOtherClients is                                   //
 // called                                                                                                          //
-CONNECTION_CLOSE_DELAY_MS = 10 * 1000;                                                                             // 243
+CONNECTION_CLOSE_DELAY_MS = 10 * 1000;                                                                             // 245
                                                                                                                    //
 // loginServiceConfiguration and ConfigError are maintained for backwards compatibility                            //
-Meteor.startup(function () {                                                                                       // 246
-  var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                                // 247
-  Ap.loginServiceConfiguration = ServiceConfiguration.configurations;                                              // 249
-  Ap.ConfigError = ServiceConfiguration.ConfigError;                                                               // 250
+Meteor.startup(function () {                                                                                       // 248
+  var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                                // 249
+  Ap.loginServiceConfiguration = ServiceConfiguration.configurations;                                              // 251
+  Ap.ConfigError = ServiceConfiguration.ConfigError;                                                               // 252
 });                                                                                                                //
                                                                                                                    //
 // Thrown when the user cancels the login process (eg, closes an oauth                                             //
 // popup, declines retina scan, etc)                                                                               //
-var lceName = 'Accounts.LoginCancelledError';                                                                      // 255
-Ap.LoginCancelledError = Meteor.makeErrorType(lceName, function (description) {                                    // 256
-  this.message = description;                                                                                      // 259
+var lceName = 'Accounts.LoginCancelledError';                                                                      // 257
+Ap.LoginCancelledError = Meteor.makeErrorType(lceName, function (description) {                                    // 258
+  this.message = description;                                                                                      // 261
 });                                                                                                                //
-Ap.LoginCancelledError.prototype.name = lceName;                                                                   // 262
+Ap.LoginCancelledError.prototype.name = lceName;                                                                   // 264
                                                                                                                    //
 // This is used to transmit specific subclass errors over the wire. We should                                      //
 // come up with a more generic way to do this (eg, with some sort of symbolic                                      //
 // error code rather than a number).                                                                               //
-Ap.LoginCancelledError.numericError = 0x8acdc2f;                                                                   // 267
+Ap.LoginCancelledError.numericError = 0x8acdc2f;                                                                   // 269
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-}).call(this);
+}],"accounts_rate_limit.js":["./accounts_common.js",function(require){
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                                 //
+// packages/accounts-base/accounts_rate_limit.js                                                                   //
+//                                                                                                                 //
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                                   //
+var _accounts_common = require('./accounts_common.js');                                                            // 1
+                                                                                                                   //
+var Ap = _accounts_common.AccountsCommon.prototype;                                                                // 3
+var defaultRateLimiterRuleId;                                                                                      // 4
+// Removes default rate limiting rule                                                                              //
+Ap.removeDefaultRateLimit = function () {                                                                          // 6
+  var resp = DDPRateLimiter.removeRule(defaultRateLimiterRuleId);                                                  // 7
+  defaultRateLimiterRuleId = null;                                                                                 // 8
+  return resp;                                                                                                     // 9
+};                                                                                                                 //
+                                                                                                                   //
+// Add a default rule of limiting logins, creating new users and password reset                                    //
+// to 5 times every 10 seconds per connection.                                                                     //
+Ap.addDefaultRateLimit = function () {                                                                             // 14
+  if (!defaultRateLimiterRuleId) {                                                                                 // 15
+    defaultRateLimiterRuleId = DDPRateLimiter.addRule({                                                            // 16
+      userId: null,                                                                                                // 17
+      clientAddress: null,                                                                                         // 18
+      type: 'method',                                                                                              // 19
+      name: function () {                                                                                          // 20
+        function name(_name) {                                                                                     // 20
+          return _.contains(['login', 'createUser', 'resetPassword', 'forgotPassword'], _name);                    // 21
+        }                                                                                                          //
+                                                                                                                   //
+        return name;                                                                                               //
+      }(),                                                                                                         //
+      connectionId: function () {                                                                                  // 24
+        function connectionId(_connectionId) {                                                                     // 24
+          return true;                                                                                             // 25
+        }                                                                                                          //
+                                                                                                                   //
+        return connectionId;                                                                                       //
+      }()                                                                                                          //
+    }, 5, 10000);                                                                                                  //
+  }                                                                                                                //
+};                                                                                                                 //
+                                                                                                                   //
+Ap.addDefaultRateLimit();                                                                                          // 31
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
-
-(function(){
+}],"accounts_server.js":["babel-runtime/helpers/classCallCheck","babel-runtime/helpers/possibleConstructorReturn","babel-runtime/helpers/inherits","./accounts_common.js",function(require,exports){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                 //
@@ -348,69 +454,90 @@ Ap.LoginCancelledError.numericError = 0x8acdc2f;                                
 //                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                                                                                    //
+exports.__esModule = true;                                                                                         //
+exports.AccountsServer = undefined;                                                                                //
+                                                                                                                   //
+var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');                                            //
+                                                                                                                   //
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);                                                   //
+                                                                                                                   //
+var _possibleConstructorReturn2 = require('babel-runtime/helpers/possibleConstructorReturn');                      //
+                                                                                                                   //
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);                             //
+                                                                                                                   //
+var _inherits2 = require('babel-runtime/helpers/inherits');                                                        //
+                                                                                                                   //
+var _inherits3 = _interopRequireDefault(_inherits2);                                                               //
+                                                                                                                   //
+var _accounts_common = require('./accounts_common.js');                                                            // 3
+                                                                                                                   //
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }                  //
+                                                                                                                   //
 var crypto = Npm.require('crypto');                                                                                // 1
                                                                                                                    //
 /**                                                                                                                //
  * @summary Constructor for the `Accounts` namespace on the server.                                                //
  * @locus Server                                                                                                   //
- * @class                                                                                                          //
+ * @class AccountsServer                                                                                           //
  * @extends AccountsCommon                                                                                         //
  * @instancename accountsServer                                                                                    //
  * @param {Object} server A server object such as `Meteor.server`.                                                 //
  */                                                                                                                //
-AccountsServer = (function (_AccountsCommon) {                                                                     // 11
-  babelHelpers.inherits(AccountsServer, _AccountsCommon);                                                          //
+                                                                                                                   //
+var AccountsServer = exports.AccountsServer = function (_AccountsCommon) {                                         //
+  (0, _inherits3['default'])(AccountsServer, _AccountsCommon);                                                     //
                                                                                                                    //
   // Note that this constructor is less likely to be instantiated multiple                                         //
   // times than the `AccountsClient` constructor, because a single server                                          //
   // can provide only one set of methods.                                                                          //
                                                                                                                    //
-  function AccountsServer(server) {                                                                                // 15
-    babelHelpers.classCallCheck(this, AccountsServer);                                                             //
+  function AccountsServer(server) {                                                                                // 17
+    (0, _classCallCheck3['default'])(this, AccountsServer);                                                        //
                                                                                                                    //
-    _AccountsCommon.call(this);                                                                                    // 16
+    var _this = (0, _possibleConstructorReturn3['default'])(this, _AccountsCommon.call(this));                     //
                                                                                                                    //
-    this._server = server || Meteor.server;                                                                        // 18
+    _this._server = server || Meteor.server;                                                                       // 20
     // Set up the server's methods, as if by calling Meteor.methods.                                               //
-    this._initServerMethods();                                                                                     // 20
+    _this._initServerMethods();                                                                                    // 17
                                                                                                                    //
-    this._initAccountDataHooks();                                                                                  // 22
+    _this._initAccountDataHooks();                                                                                 // 24
                                                                                                                    //
     // If autopublish is on, publish these user fields. Login service                                              //
     // packages (eg accounts-google) add to these by calling                                                       //
     // addAutopublishFields.  Notably, this isn't implemented with multiple                                        //
     // publishes since DDP only merges only across top-level fields, not                                           //
     // subfields (such as 'services.facebook.accessToken')                                                         //
-    this._autopublishFields = {                                                                                    // 29
-      loggedInUser: ['profile', 'username', 'emails'],                                                             // 30
-      otherUsers: ['profile', 'username']                                                                          // 31
+    _this._autopublishFields = {                                                                                   // 17
+      loggedInUser: ['profile', 'username', 'emails'],                                                             // 32
+      otherUsers: ['profile', 'username']                                                                          // 33
     };                                                                                                             //
-    this._initServerPublications();                                                                                // 33
+    _this._initServerPublications();                                                                               // 35
                                                                                                                    //
     // connectionId -> {connection, loginToken}                                                                    //
-    this._accountData = {};                                                                                        // 36
+    _this._accountData = {};                                                                                       // 17
                                                                                                                    //
     // connection id -> observe handle for the login token that this connection is                                 //
     // currently associated with, or a number. The number indicates that we are in                                 //
     // the process of setting up the observe (using a number instead of a single                                   //
     // sentinel allows multiple attempts to set up the observe to identify which                                   //
     // one was theirs).                                                                                            //
-    this._userObservesForConnections = {};                                                                         // 43
-    this._nextUserObserveNumber = 1; // for the number described above.                                            // 44
+    _this._userObservesForConnections = {};                                                                        // 17
+    _this._nextUserObserveNumber = 1; // for the number described above.                                           // 46
                                                                                                                    //
     // list of all registered handlers.                                                                            //
-    this._loginHandlers = [];                                                                                      // 47
+    _this._loginHandlers = [];                                                                                     // 17
                                                                                                                    //
-    setupUsersCollection(this.users);                                                                              // 49
-    setupDefaultLoginHandlers(this);                                                                               // 50
-    setExpireTokensInterval(this);                                                                                 // 51
+    setupUsersCollection(_this.users);                                                                             // 51
+    setupDefaultLoginHandlers(_this);                                                                              // 52
+    setExpireTokensInterval(_this);                                                                                // 53
                                                                                                                    //
-    this._validateLoginHook = new Hook({ bindEnvironment: false });                                                // 53
-    this._validateNewUserHooks = [defaultValidateNewUserHook.bind(this)];                                          // 54
+    _this._validateLoginHook = new Hook({ bindEnvironment: false });                                               // 55
+    _this._validateNewUserHooks = [defaultValidateNewUserHook.bind(_this)];                                        // 56
                                                                                                                    //
-    this._deleteSavedTokensForAllUsersOnStartup();                                                                 // 58
+    _this._deleteSavedTokensForAllUsersOnStartup();                                                                // 60
                                                                                                                    //
-    this._skipCaseInsensitiveChecksForTest = {};                                                                   // 60
+    _this._skipCaseInsensitiveChecksForTest = {};                                                                  // 62
+    return _this;                                                                                                  //
   }                                                                                                                //
                                                                                                                    //
   ///                                                                                                              //
@@ -419,8 +546,9 @@ AccountsServer = (function (_AccountsCommon) {                                  
                                                                                                                    //
   // @override of "abstract" non-implementation in accounts_common.js                                              //
                                                                                                                    //
-  AccountsServer.prototype.userId = (function () {                                                                 // 11
-    function userId() {                                                                                            // 68
+                                                                                                                   //
+  AccountsServer.prototype.userId = function () {                                                                  // 13
+    function userId() {                                                                                            //
       // This function only works if called inside a method. In theory, it                                         //
       // could also be called from publish statements, since they also                                             //
       // have a userId associated with them. However, given that publish                                           //
@@ -430,13 +558,13 @@ AccountsServer = (function (_AccountsCommon) {                                  
       // user expects. The way to make this work in a publish is to do                                             //
       // Meteor.find(this.userId).observe and recompute when the user                                              //
       // record changes.                                                                                           //
-      var currentInvocation = DDP._CurrentInvocation.get();                                                        // 78
+      var currentInvocation = DDP._CurrentInvocation.get();                                                        // 80
       if (!currentInvocation) throw new Error("Meteor.userId can only be invoked in method calls. Use this.userId in publish functions.");
-      return currentInvocation.userId;                                                                             // 81
+      return currentInvocation.userId;                                                                             // 83
     }                                                                                                              //
                                                                                                                    //
     return userId;                                                                                                 //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   ///                                                                                                              //
   /// LOGIN HOOKS                                                                                                  //
@@ -448,14 +576,15 @@ AccountsServer = (function (_AccountsCommon) {                                  
    * @param {Function} func Called whenever a login is attempted (either successful or unsuccessful).  A login can be aborted by returning a falsy value or throwing an exception.
    */                                                                                                              //
                                                                                                                    //
-  AccountsServer.prototype.validateLoginAttempt = (function () {                                                   // 11
-    function validateLoginAttempt(func) {                                                                          // 93
+                                                                                                                   //
+  AccountsServer.prototype.validateLoginAttempt = function () {                                                    // 13
+    function validateLoginAttempt(func) {                                                                          //
       // Exceptions inside the hook callback are passed up to us.                                                  //
-      return this._validateLoginHook.register(func);                                                               // 95
+      return this._validateLoginHook.register(func);                                                               // 97
     }                                                                                                              //
                                                                                                                    //
     return validateLoginAttempt;                                                                                   //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   /**                                                                                                              //
    * @summary Set restrictions on new user creation.                                                               //
@@ -463,13 +592,14 @@ AccountsServer = (function (_AccountsCommon) {                                  
    * @param {Function} func Called whenever a new user is created. Takes the new user object, and returns true to allow the creation or false to abort.
    */                                                                                                              //
                                                                                                                    //
-  AccountsServer.prototype.validateNewUser = (function () {                                                        // 11
-    function validateNewUser(func) {                                                                               // 103
-      this._validateNewUserHooks.push(func);                                                                       // 104
+                                                                                                                   //
+  AccountsServer.prototype.validateNewUser = function () {                                                         // 13
+    function validateNewUser(func) {                                                                               //
+      this._validateNewUserHooks.push(func);                                                                       // 106
     }                                                                                                              //
                                                                                                                    //
     return validateNewUser;                                                                                        //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   ///                                                                                                              //
   /// CREATE USER HOOKS                                                                                            //
@@ -481,67 +611,70 @@ AccountsServer = (function (_AccountsCommon) {                                  
    * @param {Function} func Called whenever a new user is created. Return the new user object, or throw an `Error` to abort the creation.
    */                                                                                                              //
                                                                                                                    //
-  AccountsServer.prototype.onCreateUser = (function () {                                                           // 11
-    function onCreateUser(func) {                                                                                  // 116
-      if (this._onCreateUserHook) {                                                                                // 117
-        throw new Error("Can only call onCreateUser once");                                                        // 118
+                                                                                                                   //
+  AccountsServer.prototype.onCreateUser = function () {                                                            // 13
+    function onCreateUser(func) {                                                                                  //
+      if (this._onCreateUserHook) {                                                                                // 119
+        throw new Error("Can only call onCreateUser once");                                                        // 120
       }                                                                                                            //
                                                                                                                    //
-      this._onCreateUserHook = func;                                                                               // 121
+      this._onCreateUserHook = func;                                                                               // 123
     }                                                                                                              //
                                                                                                                    //
     return onCreateUser;                                                                                           //
-  })();                                                                                                            //
+  }();                                                                                                             //
                                                                                                                    //
   return AccountsServer;                                                                                           //
-})(AccountsCommon);                                                                                                //
+}(_accounts_common.AccountsCommon);                                                                                //
                                                                                                                    //
-var Ap = AccountsServer.prototype;                                                                                 // 125
+;                                                                                                                  // 125
+                                                                                                                   //
+var Ap = AccountsServer.prototype;                                                                                 // 127
                                                                                                                    //
 // Give each login hook callback a fresh cloned copy of the attempt                                                //
 // object, but don't clone the connection.                                                                         //
 //                                                                                                                 //
-function cloneAttemptWithConnection(connection, attempt) {                                                         // 130
-  var clonedAttempt = EJSON.clone(attempt);                                                                        // 131
-  clonedAttempt.connection = connection;                                                                           // 132
-  return clonedAttempt;                                                                                            // 133
+function cloneAttemptWithConnection(connection, attempt) {                                                         // 132
+  var clonedAttempt = EJSON.clone(attempt);                                                                        // 133
+  clonedAttempt.connection = connection;                                                                           // 134
+  return clonedAttempt;                                                                                            // 135
 }                                                                                                                  //
                                                                                                                    //
-Ap._validateLogin = function (connection, attempt) {                                                               // 136
-  this._validateLoginHook.each(function (callback) {                                                               // 137
-    var ret;                                                                                                       // 138
-    try {                                                                                                          // 139
-      ret = callback(cloneAttemptWithConnection(connection, attempt));                                             // 140
+Ap._validateLogin = function (connection, attempt) {                                                               // 138
+  this._validateLoginHook.each(function (callback) {                                                               // 139
+    var ret;                                                                                                       // 140
+    try {                                                                                                          // 141
+      ret = callback(cloneAttemptWithConnection(connection, attempt));                                             // 142
     } catch (e) {                                                                                                  //
-      attempt.allowed = false;                                                                                     // 143
+      attempt.allowed = false;                                                                                     // 145
       // XXX this means the last thrown error overrides previous error                                             //
       // messages. Maybe this is surprising to users and we should make                                            //
       // overriding errors more explicit. (see                                                                     //
       // https://github.com/meteor/meteor/issues/1960)                                                             //
-      attempt.error = e;                                                                                           // 148
-      return true;                                                                                                 // 149
+      attempt.error = e;                                                                                           // 144
+      return true;                                                                                                 // 151
     }                                                                                                              //
-    if (!ret) {                                                                                                    // 151
-      attempt.allowed = false;                                                                                     // 152
+    if (!ret) {                                                                                                    // 153
+      attempt.allowed = false;                                                                                     // 154
       // don't override a specific error provided by a previous                                                    //
       // validator or the initial attempt (eg "incorrect password").                                               //
-      if (!attempt.error) attempt.error = new Meteor.Error(403, "Login forbidden");                                // 155
+      if (!attempt.error) attempt.error = new Meteor.Error(403, "Login forbidden");                                // 153
     }                                                                                                              //
-    return true;                                                                                                   // 158
+    return true;                                                                                                   // 160
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
-Ap._successfulLogin = function (connection, attempt) {                                                             // 163
-  this._onLoginHook.each(function (callback) {                                                                     // 164
-    callback(cloneAttemptWithConnection(connection, attempt));                                                     // 165
-    return true;                                                                                                   // 166
+Ap._successfulLogin = function (connection, attempt) {                                                             // 165
+  this._onLoginHook.each(function (callback) {                                                                     // 166
+    callback(cloneAttemptWithConnection(connection, attempt));                                                     // 167
+    return true;                                                                                                   // 168
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
-Ap._failedLogin = function (connection, attempt) {                                                                 // 170
-  this._onLoginFailureHook.each(function (callback) {                                                              // 171
-    callback(cloneAttemptWithConnection(connection, attempt));                                                     // 172
-    return true;                                                                                                   // 173
+Ap._failedLogin = function (connection, attempt) {                                                                 // 172
+  this._onLoginFailureHook.each(function (callback) {                                                              // 173
+    callback(cloneAttemptWithConnection(connection, attempt));                                                     // 174
+    return true;                                                                                                   // 175
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
@@ -602,17 +735,17 @@ Ap._failedLogin = function (connection, attempt) {                              
 // result.  The `type` argument is a default, inserted into the result                                             //
 // object if not explicitly returned.                                                                              //
 //                                                                                                                 //
-var tryLoginMethod = function (type, fn) {                                                                         // 236
-  var result;                                                                                                      // 237
-  try {                                                                                                            // 238
-    result = fn();                                                                                                 // 239
+var tryLoginMethod = function tryLoginMethod(type, fn) {                                                           // 238
+  var result;                                                                                                      // 239
+  try {                                                                                                            // 240
+    result = fn();                                                                                                 // 241
   } catch (e) {                                                                                                    //
-    result = { error: e };                                                                                         // 242
+    result = { error: e };                                                                                         // 244
   }                                                                                                                //
                                                                                                                    //
-  if (result && !result.type && type) result.type = type;                                                          // 245
+  if (result && !result.type && type) result.type = type;                                                          // 247
                                                                                                                    //
-  return result;                                                                                                   // 248
+  return result;                                                                                                   // 250
 };                                                                                                                 //
                                                                                                                    //
 // Log in a user on a connection.                                                                                  //
@@ -627,12 +760,12 @@ var tryLoginMethod = function (type, fn) {                                      
 // indicates that the login token has already been inserted into the                                               //
 // database and doesn't need to be inserted again.  (It's used by the                                              //
 // "resume" login handler).                                                                                        //
-Ap._loginUser = function (methodInvocation, userId, stampedLoginToken) {                                           // 264
-  var self = this;                                                                                                 // 265
+Ap._loginUser = function (methodInvocation, userId, stampedLoginToken) {                                           // 266
+  var self = this;                                                                                                 // 267
                                                                                                                    //
-  if (!stampedLoginToken) {                                                                                        // 267
-    stampedLoginToken = self._generateStampedLoginToken();                                                         // 268
-    self._insertLoginToken(userId, stampedLoginToken);                                                             // 269
+  if (!stampedLoginToken) {                                                                                        // 269
+    stampedLoginToken = self._generateStampedLoginToken();                                                         // 270
+    self._insertLoginToken(userId, stampedLoginToken);                                                             // 271
   }                                                                                                                //
                                                                                                                    //
   // This order (and the avoidance of yields) is important to make                                                 //
@@ -641,16 +774,16 @@ Ap._loginUser = function (methodInvocation, userId, stampedLoginToken) {        
   // the login token on the connection (not that there is                                                          //
   // currently a public API for reading the login token on a                                                       //
   // connection).                                                                                                  //
-  Meteor._noYieldsAllowed(function () {                                                                            // 278
-    self._setLoginToken(userId, methodInvocation.connection, self._hashLoginToken(stampedLoginToken.token));       // 279
+  Meteor._noYieldsAllowed(function () {                                                                            // 266
+    self._setLoginToken(userId, methodInvocation.connection, self._hashLoginToken(stampedLoginToken.token));       // 281
   });                                                                                                              //
                                                                                                                    //
-  methodInvocation.setUserId(userId);                                                                              // 286
+  methodInvocation.setUserId(userId);                                                                              // 288
                                                                                                                    //
-  return {                                                                                                         // 288
-    id: userId,                                                                                                    // 289
-    token: stampedLoginToken.token,                                                                                // 290
-    tokenExpires: self._tokenExpiration(stampedLoginToken.when)                                                    // 291
+  return {                                                                                                         // 290
+    id: userId,                                                                                                    // 291
+    token: stampedLoginToken.token,                                                                                // 292
+    tokenExpires: self._tokenExpiration(stampedLoginToken.when)                                                    // 293
   };                                                                                                               //
 };                                                                                                                 //
                                                                                                                    //
@@ -661,38 +794,38 @@ Ap._loginUser = function (methodInvocation, userId, stampedLoginToken) {        
 // If the login is allowed and isn't aborted by a validate login hook                                              //
 // callback, log in the user.                                                                                      //
 //                                                                                                                 //
-Ap._attemptLogin = function (methodInvocation, methodName, methodArgs, result) {                                   // 303
-  if (!result) throw new Error("result is required");                                                              // 309
+Ap._attemptLogin = function (methodInvocation, methodName, methodArgs, result) {                                   // 305
+  if (!result) throw new Error("result is required");                                                              // 311
                                                                                                                    //
   // XXX A programming error in a login handler can lead to this occuring, and                                     //
   // then we don't call onLogin or onLoginFailure callbacks. Should                                                //
   // tryLoginMethod catch this case and turn it into an error?                                                     //
-  if (!result.userId && !result.error) throw new Error("A login method must specify a userId or an error");        // 315
+  if (!result.userId && !result.error) throw new Error("A login method must specify a userId or an error");        // 310
                                                                                                                    //
-  var user;                                                                                                        // 318
-  if (result.userId) user = this.users.findOne(result.userId);                                                     // 319
+  var user;                                                                                                        // 320
+  if (result.userId) user = this.users.findOne(result.userId);                                                     // 321
                                                                                                                    //
-  var attempt = {                                                                                                  // 322
-    type: result.type || "unknown",                                                                                // 323
-    allowed: !!(result.userId && !result.error),                                                                   // 324
-    methodName: methodName,                                                                                        // 325
-    methodArguments: _.toArray(methodArgs)                                                                         // 326
+  var attempt = {                                                                                                  // 324
+    type: result.type || "unknown",                                                                                // 325
+    allowed: !!(result.userId && !result.error),                                                                   // 326
+    methodName: methodName,                                                                                        // 327
+    methodArguments: _.toArray(methodArgs)                                                                         // 328
   };                                                                                                               //
-  if (result.error) attempt.error = result.error;                                                                  // 328
-  if (user) attempt.user = user;                                                                                   // 330
+  if (result.error) attempt.error = result.error;                                                                  // 330
+  if (user) attempt.user = user;                                                                                   // 332
                                                                                                                    //
   // _validateLogin may mutate `attempt` by adding an error and changing allowed                                   //
   // to false, but that's the only change it can make (and the user's callbacks                                    //
   // only get a clone of `attempt`).                                                                               //
-  this._validateLogin(methodInvocation.connection, attempt);                                                       // 336
+  this._validateLogin(methodInvocation.connection, attempt);                                                       // 310
                                                                                                                    //
-  if (attempt.allowed) {                                                                                           // 338
+  if (attempt.allowed) {                                                                                           // 340
     var ret = _.extend(this._loginUser(methodInvocation, result.userId, result.stampedLoginToken), result.options || {});
-    this._successfulLogin(methodInvocation.connection, attempt);                                                   // 347
-    return ret;                                                                                                    // 348
+    this._successfulLogin(methodInvocation.connection, attempt);                                                   // 349
+    return ret;                                                                                                    // 350
   } else {                                                                                                         //
-    this._failedLogin(methodInvocation.connection, attempt);                                                       // 351
-    throw attempt.error;                                                                                           // 352
+    this._failedLogin(methodInvocation.connection, attempt);                                                       // 353
+    throw attempt.error;                                                                                           // 354
   }                                                                                                                //
 };                                                                                                                 //
                                                                                                                    //
@@ -700,8 +833,8 @@ Ap._attemptLogin = function (methodInvocation, methodName, methodArgs, result) {
 // Ensure that thrown exceptions are caught and that login hook                                                    //
 // callbacks are still called.                                                                                     //
 //                                                                                                                 //
-Ap._loginMethod = function (methodInvocation, methodName, methodArgs, type, fn) {                                  // 361
-  return this._attemptLogin(methodInvocation, methodName, methodArgs, tryLoginMethod(type, fn));                   // 368
+Ap._loginMethod = function (methodInvocation, methodName, methodArgs, type, fn) {                                  // 363
+  return this._attemptLogin(methodInvocation, methodName, methodArgs, tryLoginMethod(type, fn));                   // 370
 };                                                                                                                 //
                                                                                                                    //
 // Report a login attempt failed outside the context of a normal login                                             //
@@ -711,25 +844,25 @@ Ap._loginMethod = function (methodInvocation, methodName, methodArgs, type, fn) 
 // is no corresponding method for a successful login; methods that can                                             //
 // succeed at logging a user in should always be actual login methods                                              //
 // (using either Accounts._loginMethod or Accounts.registerLoginHandler).                                          //
-Ap._reportLoginFailure = function (methodInvocation, methodName, methodArgs, result) {                             // 384
-  var attempt = {                                                                                                  // 390
-    type: result.type || "unknown",                                                                                // 391
-    allowed: false,                                                                                                // 392
-    error: result.error,                                                                                           // 393
-    methodName: methodName,                                                                                        // 394
-    methodArguments: _.toArray(methodArgs)                                                                         // 395
+Ap._reportLoginFailure = function (methodInvocation, methodName, methodArgs, result) {                             // 386
+  var attempt = {                                                                                                  // 392
+    type: result.type || "unknown",                                                                                // 393
+    allowed: false,                                                                                                // 394
+    error: result.error,                                                                                           // 395
+    methodName: methodName,                                                                                        // 396
+    methodArguments: _.toArray(methodArgs)                                                                         // 397
   };                                                                                                               //
                                                                                                                    //
-  if (result.userId) {                                                                                             // 398
-    attempt.user = this.users.findOne(result.userId);                                                              // 399
+  if (result.userId) {                                                                                             // 400
+    attempt.user = this.users.findOne(result.userId);                                                              // 401
   }                                                                                                                //
                                                                                                                    //
-  this._validateLogin(methodInvocation.connection, attempt);                                                       // 402
-  this._failedLogin(methodInvocation.connection, attempt);                                                         // 403
+  this._validateLogin(methodInvocation.connection, attempt);                                                       // 404
+  this._failedLogin(methodInvocation.connection, attempt);                                                         // 405
                                                                                                                    //
   // _validateLogin may mutate attempt to set a new error message. Return                                          //
   // the modified version.                                                                                         //
-  return attempt;                                                                                                  // 407
+  return attempt;                                                                                                  // 391
 };                                                                                                                 //
                                                                                                                    //
 ///                                                                                                                //
@@ -749,15 +882,15 @@ Ap._reportLoginFailure = function (methodInvocation, methodName, methodArgs, res
 // - `undefined`, meaning don't handle;                                                                            //
 // - a login method result object                                                                                  //
                                                                                                                    //
-Ap.registerLoginHandler = function (name, handler) {                                                               // 428
-  if (!handler) {                                                                                                  // 429
-    handler = name;                                                                                                // 430
-    name = null;                                                                                                   // 431
+Ap.registerLoginHandler = function (name, handler) {                                                               // 430
+  if (!handler) {                                                                                                  // 431
+    handler = name;                                                                                                // 432
+    name = null;                                                                                                   // 433
   }                                                                                                                //
                                                                                                                    //
-  this._loginHandlers.push({                                                                                       // 434
-    name: name,                                                                                                    // 435
-    handler: handler                                                                                               // 436
+  this._loginHandlers.push({                                                                                       // 436
+    name: name,                                                                                                    // 437
+    handler: handler                                                                                               // 438
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
@@ -775,26 +908,26 @@ Ap.registerLoginHandler = function (name, handler) {                            
 // Try all of the registered login handlers until one of them doesn't                                              //
 // return `undefined`, meaning it handled this call to `login`. Return                                             //
 // that return value.                                                                                              //
-Ap._runLoginHandlers = function (methodInvocation, options) {                                                      // 455
-  for (var i = 0; i < this._loginHandlers.length; ++i) {                                                           // 456
-    var handler = this._loginHandlers[i];                                                                          // 457
+Ap._runLoginHandlers = function (methodInvocation, options) {                                                      // 457
+  for (var i = 0; i < this._loginHandlers.length; ++i) {                                                           // 458
+    var handler = this._loginHandlers[i];                                                                          // 459
                                                                                                                    //
-    var result = tryLoginMethod(handler.name, function () {                                                        // 459
-      return handler.handler.call(methodInvocation, options);                                                      // 462
+    var result = tryLoginMethod(handler.name, function () {                                                        // 461
+      return handler.handler.call(methodInvocation, options);                                                      // 464
     });                                                                                                            //
                                                                                                                    //
-    if (result) {                                                                                                  // 466
-      return result;                                                                                               // 467
+    if (result) {                                                                                                  // 468
+      return result;                                                                                               // 469
     }                                                                                                              //
                                                                                                                    //
-    if (result !== undefined) {                                                                                    // 470
-      throw new Meteor.Error(400, "A login handler should return a result or undefined");                          // 471
+    if (result !== undefined) {                                                                                    // 472
+      throw new Meteor.Error(400, "A login handler should return a result or undefined");                          // 473
     }                                                                                                              //
   }                                                                                                                //
                                                                                                                    //
-  return {                                                                                                         // 475
-    type: null,                                                                                                    // 476
-    error: new Meteor.Error(400, "Unrecognized options for login request")                                         // 477
+  return {                                                                                                         // 477
+    type: null,                                                                                                    // 478
+    error: new Meteor.Error(400, "Unrecognized options for login request")                                         // 479
   };                                                                                                               //
 };                                                                                                                 //
                                                                                                                    //
@@ -806,46 +939,46 @@ Ap._runLoginHandlers = function (methodInvocation, options) {                   
 // Any connections associated with old-style unhashed tokens will be                                               //
 // in the process of becoming associated with hashed tokens and then                                               //
 // they'll get closed.                                                                                             //
-Ap.destroyToken = function (userId, loginToken) {                                                                  // 489
-  this.users.update(userId, {                                                                                      // 490
-    $pull: {                                                                                                       // 491
-      "services.resume.loginTokens": {                                                                             // 492
-        $or: [{ hashedToken: loginToken }, { token: loginToken }]                                                  // 493
+Ap.destroyToken = function (userId, loginToken) {                                                                  // 491
+  this.users.update(userId, {                                                                                      // 492
+    $pull: {                                                                                                       // 493
+      "services.resume.loginTokens": {                                                                             // 494
+        $or: [{ hashedToken: loginToken }, { token: loginToken }]                                                  // 495
       }                                                                                                            //
     }                                                                                                              //
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
-Ap._initServerMethods = function () {                                                                              // 502
+Ap._initServerMethods = function () {                                                                              // 504
   // The methods created in this function need to be created here so that                                          //
   // this variable is available in their scope.                                                                    //
-  var accounts = this;                                                                                             // 505
+  var accounts = this;                                                                                             // 507
                                                                                                                    //
   // This object will be populated with methods and then passed to                                                 //
   // accounts._server.methods further below.                                                                       //
-  var methods = {};                                                                                                // 509
+  var methods = {};                                                                                                // 504
                                                                                                                    //
   // @returns {Object|null}                                                                                        //
   //   If successful, returns {token: reconnectToken, id: userId}                                                  //
   //   If unsuccessful (for example, if the user closed the oauth login popup),                                    //
   //     throws an error describing the reason                                                                     //
-  methods.login = function (options) {                                                                             // 515
-    var self = this;                                                                                               // 516
+  methods.login = function (options) {                                                                             // 504
+    var self = this;                                                                                               // 518
                                                                                                                    //
     // Login handlers should really also check whatever field they look at in                                      //
     // options, but we don't enforce it.                                                                           //
-    check(options, Object);                                                                                        // 520
+    check(options, Object);                                                                                        // 517
                                                                                                                    //
-    var result = accounts._runLoginHandlers(self, options);                                                        // 522
+    var result = accounts._runLoginHandlers(self, options);                                                        // 524
                                                                                                                    //
-    return accounts._attemptLogin(self, "login", arguments, result);                                               // 524
+    return accounts._attemptLogin(self, "login", arguments, result);                                               // 526
   };                                                                                                               //
                                                                                                                    //
-  methods.logout = function () {                                                                                   // 527
-    var token = accounts._getLoginToken(this.connection.id);                                                       // 528
-    accounts._setLoginToken(this.userId, this.connection, null);                                                   // 529
-    if (token && this.userId) accounts.destroyToken(this.userId, token);                                           // 530
-    this.setUserId(null);                                                                                          // 532
+  methods.logout = function () {                                                                                   // 529
+    var token = accounts._getLoginToken(this.connection.id);                                                       // 530
+    accounts._setLoginToken(this.userId, this.connection, null);                                                   // 531
+    if (token && this.userId) accounts.destroyToken(this.userId, token);                                           // 532
+    this.setUserId(null);                                                                                          // 534
   };                                                                                                               //
                                                                                                                    //
   // Delete all the current user's tokens and close all open connections logged                                    //
@@ -865,43 +998,43 @@ Ap._initServerMethods = function () {                                           
   // this method directly.                                                                                         //
   //                                                                                                               //
   // @returns {Object} Object with token and tokenExpires keys.                                                    //
-  methods.logoutOtherClients = function () {                                                                       // 552
-    var self = this;                                                                                               // 553
-    var user = accounts.users.findOne(self.userId, {                                                               // 554
-      fields: {                                                                                                    // 555
-        "services.resume.loginTokens": true                                                                        // 556
+  methods.logoutOtherClients = function () {                                                                       // 504
+    var self = this;                                                                                               // 555
+    var user = accounts.users.findOne(self.userId, {                                                               // 556
+      fields: {                                                                                                    // 557
+        "services.resume.loginTokens": true                                                                        // 558
       }                                                                                                            //
     });                                                                                                            //
-    if (user) {                                                                                                    // 559
+    if (user) {                                                                                                    // 561
       // Save the current tokens in the database to be deleted in                                                  //
       // CONNECTION_CLOSE_DELAY_MS ms. This gives other connections in the                                         //
       // caller's browser time to find the fresh token in localStorage. We save                                    //
       // the tokens in the database in case we crash before actually deleting                                      //
       // them.                                                                                                     //
-      var tokens = user.services.resume.loginTokens;                                                               // 565
-      var newToken = accounts._generateStampedLoginToken();                                                        // 566
-      var userId = self.userId;                                                                                    // 567
-      accounts.users.update(userId, {                                                                              // 568
-        $set: {                                                                                                    // 569
-          "services.resume.loginTokensToDelete": tokens,                                                           // 570
-          "services.resume.haveLoginTokensToDelete": true                                                          // 571
+      var tokens = user.services.resume.loginTokens;                                                               // 567
+      var newToken = accounts._generateStampedLoginToken();                                                        // 568
+      var userId = self.userId;                                                                                    // 569
+      accounts.users.update(userId, {                                                                              // 570
+        $set: {                                                                                                    // 571
+          "services.resume.loginTokensToDelete": tokens,                                                           // 572
+          "services.resume.haveLoginTokensToDelete": true                                                          // 573
         },                                                                                                         //
-        $push: { "services.resume.loginTokens": accounts._hashStampedToken(newToken) }                             // 573
+        $push: { "services.resume.loginTokens": accounts._hashStampedToken(newToken) }                             // 575
       });                                                                                                          //
-      Meteor.setTimeout(function () {                                                                              // 575
+      Meteor.setTimeout(function () {                                                                              // 577
         // The observe on Meteor.users will take care of closing the connections                                   //
         // associated with `tokens`.                                                                               //
-        accounts._deleteSavedTokensForUser(userId, tokens);                                                        // 578
+        accounts._deleteSavedTokensForUser(userId, tokens);                                                        // 580
       }, accounts._noConnectionCloseDelayForTest ? 0 : CONNECTION_CLOSE_DELAY_MS);                                 //
       // We do not set the login token on this connection, but instead the                                         //
       // observe closes the connection and the client will reconnect with the                                      //
       // new token.                                                                                                //
-      return {                                                                                                     // 584
-        token: newToken.token,                                                                                     // 585
-        tokenExpires: accounts._tokenExpiration(newToken.when)                                                     // 586
+      return {                                                                                                     // 561
+        token: newToken.token,                                                                                     // 587
+        tokenExpires: accounts._tokenExpiration(newToken.when)                                                     // 588
       };                                                                                                           //
     } else {                                                                                                       //
-      throw new Meteor.Error("You are not logged in.");                                                            // 589
+      throw new Meteor.Error("You are not logged in.");                                                            // 591
     }                                                                                                              //
   };                                                                                                               //
                                                                                                                    //
@@ -913,133 +1046,133 @@ Ap._initServerMethods = function () {                                           
   // @returns Object                                                                                               //
   //   If successful, returns { token: <new token>, id: <user id>,                                                 //
   //   tokenExpires: <expiration date> }.                                                                          //
-  methods.getNewToken = function () {                                                                              // 601
-    var self = this;                                                                                               // 602
-    var user = accounts.users.findOne(self.userId, {                                                               // 603
-      fields: { "services.resume.loginTokens": 1 }                                                                 // 604
+  methods.getNewToken = function () {                                                                              // 504
+    var self = this;                                                                                               // 604
+    var user = accounts.users.findOne(self.userId, {                                                               // 605
+      fields: { "services.resume.loginTokens": 1 }                                                                 // 606
     });                                                                                                            //
-    if (!self.userId || !user) {                                                                                   // 606
-      throw new Meteor.Error("You are not logged in.");                                                            // 607
+    if (!self.userId || !user) {                                                                                   // 608
+      throw new Meteor.Error("You are not logged in.");                                                            // 609
     }                                                                                                              //
     // Be careful not to generate a new token that has a later                                                     //
     // expiration than the curren token. Otherwise, a bad guy with a                                               //
     // stolen token could use this method to stop his stolen token from                                            //
     // ever expiring.                                                                                              //
-    var currentHashedToken = accounts._getLoginToken(self.connection.id);                                          // 613
-    var currentStampedToken = _.find(user.services.resume.loginTokens, function (stampedToken) {                   // 614
-      return stampedToken.hashedToken === currentHashedToken;                                                      // 617
+    var currentHashedToken = accounts._getLoginToken(self.connection.id);                                          // 603
+    var currentStampedToken = _.find(user.services.resume.loginTokens, function (stampedToken) {                   // 616
+      return stampedToken.hashedToken === currentHashedToken;                                                      // 619
     });                                                                                                            //
-    if (!currentStampedToken) {                                                                                    // 620
+    if (!currentStampedToken) {                                                                                    // 622
       // safety belt: this should never happen                                                                     //
-      throw new Meteor.Error("Invalid login token");                                                               // 621
+      throw new Meteor.Error("Invalid login token");                                                               // 623
     }                                                                                                              //
-    var newStampedToken = accounts._generateStampedLoginToken();                                                   // 623
-    newStampedToken.when = currentStampedToken.when;                                                               // 624
-    accounts._insertLoginToken(self.userId, newStampedToken);                                                      // 625
-    return accounts._loginUser(self, self.userId, newStampedToken);                                                // 626
+    var newStampedToken = accounts._generateStampedLoginToken();                                                   // 625
+    newStampedToken.when = currentStampedToken.when;                                                               // 626
+    accounts._insertLoginToken(self.userId, newStampedToken);                                                      // 627
+    return accounts._loginUser(self, self.userId, newStampedToken);                                                // 628
   };                                                                                                               //
                                                                                                                    //
   // Removes all tokens except the token associated with the current                                               //
   // connection. Throws an error if the connection is not logged                                                   //
   // in. Returns nothing on success.                                                                               //
-  methods.removeOtherTokens = function () {                                                                        // 632
-    var self = this;                                                                                               // 633
-    if (!self.userId) {                                                                                            // 634
-      throw new Meteor.Error("You are not logged in.");                                                            // 635
+  methods.removeOtherTokens = function () {                                                                        // 504
+    var self = this;                                                                                               // 635
+    if (!self.userId) {                                                                                            // 636
+      throw new Meteor.Error("You are not logged in.");                                                            // 637
     }                                                                                                              //
-    var currentToken = accounts._getLoginToken(self.connection.id);                                                // 637
-    accounts.users.update(self.userId, {                                                                           // 638
-      $pull: {                                                                                                     // 639
-        "services.resume.loginTokens": { hashedToken: { $ne: currentToken } }                                      // 640
+    var currentToken = accounts._getLoginToken(self.connection.id);                                                // 639
+    accounts.users.update(self.userId, {                                                                           // 640
+      $pull: {                                                                                                     // 641
+        "services.resume.loginTokens": { hashedToken: { $ne: currentToken } }                                      // 642
       }                                                                                                            //
     });                                                                                                            //
   };                                                                                                               //
                                                                                                                    //
   // Allow a one-time configuration for a login service. Modifications                                             //
   // to this collection are also allowed in insecure mode.                                                         //
-  methods.configureLoginService = function (options) {                                                             // 647
-    check(options, Match.ObjectIncluding({ service: String }));                                                    // 648
+  methods.configureLoginService = function (options) {                                                             // 504
+    check(options, Match.ObjectIncluding({ service: String }));                                                    // 650
     // Don't let random users configure a service we haven't added yet (so                                         //
     // that when we do later add it, it's set up with their configuration                                          //
     // instead of ours).                                                                                           //
     // XXX if service configuration is oauth-specific then this code should                                        //
     //     be in accounts-oauth; if it's not then the registry should be                                           //
     //     in this package                                                                                         //
-    if (!(accounts.oauth && _.contains(accounts.oauth.serviceNames(), options.service))) {                         // 655
-      throw new Meteor.Error(403, "Service unknown");                                                              // 657
+    if (!(accounts.oauth && _.contains(accounts.oauth.serviceNames(), options.service))) {                         // 649
+      throw new Meteor.Error(403, "Service unknown");                                                              // 659
     }                                                                                                              //
                                                                                                                    //
-    var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                              // 660
+    var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                              // 662
     if (ServiceConfiguration.configurations.findOne({ service: options.service })) throw new Meteor.Error(403, "Service " + options.service + " already configured");
                                                                                                                    //
     if (_.has(options, "secret") && usingOAuthEncryption()) options.secret = OAuthEncryption.seal(options.secret);
                                                                                                                    //
-    ServiceConfiguration.configurations.insert(options);                                                           // 668
+    ServiceConfiguration.configurations.insert(options);                                                           // 670
   };                                                                                                               //
                                                                                                                    //
-  accounts._server.methods(methods);                                                                               // 671
+  accounts._server.methods(methods);                                                                               // 673
 };                                                                                                                 //
                                                                                                                    //
-Ap._initAccountDataHooks = function () {                                                                           // 674
-  var accounts = this;                                                                                             // 675
+Ap._initAccountDataHooks = function () {                                                                           // 676
+  var accounts = this;                                                                                             // 677
                                                                                                                    //
-  accounts._server.onConnection(function (connection) {                                                            // 677
-    accounts._accountData[connection.id] = {                                                                       // 678
-      connection: connection                                                                                       // 679
+  accounts._server.onConnection(function (connection) {                                                            // 679
+    accounts._accountData[connection.id] = {                                                                       // 680
+      connection: connection                                                                                       // 681
     };                                                                                                             //
                                                                                                                    //
-    connection.onClose(function () {                                                                               // 682
-      accounts._removeTokenFromConnection(connection.id);                                                          // 683
-      delete accounts._accountData[connection.id];                                                                 // 684
+    connection.onClose(function () {                                                                               // 684
+      accounts._removeTokenFromConnection(connection.id);                                                          // 685
+      delete accounts._accountData[connection.id];                                                                 // 686
     });                                                                                                            //
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
-Ap._initServerPublications = function () {                                                                         // 689
-  var accounts = this;                                                                                             // 690
+Ap._initServerPublications = function () {                                                                         // 691
+  var accounts = this;                                                                                             // 692
                                                                                                                    //
   // Publish all login service configuration fields other than secret.                                             //
-  accounts._server.publish("meteor.loginServiceConfiguration", function () {                                       // 693
-    var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                              // 694
-    return ServiceConfiguration.configurations.find({}, { fields: { secret: 0 } });                                // 696
+  accounts._server.publish("meteor.loginServiceConfiguration", function () {                                       // 691
+    var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                              // 696
+    return ServiceConfiguration.configurations.find({}, { fields: { secret: 0 } });                                // 698
   }, { is_auto: true }); // not techincally autopublish, but stops the warning.                                    //
                                                                                                                    //
   // Publish the current user's record to the client.                                                              //
-  accounts._server.publish(null, function () {                                                                     // 700
-    if (this.userId) {                                                                                             // 701
-      return accounts.users.find({                                                                                 // 702
-        _id: this.userId                                                                                           // 703
+  accounts._server.publish(null, function () {                                                                     // 691
+    if (this.userId) {                                                                                             // 703
+      return accounts.users.find({                                                                                 // 704
+        _id: this.userId                                                                                           // 705
       }, {                                                                                                         //
-        fields: {                                                                                                  // 705
-          profile: 1,                                                                                              // 706
-          username: 1,                                                                                             // 707
-          emails: 1                                                                                                // 708
+        fields: {                                                                                                  // 707
+          profile: 1,                                                                                              // 708
+          username: 1,                                                                                             // 709
+          emails: 1                                                                                                // 710
         }                                                                                                          //
       });                                                                                                          //
     } else {                                                                                                       //
-      return null;                                                                                                 // 712
+      return null;                                                                                                 // 714
     }                                                                                                              //
   }, /*suppress autopublish warning*/{ is_auto: true });                                                           //
                                                                                                                    //
   // Use Meteor.startup to give other packages a chance to call                                                    //
   // addAutopublishFields.                                                                                         //
-  Package.autopublish && Meteor.startup(function () {                                                              // 718
+  Package.autopublish && Meteor.startup(function () {                                                              // 691
     // ['profile', 'username'] -> {profile: 1, username: 1}                                                        //
-    var toFieldSelector = function (fields) {                                                                      // 720
-      return _.object(_.map(fields, function (field) {                                                             // 721
-        return [field, 1];                                                                                         // 722
+    var toFieldSelector = function toFieldSelector(fields) {                                                       // 722
+      return _.object(_.map(fields, function (field) {                                                             // 723
+        return [field, 1];                                                                                         // 724
       }));                                                                                                         //
     };                                                                                                             //
                                                                                                                    //
-    accounts._server.publish(null, function () {                                                                   // 726
-      if (this.userId) {                                                                                           // 727
-        return accounts.users.find({                                                                               // 728
-          _id: this.userId                                                                                         // 729
+    accounts._server.publish(null, function () {                                                                   // 728
+      if (this.userId) {                                                                                           // 729
+        return accounts.users.find({                                                                               // 730
+          _id: this.userId                                                                                         // 731
         }, {                                                                                                       //
-          fields: toFieldSelector(accounts._autopublishFields.loggedInUser)                                        // 731
+          fields: toFieldSelector(accounts._autopublishFields.loggedInUser)                                        // 733
         });                                                                                                        //
       } else {                                                                                                     //
-        return null;                                                                                               // 734
+        return null;                                                                                               // 736
       }                                                                                                            //
     }, /*suppress autopublish warning*/{ is_auto: true });                                                         //
                                                                                                                    //
@@ -1048,13 +1181,13 @@ Ap._initServerPublications = function () {                                      
     // run-time performance every time a user document is changed (eg someone                                      //
     // logging in). If this is a problem, we can instead write a manual publish                                    //
     // function which filters out fields based on 'this.userId'.                                                   //
-    accounts._server.publish(null, function () {                                                                   // 743
-      var selector = this.userId ? {                                                                               // 744
-        _id: { $ne: this.userId }                                                                                  // 745
+    accounts._server.publish(null, function () {                                                                   // 720
+      var selector = this.userId ? {                                                                               // 746
+        _id: { $ne: this.userId }                                                                                  // 747
       } : {};                                                                                                      //
                                                                                                                    //
-      return accounts.users.find(selector, {                                                                       // 748
-        fields: toFieldSelector(accounts._autopublishFields.otherUsers)                                            // 749
+      return accounts.users.find(selector, {                                                                       // 750
+        fields: toFieldSelector(accounts._autopublishFields.otherUsers)                                            // 751
       });                                                                                                          //
     }, /*suppress autopublish warning*/{ is_auto: true });                                                         //
   });                                                                                                              //
@@ -1067,9 +1200,9 @@ Ap._initServerPublications = function () {                                      
 // @param opts {Object} with:                                                                                      //
 //   - forLoggedInUser {Array} Array of fields published to the logged-in user                                     //
 //   - forOtherUsers {Array} Array of fields published to users that aren't logged in                              //
-Ap.addAutopublishFields = function (opts) {                                                                        // 762
-  this._autopublishFields.loggedInUser.push.apply(this._autopublishFields.loggedInUser, opts.forLoggedInUser);     // 763
-  this._autopublishFields.otherUsers.push.apply(this._autopublishFields.otherUsers, opts.forOtherUsers);           // 765
+Ap.addAutopublishFields = function (opts) {                                                                        // 764
+  this._autopublishFields.loggedInUser.push.apply(this._autopublishFields.loggedInUser, opts.forLoggedInUser);     // 765
+  this._autopublishFields.otherUsers.push.apply(this._autopublishFields.otherUsers, opts.forOtherUsers);           // 767
 };                                                                                                                 //
                                                                                                                    //
 ///                                                                                                                //
@@ -1078,19 +1211,19 @@ Ap.addAutopublishFields = function (opts) {                                     
                                                                                                                    //
 // HACK: This is used by 'meteor-accounts' to get the loginToken for a                                             //
 // connection. Maybe there should be a public way to do that.                                                      //
-Ap._getAccountData = function (connectionId, field) {                                                              // 775
-  var data = this._accountData[connectionId];                                                                      // 776
-  return data && data[field];                                                                                      // 777
+Ap._getAccountData = function (connectionId, field) {                                                              // 777
+  var data = this._accountData[connectionId];                                                                      // 778
+  return data && data[field];                                                                                      // 779
 };                                                                                                                 //
                                                                                                                    //
-Ap._setAccountData = function (connectionId, field, value) {                                                       // 780
-  var data = this._accountData[connectionId];                                                                      // 781
+Ap._setAccountData = function (connectionId, field, value) {                                                       // 782
+  var data = this._accountData[connectionId];                                                                      // 783
                                                                                                                    //
   // safety belt. shouldn't happen. accountData is set in onConnection,                                            //
   // we don't have a connectionId until it is set.                                                                 //
-  if (!data) return;                                                                                               // 785
+  if (!data) return;                                                                                               // 782
                                                                                                                    //
-  if (value === undefined) delete data[field];else data[field] = value;                                            // 788
+  if (value === undefined) delete data[field];else data[field] = value;                                            // 790
 };                                                                                                                 //
                                                                                                                    //
 ///                                                                                                                //
@@ -1098,81 +1231,81 @@ Ap._setAccountData = function (connectionId, field, value) {                    
 ///                                                                                                                //
 /// support reconnecting using a meteor login token                                                                //
                                                                                                                    //
-Ap._hashLoginToken = function (loginToken) {                                                                       // 800
-  var hash = crypto.createHash('sha256');                                                                          // 801
-  hash.update(loginToken);                                                                                         // 802
-  return hash.digest('base64');                                                                                    // 803
+Ap._hashLoginToken = function (loginToken) {                                                                       // 802
+  var hash = crypto.createHash('sha256');                                                                          // 803
+  hash.update(loginToken);                                                                                         // 804
+  return hash.digest('base64');                                                                                    // 805
 };                                                                                                                 //
                                                                                                                    //
 // {token, when} => {hashedToken, when}                                                                            //
-Ap._hashStampedToken = function (stampedToken) {                                                                   // 808
-  return _.extend(_.omit(stampedToken, 'token'), {                                                                 // 809
-    hashedToken: this._hashLoginToken(stampedToken.token)                                                          // 810
+Ap._hashStampedToken = function (stampedToken) {                                                                   // 810
+  return _.extend(_.omit(stampedToken, 'token'), {                                                                 // 811
+    hashedToken: this._hashLoginToken(stampedToken.token)                                                          // 812
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
 // Using $addToSet avoids getting an index error if another client                                                 //
 // logging in simultaneously has already inserted the new hashed                                                   //
 // token.                                                                                                          //
-Ap._insertHashedLoginToken = function (userId, hashedToken, query) {                                               // 818
-  query = query ? _.clone(query) : {};                                                                             // 819
-  query._id = userId;                                                                                              // 820
-  this.users.update(query, {                                                                                       // 821
-    $addToSet: {                                                                                                   // 822
-      "services.resume.loginTokens": hashedToken                                                                   // 823
+Ap._insertHashedLoginToken = function (userId, hashedToken, query) {                                               // 820
+  query = query ? _.clone(query) : {};                                                                             // 821
+  query._id = userId;                                                                                              // 822
+  this.users.update(query, {                                                                                       // 823
+    $addToSet: {                                                                                                   // 824
+      "services.resume.loginTokens": hashedToken                                                                   // 825
     }                                                                                                              //
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
 // Exported for tests.                                                                                             //
-Ap._insertLoginToken = function (userId, stampedToken, query) {                                                    // 830
-  this._insertHashedLoginToken(userId, this._hashStampedToken(stampedToken), query);                               // 831
+Ap._insertLoginToken = function (userId, stampedToken, query) {                                                    // 832
+  this._insertHashedLoginToken(userId, this._hashStampedToken(stampedToken), query);                               // 833
 };                                                                                                                 //
                                                                                                                    //
-Ap._clearAllLoginTokens = function (userId) {                                                                      // 839
-  this.users.update(userId, {                                                                                      // 840
-    $set: {                                                                                                        // 841
-      'services.resume.loginTokens': []                                                                            // 842
+Ap._clearAllLoginTokens = function (userId) {                                                                      // 841
+  this.users.update(userId, {                                                                                      // 842
+    $set: {                                                                                                        // 843
+      'services.resume.loginTokens': []                                                                            // 844
     }                                                                                                              //
   });                                                                                                              //
 };                                                                                                                 //
                                                                                                                    //
 // test hook                                                                                                       //
-Ap._getUserObserve = function (connectionId) {                                                                     // 848
-  return this._userObservesForConnections[connectionId];                                                           // 849
+Ap._getUserObserve = function (connectionId) {                                                                     // 850
+  return this._userObservesForConnections[connectionId];                                                           // 851
 };                                                                                                                 //
                                                                                                                    //
 // Clean up this connection's association with the token: that is, stop                                            //
 // the observe that we started when we associated the connection with                                              //
 // this token.                                                                                                     //
-Ap._removeTokenFromConnection = function (connectionId) {                                                          // 855
-  if (_.has(this._userObservesForConnections, connectionId)) {                                                     // 856
-    var observe = this._userObservesForConnections[connectionId];                                                  // 857
-    if (typeof observe === 'number') {                                                                             // 858
+Ap._removeTokenFromConnection = function (connectionId) {                                                          // 857
+  if (_.has(this._userObservesForConnections, connectionId)) {                                                     // 858
+    var observe = this._userObservesForConnections[connectionId];                                                  // 859
+    if (typeof observe === 'number') {                                                                             // 860
       // We're in the process of setting up an observe for this connection. We                                     //
       // can't clean up that observe yet, but if we delete the placeholder for                                     //
       // this connection, then the observe will get cleaned up as soon as it has                                   //
       // been set up.                                                                                              //
-      delete this._userObservesForConnections[connectionId];                                                       // 863
-    } else {                                                                                                       //
       delete this._userObservesForConnections[connectionId];                                                       // 865
-      observe.stop();                                                                                              // 866
+    } else {                                                                                                       //
+      delete this._userObservesForConnections[connectionId];                                                       // 867
+      observe.stop();                                                                                              // 868
     }                                                                                                              //
   }                                                                                                                //
 };                                                                                                                 //
                                                                                                                    //
-Ap._getLoginToken = function (connectionId) {                                                                      // 871
-  return this._getAccountData(connectionId, 'loginToken');                                                         // 872
+Ap._getLoginToken = function (connectionId) {                                                                      // 873
+  return this._getAccountData(connectionId, 'loginToken');                                                         // 874
 };                                                                                                                 //
                                                                                                                    //
 // newToken is a hashed token.                                                                                     //
-Ap._setLoginToken = function (userId, connection, newToken) {                                                      // 876
-  var self = this;                                                                                                 // 877
+Ap._setLoginToken = function (userId, connection, newToken) {                                                      // 878
+  var self = this;                                                                                                 // 879
                                                                                                                    //
-  self._removeTokenFromConnection(connection.id);                                                                  // 879
-  self._setAccountData(connection.id, 'loginToken', newToken);                                                     // 880
+  self._removeTokenFromConnection(connection.id);                                                                  // 881
+  self._setAccountData(connection.id, 'loginToken', newToken);                                                     // 882
                                                                                                                    //
-  if (newToken) {                                                                                                  // 882
+  if (newToken) {                                                                                                  // 884
     // Set up an observe for this token. If the token goes away, we need                                           //
     // to close the connection.  We defer the observe because there's                                              //
     // no need for it to be on the critical path for login; we just need                                           //
@@ -1186,34 +1319,42 @@ Ap._setLoginToken = function (userId, connection, newToken) {                   
     // handle (unless the placeholder has been deleted or replaced by a                                            //
     // different placehold number, signifying that the connection was closed                                       //
     // already -- in this case we just clean up the observe that we started).                                      //
-    var myObserveNumber = ++self._nextUserObserveNumber;                                                           // 896
-    self._userObservesForConnections[connection.id] = myObserveNumber;                                             // 897
-    Meteor.defer(function () {                                                                                     // 898
+    var myObserveNumber = ++self._nextUserObserveNumber;                                                           // 898
+    self._userObservesForConnections[connection.id] = myObserveNumber;                                             // 899
+    Meteor.defer(function () {                                                                                     // 900
       // If something else happened on this connection in the meantime (it got                                     //
       // closed, or another call to _setLoginToken happened), just do                                              //
       // nothing. We don't need to start an observe for an old connection or old                                   //
       // token.                                                                                                    //
-      if (self._userObservesForConnections[connection.id] !== myObserveNumber) {                                   // 903
-        return;                                                                                                    // 904
+      if (self._userObservesForConnections[connection.id] !== myObserveNumber) {                                   // 905
+        return;                                                                                                    // 906
       }                                                                                                            //
                                                                                                                    //
-      var foundMatchingUser;                                                                                       // 907
+      var foundMatchingUser;                                                                                       // 909
       // Because we upgrade unhashed login tokens to hashed tokens at                                              //
       // login time, sessions will only be logged in with a hashed                                                 //
       // token. Thus we only need to observe hashed tokens here.                                                   //
-      var observe = self.users.find({                                                                              // 911
-        _id: userId,                                                                                               // 912
-        'services.resume.loginTokens.hashedToken': newToken                                                        // 913
+      var observe = self.users.find({                                                                              // 900
+        _id: userId,                                                                                               // 914
+        'services.resume.loginTokens.hashedToken': newToken                                                        // 915
       }, { fields: { _id: 1 } }).observeChanges({                                                                  //
-        added: function () {                                                                                       // 915
-          foundMatchingUser = true;                                                                                // 916
-        },                                                                                                         //
-        removed: function () {                                                                                     // 918
-          connection.close();                                                                                      // 919
-          // The onClose callback for the connection takes care of                                                 //
-          // cleaning up the observe handle and any other state we have                                            //
-          // lying around.                                                                                         //
-        }                                                                                                          //
+        added: function () {                                                                                       // 917
+          function added() {                                                                                       // 917
+            foundMatchingUser = true;                                                                              // 918
+          }                                                                                                        //
+                                                                                                                   //
+          return added;                                                                                            //
+        }(),                                                                                                       //
+        removed: function () {                                                                                     // 920
+          function removed() {                                                                                     // 920
+            connection.close();                                                                                    // 921
+            // The onClose callback for the connection takes care of                                               //
+            // cleaning up the observe handle and any other state we have                                          //
+            // lying around.                                                                                       //
+          }                                                                                                        // 920
+                                                                                                                   //
+          return removed;                                                                                          //
+        }()                                                                                                        //
       });                                                                                                          //
                                                                                                                    //
       // If the user ran another login or logout command we were waiting for the                                   //
@@ -1224,123 +1365,123 @@ Ap._setLoginToken = function (userId, connection, newToken) {                   
       // Similarly, if the connection was already closed, then the onClose                                         //
       // callback would have called _removeTokenFromConnection and there won't                                     //
       // be an entry in _userObservesForConnections. We can stop the observe.                                      //
-      if (self._userObservesForConnections[connection.id] !== myObserveNumber) {                                   // 934
-        observe.stop();                                                                                            // 935
-        return;                                                                                                    // 936
+      if (self._userObservesForConnections[connection.id] !== myObserveNumber) {                                   // 900
+        observe.stop();                                                                                            // 937
+        return;                                                                                                    // 938
       }                                                                                                            //
                                                                                                                    //
-      self._userObservesForConnections[connection.id] = observe;                                                   // 939
+      self._userObservesForConnections[connection.id] = observe;                                                   // 941
                                                                                                                    //
-      if (!foundMatchingUser) {                                                                                    // 941
+      if (!foundMatchingUser) {                                                                                    // 943
         // We've set up an observe on the user associated with `newToken`,                                         //
         // so if the new token is removed from the database, we'll close                                           //
         // the connection. But the token might have already been deleted                                           //
         // before we set up the observe, which wouldn't have closed the                                            //
         // connection because the observe wasn't running yet.                                                      //
-        connection.close();                                                                                        // 947
+        connection.close();                                                                                        // 949
       }                                                                                                            //
     });                                                                                                            //
   }                                                                                                                //
 };                                                                                                                 //
                                                                                                                    //
-function setupDefaultLoginHandlers(accounts) {                                                                     // 953
-  accounts.registerLoginHandler("resume", function (options) {                                                     // 954
-    return defaultResumeLoginHandler.call(this, accounts, options);                                                // 955
+function setupDefaultLoginHandlers(accounts) {                                                                     // 955
+  accounts.registerLoginHandler("resume", function (options) {                                                     // 956
+    return defaultResumeLoginHandler.call(this, accounts, options);                                                // 957
   });                                                                                                              //
 }                                                                                                                  //
                                                                                                                    //
 // Login handler for resume tokens.                                                                                //
-function defaultResumeLoginHandler(accounts, options) {                                                            // 960
-  if (!options.resume) return undefined;                                                                           // 961
+function defaultResumeLoginHandler(accounts, options) {                                                            // 962
+  if (!options.resume) return undefined;                                                                           // 963
                                                                                                                    //
-  check(options.resume, String);                                                                                   // 964
+  check(options.resume, String);                                                                                   // 966
                                                                                                                    //
-  var hashedToken = accounts._hashLoginToken(options.resume);                                                      // 966
+  var hashedToken = accounts._hashLoginToken(options.resume);                                                      // 968
                                                                                                                    //
   // First look for just the new-style hashed login token, to avoid                                                //
   // sending the unhashed token to the database in a query if we don't                                             //
   // need to.                                                                                                      //
-  var user = accounts.users.findOne({ "services.resume.loginTokens.hashedToken": hashedToken });                   // 971
+  var user = accounts.users.findOne({ "services.resume.loginTokens.hashedToken": hashedToken });                   // 962
                                                                                                                    //
-  if (!user) {                                                                                                     // 974
+  if (!user) {                                                                                                     // 976
     // If we didn't find the hashed login token, try also looking for                                              //
     // the old-style unhashed token.  But we need to look for either                                               //
     // the old-style token OR the new-style token, because another                                                 //
     // client connection logging in simultaneously might have already                                              //
     // converted the token.                                                                                        //
-    user = accounts.users.findOne({                                                                                // 980
+    user = accounts.users.findOne({                                                                                // 982
       $or: [{ "services.resume.loginTokens.hashedToken": hashedToken }, { "services.resume.loginTokens.token": options.resume }]
     });                                                                                                            //
   }                                                                                                                //
                                                                                                                    //
-  if (!user) return {                                                                                              // 988
-    error: new Meteor.Error(403, "You've been logged out by the server. Please log in again.")                     // 990
+  if (!user) return {                                                                                              // 990
+    error: new Meteor.Error(403, "You've been logged out by the server. Please log in again.")                     // 992
   };                                                                                                               //
                                                                                                                    //
   // Find the token, which will either be an object with fields                                                    //
   // {hashedToken, when} for a hashed token or {token, when} for an                                                //
   // unhashed token.                                                                                               //
-  var oldUnhashedStyleToken;                                                                                       // 996
-  var token = _.find(user.services.resume.loginTokens, function (token) {                                          // 997
-    return token.hashedToken === hashedToken;                                                                      // 998
+  var oldUnhashedStyleToken;                                                                                       // 962
+  var token = _.find(user.services.resume.loginTokens, function (token) {                                          // 999
+    return token.hashedToken === hashedToken;                                                                      // 1000
   });                                                                                                              //
-  if (token) {                                                                                                     // 1000
-    oldUnhashedStyleToken = false;                                                                                 // 1001
+  if (token) {                                                                                                     // 1002
+    oldUnhashedStyleToken = false;                                                                                 // 1003
   } else {                                                                                                         //
-    token = _.find(user.services.resume.loginTokens, function (token) {                                            // 1003
-      return token.token === options.resume;                                                                       // 1004
+    token = _.find(user.services.resume.loginTokens, function (token) {                                            // 1005
+      return token.token === options.resume;                                                                       // 1006
     });                                                                                                            //
-    oldUnhashedStyleToken = true;                                                                                  // 1006
+    oldUnhashedStyleToken = true;                                                                                  // 1008
   }                                                                                                                //
                                                                                                                    //
-  var tokenExpires = accounts._tokenExpiration(token.when);                                                        // 1009
-  if (new Date() >= tokenExpires) return {                                                                         // 1010
-    userId: user._id,                                                                                              // 1012
-    error: new Meteor.Error(403, "Your session has expired. Please log in again.")                                 // 1013
+  var tokenExpires = accounts._tokenExpiration(token.when);                                                        // 1011
+  if (new Date() >= tokenExpires) return {                                                                         // 1012
+    userId: user._id,                                                                                              // 1014
+    error: new Meteor.Error(403, "Your session has expired. Please log in again.")                                 // 1015
   };                                                                                                               //
                                                                                                                    //
   // Update to a hashed token when an unhashed token is encountered.                                               //
-  if (oldUnhashedStyleToken) {                                                                                     // 1017
+  if (oldUnhashedStyleToken) {                                                                                     // 962
     // Only add the new hashed token if the old unhashed token still                                               //
     // exists (this avoids resurrecting the token if it was deleted                                                //
     // after we read it).  Using $addToSet avoids getting an index                                                 //
     // error if another client logging in simultaneously has already                                               //
     // inserted the new hashed token.                                                                              //
-    accounts.users.update({                                                                                        // 1023
-      _id: user._id,                                                                                               // 1025
-      "services.resume.loginTokens.token": options.resume                                                          // 1026
+    accounts.users.update({                                                                                        // 1025
+      _id: user._id,                                                                                               // 1027
+      "services.resume.loginTokens.token": options.resume                                                          // 1028
     }, { $addToSet: {                                                                                              //
-        "services.resume.loginTokens": {                                                                           // 1029
-          "hashedToken": hashedToken,                                                                              // 1030
-          "when": token.when                                                                                       // 1031
+        "services.resume.loginTokens": {                                                                           // 1031
+          "hashedToken": hashedToken,                                                                              // 1032
+          "when": token.when                                                                                       // 1033
         }                                                                                                          //
       } });                                                                                                        //
                                                                                                                    //
     // Remove the old token *after* adding the new, since otherwise                                                //
     // another client trying to login between our removing the old and                                             //
     // adding the new wouldn't find a token to login with.                                                         //
-    accounts.users.update(user._id, {                                                                              // 1039
-      $pull: {                                                                                                     // 1040
-        "services.resume.loginTokens": { "token": options.resume }                                                 // 1041
+    accounts.users.update(user._id, {                                                                              // 1019
+      $pull: {                                                                                                     // 1042
+        "services.resume.loginTokens": { "token": options.resume }                                                 // 1043
       }                                                                                                            //
     });                                                                                                            //
   }                                                                                                                //
                                                                                                                    //
-  return {                                                                                                         // 1046
-    userId: user._id,                                                                                              // 1047
-    stampedLoginToken: {                                                                                           // 1048
-      token: options.resume,                                                                                       // 1049
-      when: token.when                                                                                             // 1050
+  return {                                                                                                         // 1048
+    userId: user._id,                                                                                              // 1049
+    stampedLoginToken: {                                                                                           // 1050
+      token: options.resume,                                                                                       // 1051
+      when: token.when                                                                                             // 1052
     }                                                                                                              //
   };                                                                                                               //
 }                                                                                                                  //
                                                                                                                    //
 // (Also used by Meteor Accounts server and tests).                                                                //
 //                                                                                                                 //
-Ap._generateStampedLoginToken = function () {                                                                      // 1057
-  return {                                                                                                         // 1058
-    token: Random.secret(),                                                                                        // 1059
-    when: new Date()                                                                                               // 1060
+Ap._generateStampedLoginToken = function () {                                                                      // 1059
+  return {                                                                                                         // 1060
+    token: Random.secret(),                                                                                        // 1061
+    when: new Date()                                                                                               // 1062
   };                                                                                                               //
 };                                                                                                                 //
                                                                                                                    //
@@ -1355,50 +1496,50 @@ Ap._generateStampedLoginToken = function () {                                   
 // tests. oldestValidDate is simulate expiring tokens without waiting                                              //
 // for them to actually expire. userId is used by tests to only expire                                             //
 // tokens for the test user.                                                                                       //
-Ap._expireTokens = function (oldestValidDate, userId) {                                                            // 1075
-  var tokenLifetimeMs = this._getTokenLifetimeMs();                                                                // 1076
+Ap._expireTokens = function (oldestValidDate, userId) {                                                            // 1077
+  var tokenLifetimeMs = this._getTokenLifetimeMs();                                                                // 1078
                                                                                                                    //
   // when calling from a test with extra arguments, you must specify both!                                         //
-  if (oldestValidDate && !userId || !oldestValidDate && userId) {                                                  // 1079
-    throw new Error("Bad test. Must specify both oldestValidDate and userId.");                                    // 1080
+  if (oldestValidDate && !userId || !oldestValidDate && userId) {                                                  // 1077
+    throw new Error("Bad test. Must specify both oldestValidDate and userId.");                                    // 1082
   }                                                                                                                //
                                                                                                                    //
-  oldestValidDate = oldestValidDate || new Date(new Date() - tokenLifetimeMs);                                     // 1083
-  var userFilter = userId ? { _id: userId } : {};                                                                  // 1085
+  oldestValidDate = oldestValidDate || new Date(new Date() - tokenLifetimeMs);                                     // 1085
+  var userFilter = userId ? { _id: userId } : {};                                                                  // 1087
                                                                                                                    //
   // Backwards compatible with older versions of meteor that stored login token                                    //
   // timestamps as numbers.                                                                                        //
-  this.users.update(_.extend(userFilter, {                                                                         // 1090
+  this.users.update(_.extend(userFilter, {                                                                         // 1077
     $or: [{ "services.resume.loginTokens.when": { $lt: oldestValidDate } }, { "services.resume.loginTokens.when": { $lt: +oldestValidDate } }]
   }), {                                                                                                            //
-    $pull: {                                                                                                       // 1096
-      "services.resume.loginTokens": {                                                                             // 1097
-        $or: [{ when: { $lt: oldestValidDate } }, { when: { $lt: +oldestValidDate } }]                             // 1098
+    $pull: {                                                                                                       // 1098
+      "services.resume.loginTokens": {                                                                             // 1099
+        $or: [{ when: { $lt: oldestValidDate } }, { when: { $lt: +oldestValidDate } }]                             // 1100
       }                                                                                                            //
     }                                                                                                              //
   }, { multi: true });                                                                                             //
   // The observe on Meteor.users will take care of closing connections for                                         //
   // expired tokens.                                                                                               //
-};                                                                                                                 //
+};                                                                                                                 // 1077
                                                                                                                    //
 // @override from accounts_common.js                                                                               //
-Ap.config = function (options) {                                                                                   // 1110
+Ap.config = function (options) {                                                                                   // 1112
   // Call the overridden implementation of the method.                                                             //
-  var superResult = AccountsCommon.prototype.config.apply(this, arguments);                                        // 1112
+  var superResult = _accounts_common.AccountsCommon.prototype.config.apply(this, arguments);                       // 1114
                                                                                                                    //
   // If the user set loginExpirationInDays to null, then we need to clear the                                      //
   // timer that periodically expires tokens.                                                                       //
   if (_.has(this._options, "loginExpirationInDays") && this._options.loginExpirationInDays === null && this.expireTokenInterval) {
-    Meteor.clearInterval(this.expireTokenInterval);                                                                // 1119
-    this.expireTokenInterval = null;                                                                               // 1120
+    Meteor.clearInterval(this.expireTokenInterval);                                                                // 1121
+    this.expireTokenInterval = null;                                                                               // 1122
   }                                                                                                                //
                                                                                                                    //
-  return superResult;                                                                                              // 1123
+  return superResult;                                                                                              // 1125
 };                                                                                                                 //
                                                                                                                    //
-function setExpireTokensInterval(accounts) {                                                                       // 1126
-  accounts.expireTokenInterval = Meteor.setInterval(function () {                                                  // 1127
-    accounts._expireTokens();                                                                                      // 1128
+function setExpireTokensInterval(accounts) {                                                                       // 1128
+  accounts.expireTokenInterval = Meteor.setInterval(function () {                                                  // 1129
+    accounts._expireTokens();                                                                                      // 1130
   }, EXPIRE_TOKENS_INTERVAL_MS);                                                                                   //
 }                                                                                                                  //
                                                                                                                    //
@@ -1406,10 +1547,10 @@ function setExpireTokensInterval(accounts) {                                    
 /// OAuth Encryption Support                                                                                       //
 ///                                                                                                                //
                                                                                                                    //
-var OAuthEncryption = Package["oauth-encryption"] && Package["oauth-encryption"].OAuthEncryption;                  // 1137
+var OAuthEncryption = Package["oauth-encryption"] && Package["oauth-encryption"].OAuthEncryption;                  // 1139
                                                                                                                    //
-function usingOAuthEncryption() {                                                                                  // 1141
-  return OAuthEncryption && OAuthEncryption.keyIsLoaded();                                                         // 1142
+function usingOAuthEncryption() {                                                                                  // 1143
+  return OAuthEncryption && OAuthEncryption.keyIsLoaded();                                                         // 1144
 }                                                                                                                  //
                                                                                                                    //
 // OAuth service data is temporarily stored in the pending credentials                                             //
@@ -1419,11 +1560,11 @@ function usingOAuthEncryption() {                                               
 // user id included when storing the service data permanently in                                                   //
 // the users collection.                                                                                           //
 //                                                                                                                 //
-function pinEncryptedFieldsToUser(serviceData, userId) {                                                           // 1153
-  _.each(_.keys(serviceData), function (key) {                                                                     // 1154
-    var value = serviceData[key];                                                                                  // 1155
+function pinEncryptedFieldsToUser(serviceData, userId) {                                                           // 1155
+  _.each(_.keys(serviceData), function (key) {                                                                     // 1156
+    var value = serviceData[key];                                                                                  // 1157
     if (OAuthEncryption && OAuthEncryption.isSealed(value)) value = OAuthEncryption.seal(OAuthEncryption.open(value), userId);
-    serviceData[key] = value;                                                                                      // 1158
+    serviceData[key] = value;                                                                                      // 1160
   });                                                                                                              //
 }                                                                                                                  //
                                                                                                                    //
@@ -1436,23 +1577,23 @@ function pinEncryptedFieldsToUser(serviceData, userId) {                        
 // block in the app code will run after this accounts-base startup                                                 //
 // block.  Perhaps we need a post-startup callback?                                                                //
                                                                                                                    //
-Meteor.startup(function () {                                                                                       // 1172
-  if (!usingOAuthEncryption()) {                                                                                   // 1173
-    return;                                                                                                        // 1174
+Meteor.startup(function () {                                                                                       // 1174
+  if (!usingOAuthEncryption()) {                                                                                   // 1175
+    return;                                                                                                        // 1176
   }                                                                                                                //
                                                                                                                    //
-  var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                                // 1177
+  var ServiceConfiguration = Package['service-configuration'].ServiceConfiguration;                                // 1179
                                                                                                                    //
-  ServiceConfiguration.configurations.find({                                                                       // 1180
-    $and: [{                                                                                                       // 1181
-      secret: { $exists: true }                                                                                    // 1182
+  ServiceConfiguration.configurations.find({                                                                       // 1182
+    $and: [{                                                                                                       // 1183
+      secret: { $exists: true }                                                                                    // 1184
     }, {                                                                                                           //
-      "secret.algorithm": { $exists: false }                                                                       // 1184
+      "secret.algorithm": { $exists: false }                                                                       // 1186
     }]                                                                                                             //
   }).forEach(function (config) {                                                                                   //
-    ServiceConfiguration.configurations.update(config._id, {                                                       // 1187
-      $set: {                                                                                                      // 1188
-        secret: OAuthEncryption.seal(config.secret)                                                                // 1189
+    ServiceConfiguration.configurations.update(config._id, {                                                       // 1189
+      $set: {                                                                                                      // 1190
+        secret: OAuthEncryption.seal(config.secret)                                                                // 1191
       }                                                                                                            //
     });                                                                                                            //
   });                                                                                                              //
@@ -1460,13 +1601,13 @@ Meteor.startup(function () {                                                    
                                                                                                                    //
 // XXX see comment on Accounts.createUser in passwords_server about adding a                                       //
 // second "server options" argument.                                                                               //
-function defaultCreateUserHook(options, user) {                                                                    // 1197
-  if (options.profile) user.profile = options.profile;                                                             // 1198
-  return user;                                                                                                     // 1200
+function defaultCreateUserHook(options, user) {                                                                    // 1199
+  if (options.profile) user.profile = options.profile;                                                             // 1200
+  return user;                                                                                                     // 1202
 }                                                                                                                  //
                                                                                                                    //
 // Called by accounts-password                                                                                     //
-Ap.insertUserDoc = function (options, user) {                                                                      // 1204
+Ap.insertUserDoc = function (options, user) {                                                                      // 1206
   // - clone user document, to protect from modification                                                           //
   // - add createdAt timestamp                                                                                     //
   // - prepare an _id, so that you can modify other collections (eg                                                //
@@ -1479,75 +1620,75 @@ Ap.insertUserDoc = function (options, user) {                                   
   // the user document (in which you can modify its contents), and                                                 //
   // one that gets called after (in which you should change other                                                  //
   // collections)                                                                                                  //
-  user = _.extend({                                                                                                // 1217
-    createdAt: new Date(),                                                                                         // 1218
-    _id: Random.id()                                                                                               // 1219
+  user = _.extend({                                                                                                // 1219
+    createdAt: new Date(),                                                                                         // 1220
+    _id: Random.id()                                                                                               // 1221
   }, user);                                                                                                        //
                                                                                                                    //
-  if (user.services) {                                                                                             // 1222
-    _.each(user.services, function (serviceData) {                                                                 // 1223
-      pinEncryptedFieldsToUser(serviceData, user._id);                                                             // 1224
+  if (user.services) {                                                                                             // 1224
+    _.each(user.services, function (serviceData) {                                                                 // 1225
+      pinEncryptedFieldsToUser(serviceData, user._id);                                                             // 1226
     });                                                                                                            //
   }                                                                                                                //
                                                                                                                    //
-  var fullUser;                                                                                                    // 1228
-  if (this._onCreateUserHook) {                                                                                    // 1229
-    fullUser = this._onCreateUserHook(options, user);                                                              // 1230
+  var fullUser;                                                                                                    // 1230
+  if (this._onCreateUserHook) {                                                                                    // 1231
+    fullUser = this._onCreateUserHook(options, user);                                                              // 1232
                                                                                                                    //
     // This is *not* part of the API. We need this because we can't isolate                                        //
     // the global server environment between tests, meaning we can't test                                          //
     // both having a create user hook set and not having one set.                                                  //
-    if (fullUser === 'TEST DEFAULT HOOK') fullUser = defaultCreateUserHook(options, user);                         // 1235
+    if (fullUser === 'TEST DEFAULT HOOK') fullUser = defaultCreateUserHook(options, user);                         // 1231
   } else {                                                                                                         //
-    fullUser = defaultCreateUserHook(options, user);                                                               // 1238
+    fullUser = defaultCreateUserHook(options, user);                                                               // 1240
   }                                                                                                                //
                                                                                                                    //
-  _.each(this._validateNewUserHooks, function (hook) {                                                             // 1241
-    if (!hook(fullUser)) throw new Meteor.Error(403, "User validation failed");                                    // 1242
+  _.each(this._validateNewUserHooks, function (hook) {                                                             // 1243
+    if (!hook(fullUser)) throw new Meteor.Error(403, "User validation failed");                                    // 1244
   });                                                                                                              //
                                                                                                                    //
-  var userId;                                                                                                      // 1246
-  try {                                                                                                            // 1247
-    userId = this.users.insert(fullUser);                                                                          // 1248
+  var userId;                                                                                                      // 1248
+  try {                                                                                                            // 1249
+    userId = this.users.insert(fullUser);                                                                          // 1250
   } catch (e) {                                                                                                    //
     // XXX string parsing sucks, maybe                                                                             //
     // https://jira.mongodb.org/browse/SERVER-3069 will get fixed one day                                          //
-    if (e.name !== 'MongoError') throw e;                                                                          // 1252
-    if (e.code !== 11000) throw e;                                                                                 // 1253
-    if (e.err.indexOf('emails.address') !== -1) throw new Meteor.Error(403, "Email already exists.");              // 1254
-    if (e.err.indexOf('username') !== -1) throw new Meteor.Error(403, "Username already exists.");                 // 1256
+    if (e.name !== 'MongoError') throw e;                                                                          // 1254
+    if (e.code !== 11000) throw e;                                                                                 // 1255
+    if (e.err.indexOf('emails.address') !== -1) throw new Meteor.Error(403, "Email already exists.");              // 1256
+    if (e.err.indexOf('username') !== -1) throw new Meteor.Error(403, "Username already exists.");                 // 1258
     // XXX better error reporting for services.facebook.id duplicate, etc                                          //
-    throw e;                                                                                                       // 1259
+    throw e;                                                                                                       // 1251
   }                                                                                                                //
-  return userId;                                                                                                   // 1261
+  return userId;                                                                                                   // 1263
 };                                                                                                                 //
                                                                                                                    //
 // Helper function: returns false if email does not match company domain from                                      //
 // the configuration.                                                                                              //
-Ap._testEmailDomain = function (email) {                                                                           // 1266
-  var domain = this._options.restrictCreationByEmailDomain;                                                        // 1267
+Ap._testEmailDomain = function (email) {                                                                           // 1268
+  var domain = this._options.restrictCreationByEmailDomain;                                                        // 1269
   return !domain || _.isFunction(domain) && domain(email) || _.isString(domain) && new RegExp('@' + Meteor._escapeRegExp(domain) + '$', 'i').test(email);
 };                                                                                                                 //
                                                                                                                    //
 // Validate new user's email or Google/Facebook/GitHub account's email                                             //
-function defaultValidateNewUserHook(user) {                                                                        // 1275
-  var self = this;                                                                                                 // 1276
-  var domain = self._options.restrictCreationByEmailDomain;                                                        // 1277
-  if (!domain) return true;                                                                                        // 1278
+function defaultValidateNewUserHook(user) {                                                                        // 1277
+  var self = this;                                                                                                 // 1278
+  var domain = self._options.restrictCreationByEmailDomain;                                                        // 1279
+  if (!domain) return true;                                                                                        // 1280
                                                                                                                    //
-  var emailIsGood = false;                                                                                         // 1281
-  if (!_.isEmpty(user.emails)) {                                                                                   // 1282
-    emailIsGood = _.any(user.emails, function (email) {                                                            // 1283
-      return self._testEmailDomain(email.address);                                                                 // 1284
+  var emailIsGood = false;                                                                                         // 1283
+  if (!_.isEmpty(user.emails)) {                                                                                   // 1284
+    emailIsGood = _.any(user.emails, function (email) {                                                            // 1285
+      return self._testEmailDomain(email.address);                                                                 // 1286
     });                                                                                                            //
   } else if (!_.isEmpty(user.services)) {                                                                          //
     // Find any email of any service and check it                                                                  //
-    emailIsGood = _.any(user.services, function (service) {                                                        // 1288
-      return service.email && self._testEmailDomain(service.email);                                                // 1289
+    emailIsGood = _.any(user.services, function (service) {                                                        // 1290
+      return service.email && self._testEmailDomain(service.email);                                                // 1291
     });                                                                                                            //
   }                                                                                                                //
                                                                                                                    //
-  if (emailIsGood) return true;                                                                                    // 1293
+  if (emailIsGood) return true;                                                                                    // 1295
                                                                                                                    //
   if (_.isString(domain)) throw new Meteor.Error(403, "@" + domain + " email required");else throw new Meteor.Error(403, "Email doesn't match the criteria.");
 }                                                                                                                  //
@@ -1567,15 +1708,15 @@ function defaultValidateNewUserHook(user) {                                     
 // @returns {Object} Object with token and id keys, like the result                                                //
 //        of the "login" method.                                                                                   //
 //                                                                                                                 //
-Ap.updateOrCreateUserFromExternalService = function (serviceName, serviceData, options) {                          // 1317
-  options = _.clone(options || {});                                                                                // 1322
+Ap.updateOrCreateUserFromExternalService = function (serviceName, serviceData, options) {                          // 1319
+  options = _.clone(options || {});                                                                                // 1324
                                                                                                                    //
   if (serviceName === "password" || serviceName === "resume") throw new Error("Can't use updateOrCreateUserFromExternalService with internal service " + serviceName);
-  if (!_.has(serviceData, 'id')) throw new Error("Service data for service " + serviceName + " must include id");  // 1328
+  if (!_.has(serviceData, 'id')) throw new Error("Service data for service " + serviceName + " must include id");  // 1330
                                                                                                                    //
   // Look for a user with the appropriate service user id.                                                         //
-  var selector = {};                                                                                               // 1333
-  var serviceIdKey = "services." + serviceName + ".id";                                                            // 1334
+  var selector = {};                                                                                               // 1323
+  var serviceIdKey = "services." + serviceName + ".id";                                                            // 1336
                                                                                                                    //
   // XXX Temporary special case for Twitter. (Issue #629)                                                          //
   //   The serviceData.id will be a string representation of an integer.                                           //
@@ -1584,104 +1725,108 @@ Ap.updateOrCreateUserFromExternalService = function (serviceName, serviceData, o
   //   user IDs in number form, and recent versions storing them as strings.                                       //
   //   This can be removed once migration technology is in place, and twitter                                      //
   //   users stored with integer IDs have been migrated to string IDs.                                             //
-  if (serviceName === "twitter" && !isNaN(serviceData.id)) {                                                       // 1343
-    selector["$or"] = [{}, {}];                                                                                    // 1344
-    selector["$or"][0][serviceIdKey] = serviceData.id;                                                             // 1345
-    selector["$or"][1][serviceIdKey] = parseInt(serviceData.id, 10);                                               // 1346
+  if (serviceName === "twitter" && !isNaN(serviceData.id)) {                                                       // 1323
+    selector["$or"] = [{}, {}];                                                                                    // 1346
+    selector["$or"][0][serviceIdKey] = serviceData.id;                                                             // 1347
+    selector["$or"][1][serviceIdKey] = parseInt(serviceData.id, 10);                                               // 1348
   } else {                                                                                                         //
-    selector[serviceIdKey] = serviceData.id;                                                                       // 1348
+    selector[serviceIdKey] = serviceData.id;                                                                       // 1350
   }                                                                                                                //
                                                                                                                    //
-  var user = this.users.findOne(selector);                                                                         // 1351
+  var user = this.users.findOne(selector);                                                                         // 1353
                                                                                                                    //
-  if (user) {                                                                                                      // 1353
-    pinEncryptedFieldsToUser(serviceData, user._id);                                                               // 1354
+  if (user) {                                                                                                      // 1355
+    pinEncryptedFieldsToUser(serviceData, user._id);                                                               // 1356
                                                                                                                    //
     // We *don't* process options (eg, profile) for update, but we do replace                                      //
     // the serviceData (eg, so that we keep an unexpired access token and                                          //
     // don't cache old email addresses in serviceData.email).                                                      //
     // XXX provide an onUpdateUser hook which would let apps update                                                //
     //     the profile too                                                                                         //
-    var setAttrs = {};                                                                                             // 1361
-    _.each(serviceData, function (value, key) {                                                                    // 1362
-      setAttrs["services." + serviceName + "." + key] = value;                                                     // 1363
+    var setAttrs = {};                                                                                             // 1355
+    _.each(serviceData, function (value, key) {                                                                    // 1364
+      setAttrs["services." + serviceName + "." + key] = value;                                                     // 1365
     });                                                                                                            //
                                                                                                                    //
     // XXX Maybe we should re-use the selector above and notice if the update                                      //
     //     touches nothing?                                                                                        //
-    this.users.update(user._id, {                                                                                  // 1368
-      $set: setAttrs                                                                                               // 1369
+    this.users.update(user._id, {                                                                                  // 1355
+      $set: setAttrs                                                                                               // 1371
     });                                                                                                            //
                                                                                                                    //
-    return {                                                                                                       // 1372
-      type: serviceName,                                                                                           // 1373
-      userId: user._id                                                                                             // 1374
+    return {                                                                                                       // 1374
+      type: serviceName,                                                                                           // 1375
+      userId: user._id                                                                                             // 1376
     };                                                                                                             //
   } else {                                                                                                         //
     // Create a new user with the service data. Pass other options through to                                      //
     // insertUserDoc.                                                                                              //
-    user = { services: {} };                                                                                       // 1380
-    user.services[serviceName] = serviceData;                                                                      // 1381
-    return {                                                                                                       // 1382
-      type: serviceName,                                                                                           // 1383
-      userId: this.insertUserDoc(options, user)                                                                    // 1384
+    user = { services: {} };                                                                                       // 1382
+    user.services[serviceName] = serviceData;                                                                      // 1383
+    return {                                                                                                       // 1384
+      type: serviceName,                                                                                           // 1385
+      userId: this.insertUserDoc(options, user)                                                                    // 1386
     };                                                                                                             //
   }                                                                                                                //
 };                                                                                                                 //
                                                                                                                    //
-function setupUsersCollection(users) {                                                                             // 1389
+function setupUsersCollection(users) {                                                                             // 1391
   ///                                                                                                              //
   /// RESTRICTING WRITES TO USER OBJECTS                                                                           //
   ///                                                                                                              //
-  users.allow({                                                                                                    // 1393
+  users.allow({                                                                                                    // 1395
     // clients can modify the profile field of their own document, and                                             //
     // nothing else.                                                                                               //
-    update: function (userId, user, fields, modifier) {                                                            // 1396
-      // make sure it is our record                                                                                //
-      if (user._id !== userId) return false;                                                                       // 1398
+    update: function () {                                                                                          // 1398
+      function update(userId, user, fields, modifier) {                                                            // 1398
+        // make sure it is our record                                                                              //
+        if (user._id !== userId) return false;                                                                     // 1400
                                                                                                                    //
-      // user can only modify the 'profile' field. sets to multiple                                                //
-      // sub-keys (eg profile.foo and profile.bar) are merged into entry                                           //
-      // in the fields list.                                                                                       //
-      if (fields.length !== 1 || fields[0] !== 'profile') return false;                                            // 1404
+        // user can only modify the 'profile' field. sets to multiple                                              //
+        // sub-keys (eg profile.foo and profile.bar) are merged into entry                                         //
+        // in the fields list.                                                                                     //
+        if (fields.length !== 1 || fields[0] !== 'profile') return false;                                          // 1398
                                                                                                                    //
-      return true;                                                                                                 // 1407
-    },                                                                                                             //
-    fetch: ['_id'] // we only look at _id.                                                                         // 1409
-  });                                                                                                              //
+        return true;                                                                                               // 1409
+      }                                                                                                            //
+                                                                                                                   //
+      return update;                                                                                               //
+    }(),                                                                                                           //
+    fetch: ['_id'] // we only look at _id.                                                                         // 1411
+  });                                                                                                              // 1395
                                                                                                                    //
   /// DEFAULT INDEXES ON USERS                                                                                     //
-  users._ensureIndex('username', { unique: 1, sparse: 1 });                                                        // 1413
-  users._ensureIndex('emails.address', { unique: 1, sparse: 1 });                                                  // 1414
-  users._ensureIndex('services.resume.loginTokens.hashedToken', { unique: 1, sparse: 1 });                         // 1415
-  users._ensureIndex('services.resume.loginTokens.token', { unique: 1, sparse: 1 });                               // 1417
+  users._ensureIndex('username', { unique: 1, sparse: 1 });                                                        // 1391
+  users._ensureIndex('emails.address', { unique: 1, sparse: 1 });                                                  // 1416
+  users._ensureIndex('services.resume.loginTokens.hashedToken', { unique: 1, sparse: 1 });                         // 1417
+  users._ensureIndex('services.resume.loginTokens.token', { unique: 1, sparse: 1 });                               // 1419
   // For taking care of logoutOtherClients calls that crashed before the                                           //
   // tokens were deleted.                                                                                          //
-  users._ensureIndex('services.resume.haveLoginTokensToDelete', { sparse: 1 });                                    // 1421
+  users._ensureIndex('services.resume.haveLoginTokensToDelete', { sparse: 1 });                                    // 1391
   // For expiring login tokens                                                                                     //
-  users._ensureIndex("services.resume.loginTokens.when", { sparse: 1 });                                           // 1424
+  users._ensureIndex("services.resume.loginTokens.when", { sparse: 1 });                                           // 1391
 }                                                                                                                  //
                                                                                                                    //
 ///                                                                                                                //
 /// CLEAN UP FOR `logoutOtherClients`                                                                              //
 ///                                                                                                                //
                                                                                                                    //
-Ap._deleteSavedTokensForUser = function (userId, tokensToDelete) {                                                 // 1431
-  if (tokensToDelete) {                                                                                            // 1432
-    this.users.update(userId, {                                                                                    // 1433
-      $unset: {                                                                                                    // 1434
-        "services.resume.haveLoginTokensToDelete": 1,                                                              // 1435
-        "services.resume.loginTokensToDelete": 1                                                                   // 1436
+Ap._deleteSavedTokensForUser = function (userId, tokensToDelete) {                                                 // 1433
+  if (tokensToDelete) {                                                                                            // 1434
+    this.users.update(userId, {                                                                                    // 1435
+      $unset: {                                                                                                    // 1436
+        "services.resume.haveLoginTokensToDelete": 1,                                                              // 1437
+        "services.resume.loginTokensToDelete": 1                                                                   // 1438
       },                                                                                                           //
-      $pullAll: {                                                                                                  // 1438
-        "services.resume.loginTokens": tokensToDelete                                                              // 1439
+      $pullAll: {                                                                                                  // 1440
+        "services.resume.loginTokens": tokensToDelete                                                              // 1441
       }                                                                                                            //
     });                                                                                                            //
   }                                                                                                                //
 };                                                                                                                 //
                                                                                                                    //
-Ap._deleteSavedTokensForAllUsersOnStartup = function () {                                                          // 1445
-  var self = this;                                                                                                 // 1446
+Ap._deleteSavedTokensForAllUsersOnStartup = function () {                                                          // 1447
+  var self = this;                                                                                                 // 1448
                                                                                                                    //
   // If we find users who have saved tokens to delete on startup, delete                                           //
   // them now. It's possible that the server could have crashed and come                                           //
@@ -1689,71 +1834,19 @@ Ap._deleteSavedTokensForAllUsersOnStartup = function () {                       
   // shouldn't happen very often. We shouldn't put a delay here because                                            //
   // that would give a lot of power to an attacker with a stolen login                                             //
   // token and the ability to crash the server.                                                                    //
-  Meteor.startup(function () {                                                                                     // 1454
-    self.users.find({                                                                                              // 1455
-      "services.resume.haveLoginTokensToDelete": true                                                              // 1456
+  Meteor.startup(function () {                                                                                     // 1447
+    self.users.find({                                                                                              // 1457
+      "services.resume.haveLoginTokensToDelete": true                                                              // 1458
     }, {                                                                                                           //
-      "services.resume.loginTokensToDelete": 1                                                                     // 1458
+      "services.resume.loginTokensToDelete": 1                                                                     // 1460
     }).forEach(function (user) {                                                                                   //
-      self._deleteSavedTokensForUser(user._id, user.services.resume.loginTokensToDelete);                          // 1460
+      self._deleteSavedTokensForUser(user._id, user.services.resume.loginTokensToDelete);                          // 1462
     });                                                                                                            //
   });                                                                                                              //
 };                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-}).call(this);
-
-
-
-
-
-
-(function(){
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                                                 //
-// packages/accounts-base/accounts_rate_limit.js                                                                   //
-//                                                                                                                 //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                   //
-var Ap = AccountsCommon.prototype;                                                                                 // 1
-var defaultRateLimiterRuleId;                                                                                      // 2
-// Removes default rate limiting rule                                                                              //
-Ap.removeDefaultRateLimit = function () {                                                                          // 4
-  var resp = DDPRateLimiter.removeRule(defaultRateLimiterRuleId);                                                  // 5
-  defaultRateLimiterRuleId = null;                                                                                 // 6
-  return resp;                                                                                                     // 7
-};                                                                                                                 //
-                                                                                                                   //
-// Add a default rule of limiting logins, creating new users and password reset                                    //
-// to 5 times every 10 seconds per connection.                                                                     //
-Ap.addDefaultRateLimit = function () {                                                                             // 12
-  if (!defaultRateLimiterRuleId) {                                                                                 // 13
-    defaultRateLimiterRuleId = DDPRateLimiter.addRule({                                                            // 14
-      userId: null,                                                                                                // 15
-      clientAddress: null,                                                                                         // 16
-      type: 'method',                                                                                              // 17
-      name: function (name) {                                                                                      // 18
-        return _.contains(['login', 'createUser', 'resetPassword', 'forgotPassword'], name);                       // 19
-      },                                                                                                           //
-      connectionId: function (connectionId) {                                                                      // 22
-        return true;                                                                                               // 23
-      }                                                                                                            //
-    }, 5, 10000);                                                                                                  //
-  }                                                                                                                //
-};                                                                                                                 //
-                                                                                                                   //
-Ap.addDefaultRateLimit();                                                                                          // 29
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-}).call(this);
-
-
-
-
-
-
-(function(){
+}],"url_server.js":["./accounts_server.js",function(require){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                 //
@@ -1761,66 +1854,48 @@ Ap.addDefaultRateLimit();                                                       
 //                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                                                                                                                    //
+var _accounts_server = require('./accounts_server.js');                                                            // 1
+                                                                                                                   //
 // XXX These should probably not actually be public?                                                               //
                                                                                                                    //
-AccountsServer.prototype.urls = {                                                                                  // 3
-  resetPassword: function (token) {                                                                                // 4
-    return Meteor.absoluteUrl('#/reset-password/' + token);                                                        // 5
-  },                                                                                                               //
+_accounts_server.AccountsServer.prototype.urls = {                                                                 // 5
+  resetPassword: function () {                                                                                     // 6
+    function resetPassword(token) {                                                                                // 6
+      return Meteor.absoluteUrl('#/reset-password/' + token);                                                      // 7
+    }                                                                                                              //
                                                                                                                    //
-  verifyEmail: function (token) {                                                                                  // 8
-    return Meteor.absoluteUrl('#/verify-email/' + token);                                                          // 9
-  },                                                                                                               //
+    return resetPassword;                                                                                          //
+  }(),                                                                                                             //
                                                                                                                    //
-  enrollAccount: function (token) {                                                                                // 12
-    return Meteor.absoluteUrl('#/enroll-account/' + token);                                                        // 13
-  }                                                                                                                //
+  verifyEmail: function () {                                                                                       // 10
+    function verifyEmail(token) {                                                                                  // 10
+      return Meteor.absoluteUrl('#/verify-email/' + token);                                                        // 11
+    }                                                                                                              //
+                                                                                                                   //
+    return verifyEmail;                                                                                            //
+  }(),                                                                                                             //
+                                                                                                                   //
+  enrollAccount: function () {                                                                                     // 14
+    function enrollAccount(token) {                                                                                // 14
+      return Meteor.absoluteUrl('#/enroll-account/' + token);                                                      // 15
+    }                                                                                                              //
+                                                                                                                   //
+    return enrollAccount;                                                                                          //
+  }()                                                                                                              //
 };                                                                                                                 //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-}).call(this);
-
-
-
-
-
-
-(function(){
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                                                 //
-// packages/accounts-base/globals_server.js                                                                        //
-//                                                                                                                 //
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                                                                                                                   //
-/**                                                                                                                //
- * @namespace Accounts                                                                                             //
- * @summary The namespace for all server-side accounts-related methods.                                            //
- */                                                                                                                //
-Accounts = new AccountsServer(Meteor.server);                                                                      // 5
-                                                                                                                   //
-// Users table. Don't use the normal autopublish, since we want to hide                                            //
-// some fields. Code to autopublish this is in accounts_server.js.                                                 //
-// XXX Allow users to configure this collection name.                                                              //
-                                                                                                                   //
-/**                                                                                                                //
- * @summary A [Mongo.Collection](#collections) containing user documents.                                          //
- * @locus Anywhere                                                                                                 //
- * @type {Mongo.Collection}                                                                                        //
- */                                                                                                                //
-Meteor.users = Accounts.users;                                                                                     // 16
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-}).call(this);
-
+}]}}}},{"extensions":[".js",".json"]});
+var exports = require("./node_modules/meteor/accounts-base/server_main.js");
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['accounts-base'] = {
-  Accounts: Accounts,
-  AccountsServer: AccountsServer,
-  AccountsTest: AccountsTest
-};
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['accounts-base'] = exports, {
+  Accounts: Accounts
+});
 
 })();
 

@@ -11,11 +11,11 @@ Router.route("/module/new", {
 
 
 
-Router.route("/module/edit/:moduleId", {
+Router.route("/module/edit/:id", {
 	controller : "ApplicationController",
 	name: "module.edit",
 	data : function(){
-		return Modules.findOne(this.params.moduleId);
+		return Modules.findOne(this.params.id);
 	},
 	action : function () {
 		var data = this.data();
@@ -60,5 +60,3 @@ Router.route("/module", {
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=module.js.map

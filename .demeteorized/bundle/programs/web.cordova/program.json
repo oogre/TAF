@@ -2,22 +2,22 @@
   "format": "web-program-pre1",
   "manifest": [
     {
-      "path": "90aa07b85297affeef60c374fc59fad24dae7e97.js",
+      "path": "b82aa606ee2841a8483848b2958fe24001930431.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/90aa07b85297affeef60c374fc59fad24dae7e97.js?meteor_js_resource=true",
-      "size": 1473273,
-      "hash": "90aa07b85297affeef60c374fc59fad24dae7e97"
+      "url": "/b82aa606ee2841a8483848b2958fe24001930431.js?meteor_js_resource=true",
+      "size": 2471218,
+      "hash": "b82aa606ee2841a8483848b2958fe24001930431"
     },
     {
-      "path": "76c5f03ebbd65a091193fcca399b8fc4f8186034.css",
+      "path": "bba9dcdedc6694585394bef1d017a32049fd045f.css",
       "where": "client",
       "type": "css",
       "cacheable": true,
-      "url": "/76c5f03ebbd65a091193fcca399b8fc4f8186034.css?meteor_css_resource=true",
-      "size": 181847,
-      "hash": "76c5f03ebbd65a091193fcca399b8fc4f8186034"
+      "url": "/bba9dcdedc6694585394bef1d017a32049fd045f.css?meteor_css_resource=true",
+      "size": 180452,
+      "hash": "bba9dcdedc6694585394bef1d017a32049fd045f"
     },
     {
       "path": "app/fonts/FontAwesome.otf",
@@ -304,5 +304,9 @@
       "type": "head",
       "hash": "790e21caac176a749d0c6e3940540b9216c7c6eb"
     }
-  ]
+  ],
+  "cordovaCompatibilityVersions": {
+    "android": "60c4d497703403589ff27d6a6f157d7e587c0bab",
+    "ios": "63e3f600072ae43df39008e76352473f09c5133b"
+  }
 }

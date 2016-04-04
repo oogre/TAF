@@ -6,7 +6,7 @@ Router.route("/worker", {
 	action : function () {
 		Session.set(Meteor.PAGE_TITLE, "List des travailleurs");
 		this.render("workerindex");
-		if(Meteor.isBoss()){
+		if(Meteor.isWorker()){
 			Session.set(Meteor.FILL_CONTEXT_MENU_KEY, true);
 			this.render("workeraction", {to : "action"}); //contextmenu.action
 		}
@@ -34,11 +34,11 @@ Router.route("/worker/new", {
 
 
 
-Router.route("/worker/edit/:workerId", {
+Router.route("/worker/edit/:id", {
 	controller : "CleanController",
 	name: "user.edit",
 	data : function(){
-		return Workers.findOne(this.params.workerId); 
+		return Workers.findOne(this.params.id); 
 	},
 	action : function () {
 		var data = this.data();
@@ -66,5 +66,3 @@ Router.route("/worker/:workerId", {
 	}	
 });
 }).call(this);
-
-//# sourceMappingURL=worker.js.map

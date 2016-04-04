@@ -7,6 +7,8 @@
     <preference name="KeyboardDisplayRequiresUserAction" value="true" />
     <preference name="MediaPlaybackRequiresUserAction" value="false" />
     <preference name="SuppressesIncrementalRendering" value="false" />
+    <preference name="SuppressesLongPressGesture" value="false" />
+    <preference name="Suppresses3DTouchGesture" value="false" />
     <preference name="GapBetweenPages" value="0" />
     <preference name="PageLength" value="0" />
     <preference name="PaginationBreakingMode" value="page" />
@@ -14,8 +16,16 @@
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
-    <feature name="File">
-        <param name="ios-package" value="CDVFile" />
+    <feature name="HandleOpenUrl">
+        <param name="ios-package" value="CDVHandleOpenURL" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="IntentAndNavigationFilter">
+        <param name="ios-package" value="CDVIntentAndNavigationFilter" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="GestureHandler">
+        <param name="ios-package" value="CDVGestureHandler" />
         <param name="onload" value="true" />
     </feature>
     <feature name="Camera">
@@ -28,11 +38,13 @@
     <feature name="Console">
         <param name="ios-package" value="CDVLogger" />
     </feature>
-    <feature name="Device">
-        <param name="ios-package" value="CDVDevice" />
+    <feature name="CDVWKWebViewEngine">
+        <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
-    <feature name="CordovaUpdate">
-        <param name="ios-package" value="CordovaUpdate" />
+    <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+    <feature name="WebAppLocalServer">
+        <param name="ios-package" value="METWebAppLocalServer" />
+        <param name="onload" value="true" />
     </feature>
     <feature name="StatusBar">
         <param name="ios-package" value="CDVStatusBar" />
@@ -44,66 +56,52 @@
         <param name="ios-package" value="CDVSplashScreen" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="FileTransfer">
-        <param name="ios-package" value="CDVFileTransfer" />
-    </feature>
     <feature name="BarcodeScanner">
         <param name="ios-package" value="CDVBarcodeScanner" />
     </feature>
-    <icon height="60" src="resources/iphone.icon.png" width="60" />
-    <icon height="29" src="resources/iphone.icon.png" width="29" />
-    <icon height="40" src="resources/iphone.icon.png" width="40" />
-    <icon height="50" src="resources/iphone.icon.png" width="50" />
-    <icon height="57" src="resources/iphone.icon.png" width="57" />
-    <icon height="58" src="resources/iphone.icon.png" width="58" />
     <icon height="120" src="resources/iphone_2x.icon.png" width="120" />
-    <icon height="80" src="resources/iphone_2x.icon.png" width="80" />
-    <icon height="100" src="resources/iphone_2x.icon.png" width="100" />
-    <icon height="114" src="resources/iphone_2x.icon.png" width="114" />
     <icon height="180" src="resources/iphone_3x.icon.png" width="180" />
     <icon height="76" src="resources/ipad.icon.png" width="76" />
-    <icon height="72" src="resources/ipad.icon.png" width="72" />
     <icon height="152" src="resources/ipad_2x.icon.png" width="152" />
-    <icon height="144" src="resources/ipad_2x.icon.png" width="144" />
-    <splash height="480" src="resources/iphone.splash.png" width="320" />
+    <icon height="167" src="resources/ipad_pro.icon.png" width="167" />
+    <icon height="29" src="resources/ios_settings.icon.png" width="29" />
+    <icon height="58" src="resources/ios_settings_2x.icon.png" width="58" />
+    <icon height="40" src="resources/ios_spotlight.icon.png" width="40" />
+    <icon height="80" src="resources/ios_spotlight_2x.icon.png" width="80" />
     <splash height="960" src="resources/iphone_2x.splash.png" width="640" />
     <splash height="1136" src="resources/iphone5.splash.png" width="640" />
     <splash height="1334" src="resources/iphone6.splash.png" width="750" />
     <splash height="2208" src="resources/iphone6p_portrait.splash.png" width="1242" />
     <splash height="1242" src="resources/iphone6p_landscape.splash.png" width="2208" />
-    <splash height="1004" src="resources/ipad_portrait.splash.png" width="768" />
     <splash height="1024" src="resources/ipad_portrait.splash.png" width="768" />
-    <splash height="2008" src="resources/ipad_portrait_2x.splash.png" width="1536" />
     <splash height="2048" src="resources/ipad_portrait_2x.splash.png" width="1536" />
-    <splash height="748" src="resources/ipad_landscape.splash.png" width="1024" />
     <splash height="768" src="resources/ipad_landscape.splash.png" width="1024" />
-    <splash height="1496" src="resources/ipad_landscape_2x.splash.png" width="2048" />
     <splash height="1536" src="resources/ipad_landscape_2x.splash.png" width="2048" />
     <name>GduTAF</name>
     <description>Gestion du Travail à l'Atelier du Froid</description>
     <author email="vincent@ogre.be" href="http://taf.ogre.be">Vincent Evrard</author>
     <preference name="webviewbounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="deployment-target" value="7.0" />
     <preference name="AutoHideSplashScreen" value="false" />
     <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="10000" />
+    <preference name="SplashScreenDelay" value="5000" />
+    <preference name="FadeSplashScreenDuration" value="250" />
+    <preference name="ShowSplashScreenSpinner" value="false" />
     <preference name="StatusBarOverlaysWebView" value="false" />
     <preference name="StatusBarStyle" value="default" />
     <preference name="BackgroundColor" value="0xff0000ff" />
     <preference name="HideKeyboardFormAccessoryBar" value="true" />
     <preference name="Orientation" value="portrait" />
-    <content src="index.html" />
-    <access launch-external="true" origin="tel:*" />
-    <access launch-external="true" origin="geo:*" />
-    <access launch-external="true" origin="mailto:*" />
-    <access launch-external="true" origin="sms:*" />
-    <access launch-external="true" origin="market:*" />
-    <access origin="file:*" />
-    <access origin="cdv:*" />
-    <access origin="gap:*" />
-    <access origin="http://meteor.local/*" />
-    <access origin="*://localhost/*" />
-    <access origin="*://10.0.2.2/*" />
+    <content src="http://localhost:12704/" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="geo:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="market:*" />
+    <allow-intent href="itms:*" />
+    <allow-intent href="itms-apps:*" />
+    <allow-navigation href="http://localhost" />
+    <access origin="*://localhost" />
+    <access origin="*://10.0.2.2" />
     <access origin="*" />
 </widget>

@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var Blaze = Package.blaze.Blaze;
 var UI = Package.blaze.UI;
 var Handlebars = Package.blaze.Handlebars;
@@ -19,7 +21,7 @@ var MeteorCamera;
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
                                                                      //
-MeteorCamera = {};                                                   // 1
+MeteorCamera = {};
 ///////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -27,10 +29,11 @@ MeteorCamera = {};                                                   // 1
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['mdg:camera'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['mdg:camera'] = {}, {
   MeteorCamera: MeteorCamera
-};
+});
 
 })();
-
-//# sourceMappingURL=mdg_camera.js.map

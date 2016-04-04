@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 
 /* Package-scope variables */
 var NpmModuleMongodb, NpmModuleMongodbVersion;
@@ -14,9 +16,9 @@ var NpmModuleMongodb, NpmModuleMongodbVersion;
 //                                                                     //
 /////////////////////////////////////////////////////////////////////////
                                                                        //
-NpmModuleMongodb = Npm.require('mongodb');                             // 1
+NpmModuleMongodb = Npm.require('mongodb');
 NpmModuleMongodbVersion = Npm.require('mongodb/package.json').version;
-                                                                       // 3
+
 /////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -24,11 +26,12 @@ NpmModuleMongodbVersion = Npm.require('mongodb/package.json').version;
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['npm-mongo'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['npm-mongo'] = {}, {
   NpmModuleMongodb: NpmModuleMongodb,
   NpmModuleMongodbVersion: NpmModuleMongodbVersion
-};
+});
 
 })();
-
-//# sourceMappingURL=npm-mongo.js.map

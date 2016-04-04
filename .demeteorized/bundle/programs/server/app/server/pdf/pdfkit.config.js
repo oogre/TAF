@@ -5,6 +5,8 @@
 Meteor.pdfkitConfig = {
 	param : {
 		filename : "default.pdf",
+		maxLinePerPage : 49,
+		minLinePerCat : 10,
 		page : {
 			size : "A4",
 			margins : {
@@ -27,7 +29,7 @@ Meteor.pdfkitConfig = {
 		fill : {
 			grey : "#dedede",
 			black : "#000000"
-		},
+		}/*,
 		fonts : [{
 				name : "DejaVuSans",
 				file : process.env.PWD + "/programs/web.browser/app/fonts/dejavu/DejaVuSans.ttf"
@@ -41,6 +43,7 @@ Meteor.pdfkitConfig = {
 				name : "DejaVuSansMono-Bold",
 				file : process.env.PWD + "/programs/web.browser/app/fonts/dejavu/DejaVuSansMono-Bold.ttf"
 			}]
+			*/
 	},
 	templates : function(pdf){
 		return 	pdf
@@ -213,5 +216,3 @@ Meteor.pdfkitConfig = {
 
 };
 }).call(this);
-
-//# sourceMappingURL=pdfkit.config.js.map

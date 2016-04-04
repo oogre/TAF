@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 
 /* Package-scope variables */
 var Store;
@@ -14,8 +16,8 @@ var Store;
 //                                                                   //
 ///////////////////////////////////////////////////////////////////////
                                                                      //
-// Define the Storage scope                                          // 1
-Store = {};                                                          // 2
+// Define the Storage scope
+Store = {};
 ///////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -23,10 +25,11 @@ Store = {};                                                          // 2
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['ground:store'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['ground:store'] = {}, {
   Store: Store
-};
+});
 
 })();
-
-//# sourceMappingURL=ground_store.js.map

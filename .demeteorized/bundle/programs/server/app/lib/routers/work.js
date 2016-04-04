@@ -48,7 +48,7 @@ Router.route("/work/:workId", {
 		if(data){
 			Session.set(Meteor.PAGE_TITLE, s.capitalize(data.type)+" chez "+s.capitalize(data.shop.name));	
 			this.render("work-view");
-			if(Meteor.isChief()){
+			if(Meteor.isWorker()){
 				Session.set(Meteor.FILL_CONTEXT_MENU_KEY, true);
 				this.render("work-viewaction", {to : "action"}); //contextmenu.action
 			}
@@ -59,5 +59,3 @@ Router.route("/work/:workId", {
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=work.js.map

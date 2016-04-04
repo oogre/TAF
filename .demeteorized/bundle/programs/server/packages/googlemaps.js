@@ -2,18 +2,21 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 
 /* Package-scope variables */
-var googlemaps;
+var key, googlemaps;
 
 
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package.googlemaps = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package.googlemaps = {}, {
   googlemaps: googlemaps
-};
+});
 
 })();
-
-//# sourceMappingURL=googlemaps.js.map

@@ -70,7 +70,7 @@ Meteor.methods({
 						})
 						.value();
 		
-		HTTP.call("GET", "http://pdftaf.ogre.be/ogre/maintenane.php", {
+		HTTP.call("GET", "http://pdftaf.ogre.be/tcpdf/ogre/maintenane.php", {
 			params: {
 				filename : filename,
 				dest : dest,
@@ -99,5 +99,3 @@ Meteor.methods({
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=methods.maintenance.js.map

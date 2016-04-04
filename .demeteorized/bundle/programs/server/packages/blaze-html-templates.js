@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 
 
 
@@ -10,5 +12,3 @@ if (typeof Package === 'undefined') Package = {};
 Package['blaze-html-templates'] = {};
 
 })();
-
-//# sourceMappingURL=blaze-html-templates.js.map

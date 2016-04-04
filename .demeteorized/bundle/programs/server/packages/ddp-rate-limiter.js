@@ -2,124 +2,130 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var RateLimiter = Package['rate-limit'].RateLimiter;
 
 /* Package-scope variables */
-var DDPRateLimiter;
+var DDPRateLimiter, RATE_LIMIT_NUM_CALLS, RATE_LIMIT_INTERVAL_TIME_MS;
 
 (function(){
 
-//////////////////////////////////////////////////////////////////////////////////
-//                                                                              //
-// packages/ddp-rate-limiter/ddp-rate-limiter.js                                //
-//                                                                              //
-//////////////////////////////////////////////////////////////////////////////////
-                                                                                //
-// Rate Limiter built into DDP with a default error message. See README or      // 1
-// online documentation for more details.                                       // 2
-DDPRateLimiter = {};                                                            // 3
-                                                                                // 4
-var errorMessage = function (rateLimitResult) {                                 // 5
-  return "Error, too many requests. Please slow down. You must wait " +         // 6
-    Math.ceil(rateLimitResult.timeToReset / 1000) + " seconds before " +        // 7
-    "trying again.";                                                            // 8
-};                                                                              // 9
-var rateLimiter = new RateLimiter();                                            // 10
-                                                                                // 11
-DDPRateLimiter.getErrorMessage = function (rateLimitResult) {                   // 12
-  if (typeof errorMessage === 'function')                                       // 13
-    return errorMessage(rateLimitResult);                                       // 14
-  else                                                                          // 15
-    return errorMessage;                                                        // 16
-};                                                                              // 17
-                                                                                // 18
-/**                                                                             // 19
- * @summary Set error message text when method or subscription rate limit       // 20
- * exceeded.                                                                    // 21
- * @param {string|function} message Functions are passed in an object with a    // 22
+/////////////////////////////////////////////////////////////////////////////////////
+//                                                                                 //
+// packages/ddp-rate-limiter/ddp-rate-limiter.js                                   //
+//                                                                                 //
+/////////////////////////////////////////////////////////////////////////////////////
+                                                                                   //
+// Rate Limiter built into DDP with a default error message. See README or
+// online documentation for more details.
+DDPRateLimiter = {};
+
+var errorMessage = function (rateLimitResult) {
+  return "Error, too many requests. Please slow down. You must wait " +
+    Math.ceil(rateLimitResult.timeToReset / 1000) + " seconds before " +
+    "trying again.";
+};
+var rateLimiter = new RateLimiter();
+
+DDPRateLimiter.getErrorMessage = function (rateLimitResult) {
+  if (typeof errorMessage === 'function')
+    return errorMessage(rateLimitResult);
+  else
+    return errorMessage;
+};
+
+/**
+ * @summary Set error message text when method or subscription rate limit
+ * exceeded.
+ * @param {string|function} message Functions are passed in an object with a
  * `timeToReset` field that specifies the number of milliseconds until the next
- * method or subscription is allowed to run. The function must return a string  // 24
- * of the error message.                                                        // 25
- */                                                                             // 26
-DDPRateLimiter.setErrorMessage = function (message) {                           // 27
-  errorMessage = message;                                                       // 28
-};                                                                              // 29
-                                                                                // 30
-/**                                                                             // 31
- * @summary                                                                     // 32
- * Add a rule that matches against a stream of events describing method or      // 33
- * subscription attempts. Each event is an object with the following            // 34
- * properties:                                                                  // 35
- *                                                                              // 36
- * - `type`: Either "method" or "subscription"                                  // 37
- * - `name`: The name of the method or subscription being called                // 38
- * - `userId`: The user ID attempting the method or subscription                // 39
- * - `connectionId`: A string representing the user's DDP connection            // 40
- * - `clientAddress`: The IP address of the user                                // 41
- *                                                                              // 42
- * Returns unique `ruleId` that can be passed to `removeRule`.                  // 43
- *                                                                              // 44
- * @param {Object} matcher                                                      // 45
- *   Matchers specify which events are counted towards a rate limit. A matcher  // 46
+ * method or subscription is allowed to run. The function must return a string
+ * of the error message.
+ * @locus Server
+ */
+DDPRateLimiter.setErrorMessage = function (message) {
+  errorMessage = message;
+};
+
+/**
+ * @summary
+ * Add a rule that matches against a stream of events describing method or
+ * subscription attempts. Each event is an object with the following
+ * properties:
+ *
+ * - `type`: Either "method" or "subscription"
+ * - `name`: The name of the method or subscription being called
+ * - `userId`: The user ID attempting the method or subscription
+ * - `connectionId`: A string representing the user's DDP connection
+ * - `clientAddress`: The IP address of the user
+ *
+ * Returns unique `ruleId` that can be passed to `removeRule`.
+ *
+ * @param {Object} matcher
+ *   Matchers specify which events are counted towards a rate limit. A matcher
  *   is an object that has a subset of the same properties as the event objects
- *   described above. Each value in a matcher object is one of the following:   // 48
- *                                                                              // 49
+ *   described above. Each value in a matcher object is one of the following:
+ *
  *   - a string: for the event to satisfy the matcher, this value must be equal
- *   to the value of the same property in the event object                      // 51
- *                                                                              // 52
- *   - a function: for the event to satisfy the matcher, the function must      // 53
- *   evaluate to true when passed the value of the same property                // 54
- *   in the event object                                                        // 55
- *                                                                              // 56
- * Here's how events are counted: Each event that satisfies the matcher's       // 57
- * filter is mapped to a bucket. Buckets are uniquely determined by the         // 58
- * event object's values for all properties present in both the matcher and     // 59
- * event objects.                                                               // 60
- *                                                                              // 61
- * @param {number} numRequests  number of requests allowed per time interval.   // 62
- * Default = 10.                                                                // 63
- * @param {number} timeInterval time interval in milliseconds after which       // 64
- * rule's counters are reset. Default = 1000.                                   // 65
- */                                                                             // 66
-DDPRateLimiter.addRule = function (matcher, numRequests, timeInterval) {        // 67
-  return rateLimiter.addRule(matcher, numRequests, timeInterval);               // 68
-};                                                                              // 69
-                                                                                // 70
-DDPRateLimiter.printRules = function () {                                       // 71
-  return rateLimiter.rules;                                                     // 72
-};                                                                              // 73
-                                                                                // 74
-/**                                                                             // 75
- * @summary Removes the specified rule from the rate limiter. If rule had       // 76
- * hit a rate limit, that limit is removed as well.                             // 77
- * @param  {string} id 'ruleId' returned from `addRule`                         // 78
- * @return {boolean}    True if a rule was removed.                             // 79
- */                                                                             // 80
-DDPRateLimiter.removeRule = function (id) {                                     // 81
-  return rateLimiter.removeRule(id);                                            // 82
-};                                                                              // 83
-                                                                                // 84
-// This is accessed inside livedata_server.js, but shouldn't be called by any   // 85
-// user.                                                                        // 86
-DDPRateLimiter._increment = function (input) {                                  // 87
-  rateLimiter.increment(input);                                                 // 88
-};                                                                              // 89
-                                                                                // 90
-DDPRateLimiter._check = function (input) {                                      // 91
-  return rateLimiter.check(input);                                              // 92
-};                                                                              // 93
-                                                                                // 94
-//////////////////////////////////////////////////////////////////////////////////
+ *   to the value of the same property in the event object
+ *
+ *   - a function: for the event to satisfy the matcher, the function must
+ *   evaluate to true when passed the value of the same property
+ *   in the event object
+ *
+ * Here's how events are counted: Each event that satisfies the matcher's
+ * filter is mapped to a bucket. Buckets are uniquely determined by the
+ * event object's values for all properties present in both the matcher and
+ * event objects.
+ *
+ * @param {number} numRequests  number of requests allowed per time interval.
+ * Default = 10.
+ * @param {number} timeInterval time interval in milliseconds after which
+ * rule's counters are reset. Default = 1000.
+ * @locus Server
+ */
+DDPRateLimiter.addRule = function (matcher, numRequests, timeInterval) {
+  return rateLimiter.addRule(matcher, numRequests, timeInterval);
+};
+
+DDPRateLimiter.printRules = function () {
+  return rateLimiter.rules;
+};
+
+/**
+ * @summary Removes the specified rule from the rate limiter. If rule had
+ * hit a rate limit, that limit is removed as well.
+ * @param  {string} id 'ruleId' returned from `addRule`
+ * @return {boolean}    True if a rule was removed.
+ * @locus Server
+ */
+DDPRateLimiter.removeRule = function (id) {
+  return rateLimiter.removeRule(id);
+};
+
+// This is accessed inside livedata_server.js, but shouldn't be called by any
+// user.
+DDPRateLimiter._increment = function (input) {
+  rateLimiter.increment(input);
+};
+
+DDPRateLimiter._check = function (input) {
+  return rateLimiter.check(input);
+};
+
+/////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
 
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['ddp-rate-limiter'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['ddp-rate-limiter'] = {}, {
   DDPRateLimiter: DDPRateLimiter
-};
+});
 
 })();
-
-//# sourceMappingURL=ddp-rate-limiter.js.map

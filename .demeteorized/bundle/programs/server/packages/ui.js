@@ -2,24 +2,24 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var Blaze = Package.blaze.Blaze;
 var UI = Package.blaze.UI;
 var Handlebars = Package.blaze.Handlebars;
 var HTML = Package.htmljs.HTML;
 
-/* Package-scope variables */
-var Blaze, UI, Handlebars;
-
 
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package.ui = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package.ui = {}, {
   Blaze: Blaze,
   UI: UI,
   Handlebars: Handlebars
-};
+});
 
 })();
-
-//# sourceMappingURL=ui.js.map

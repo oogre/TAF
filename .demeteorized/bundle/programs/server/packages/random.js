@@ -2,18 +2,23 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var _ = Package.underscore._;
 var ECMAScript = Package.ecmascript.ECMAScript;
-var babelHelpers = Package['babel-runtime'].babelHelpers;
+var meteorInstall = Package.modules.meteorInstall;
+var Buffer = Package.modules.Buffer;
+var process = Package.modules.process;
 var Symbol = Package['ecmascript-runtime'].Symbol;
 var Map = Package['ecmascript-runtime'].Map;
 var Set = Package['ecmascript-runtime'].Set;
+var meteorBabelHelpers = Package['babel-runtime'].meteorBabelHelpers;
 var Promise = Package.promise.Promise;
 
 /* Package-scope variables */
 var Random;
 
-(function(){
+var require = meteorInstall({"node_modules":{"meteor":{"random":{"random.js":function(require){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                     //
@@ -34,11 +39,11 @@ if (Meteor.isServer) var nodeCrypto = Npm.require('crypto');                    
                                                                                                                        //
 // see http://baagoe.org/en/wiki/Better_random_numbers_for_javascript                                                  //
 // for a full discussion and Alea implementation.                                                                      //
-var Alea = function () {                                                                                               // 15
+var Alea = function Alea() {                                                                                           // 15
   function Mash() {                                                                                                    // 16
     var n = 0xefc8249d;                                                                                                // 17
                                                                                                                        //
-    var mash = function (data) {                                                                                       // 19
+    var mash = function mash(data) {                                                                                   // 19
       data = data.toString();                                                                                          // 20
       for (var i = 0; i < data.length; i++) {                                                                          // 21
         n += data.charCodeAt(i);                                                                                       // 22
@@ -49,15 +54,15 @@ var Alea = function () {                                                        
         n = h >>> 0;                                                                                                   // 27
         h -= n;                                                                                                        // 28
         n += h * 0x100000000; // 2^32                                                                                  // 29
-      }                                                                                                                //
+      }                                                                                                                // 21
       return (n >>> 0) * 2.3283064365386963e-10; // 2^-32                                                              // 31
-    };                                                                                                                 //
+    };                                                                                                                 // 19
                                                                                                                        //
     mash.version = 'Mash 0.9';                                                                                         // 34
     return mash;                                                                                                       // 35
   }                                                                                                                    //
                                                                                                                        //
-  return (function (args) {                                                                                            // 38
+  return function (args) {                                                                                             // 38
     var s0 = 0;                                                                                                        // 39
     var s1 = 0;                                                                                                        // 40
     var s2 = 0;                                                                                                        // 41
@@ -87,22 +92,22 @@ var Alea = function () {                                                        
     }                                                                                                                  //
     mash = null;                                                                                                       // 66
                                                                                                                        //
-    var random = function () {                                                                                         // 68
+    var random = function random() {                                                                                   // 68
       var t = 2091639 * s0 + c * 2.3283064365386963e-10; // 2^-32                                                      // 69
-      s0 = s1;                                                                                                         // 70
+      s0 = s1;                                                                                                         // 68
       s1 = s2;                                                                                                         // 71
       return s2 = t - (c = t | 0);                                                                                     // 72
     };                                                                                                                 //
     random.uint32 = function () {                                                                                      // 74
       return random() * 0x100000000; // 2^32                                                                           // 75
-    };                                                                                                                 //
+    };                                                                                                                 // 74
     random.fract53 = function () {                                                                                     // 77
       return random() + (random() * 0x200000 | 0) * 1.1102230246251565e-16; // 2^-53                                   // 78
-    };                                                                                                                 //
+    };                                                                                                                 // 77
     random.version = 'Alea 0.9';                                                                                       // 81
     random.args = args;                                                                                                // 82
     return random;                                                                                                     // 83
-  })(Array.prototype.slice.call(arguments));                                                                           //
+  }(Array.prototype.slice.call(arguments));                                                                            //
 };                                                                                                                     //
                                                                                                                        //
 var UNMISTAKABLE_CHARS = "23456789ABCDEFGHJKLMNPQRSTWXYZabcdefghijkmnopqrstuvwxyz";                                    // 88
@@ -114,7 +119,7 @@ var BASE64_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "012
 // - seeds: (required, only for RandomGenerator.Type.ALEA) an array                                                    //
 //   whose items will be `toString`ed and used as the seed to the Alea                                                 //
 //   algorithm                                                                                                         //
-var RandomGenerator = function (type, options) {                                                                       // 98
+var RandomGenerator = function RandomGenerator(type, options) {                                                        // 98
   var self = this;                                                                                                     // 99
   self.type = type;                                                                                                    // 100
                                                                                                                        //
@@ -155,11 +160,11 @@ RandomGenerator.prototype.fraction = function () {                              
   } else if (self.type === RandomGenerator.Type.NODE_CRYPTO) {                                                         //
     var numerator = parseInt(self.hexString(8), 16);                                                                   // 137
     return numerator * 2.3283064365386963e-10; // 2^-32                                                                // 138
-  } else if (self.type === RandomGenerator.Type.BROWSER_CRYPTO) {                                                      //
+  } else if (self.type === RandomGenerator.Type.BROWSER_CRYPTO) {                                                      // 136
       var array = new Uint32Array(1);                                                                                  // 140
       window.crypto.getRandomValues(array);                                                                            // 141
       return array[0] * 2.3283064365386963e-10; // 2^-32                                                               // 142
-    } else {                                                                                                           //
+    } else {                                                                                                           // 139
         throw new Error('Unknown random generator type: ' + self.type);                                                // 144
       }                                                                                                                //
 };                                                                                                                     //
@@ -171,7 +176,7 @@ RandomGenerator.prototype.hexString = function (digits) {                       
     var bytes;                                                                                                         // 152
     // Try to get cryptographically strong randomness. Fall back to                                                    //
     // non-cryptographically strong if not available.                                                                  //
-    try {                                                                                                              // 155
+    try {                                                                                                              // 150
       bytes = nodeCrypto.randomBytes(numBytes);                                                                        // 156
     } catch (e) {                                                                                                      //
       // XXX should re-throw any error except insufficient entropy                                                     //
@@ -180,7 +185,7 @@ RandomGenerator.prototype.hexString = function (digits) {                       
     var result = bytes.toString("hex");                                                                                // 161
     // If the number of digits is odd, we'll have generated an extra 4 bits                                            //
     // of randomness, so we need to trim the last digit.                                                               //
-    return result.substring(0, digits);                                                                                // 164
+    return result.substring(0, digits);                                                                                // 150
   } else {                                                                                                             //
     return this._randomString(digits, "0123456789abcdef");                                                             // 166
   }                                                                                                                    //
@@ -199,7 +204,7 @@ RandomGenerator.prototype.id = function (charsCount) {                          
   var self = this;                                                                                                     // 181
   // 17 characters is around 96 bits of entropy, which is the amount of                                                //
   // state in the Alea PRNG.                                                                                           //
-  if (charsCount === undefined) charsCount = 17;                                                                       // 184
+  if (charsCount === undefined) charsCount = 17;                                                                       // 180
                                                                                                                        //
   return self._randomString(charsCount, UNMISTAKABLE_CHARS);                                                           // 187
 };                                                                                                                     //
@@ -208,7 +213,7 @@ RandomGenerator.prototype.secret = function (charsCount) {                      
   var self = this;                                                                                                     // 191
   // Default to 256 bits of entropy, or 43 characters at 6 bits per                                                    //
   // character.                                                                                                        //
-  if (charsCount === undefined) charsCount = 43;                                                                       // 194
+  if (charsCount === undefined) charsCount = 43;                                                                       // 190
   return self._randomString(charsCount, BASE64_CHARS);                                                                 // 196
 };                                                                                                                     //
                                                                                                                        //
@@ -250,7 +255,7 @@ if (Meteor.isServer) {                                                          
 // the Alea algorithm)                                                                                                 //
 Random.createWithSeeds = function () {                                                                                 // 255
   for (var _len = arguments.length, seeds = Array(_len), _key = 0; _key < _len; _key++) {                              //
-    seeds[_key] = arguments[_key];                                                                                     // 255
+    seeds[_key] = arguments[_key];                                                                                     //
   }                                                                                                                    //
                                                                                                                        //
   if (seeds.length === 0) {                                                                                            // 256
@@ -264,14 +269,7 @@ Random.createWithSeeds = function () {                                          
 Random.insecure = createAleaGeneratorWithGeneratedSeed();                                                              // 264
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-}).call(this);
-
-
-
-
-
-
-(function(){
+},"deprecated.js":function(){
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                                                                                     //
@@ -298,14 +296,18 @@ Meteor.uuid = function () {                                                     
 };                                                                                                                     //
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-}).call(this);
-
+}}}}},{"extensions":[".js",".json"]});
+require("./node_modules/meteor/random/random.js");
+require("./node_modules/meteor/random/deprecated.js");
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package.random = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package.random = {}, {
   Random: Random
-};
+});
 
 })();
 

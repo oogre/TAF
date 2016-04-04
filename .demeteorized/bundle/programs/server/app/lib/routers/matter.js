@@ -11,11 +11,11 @@ Router.route("/matter/new", {
 
 
 
-Router.route("/matter/edit/:matterId", {
+Router.route("/matter/edit/:id", {
 	controller : "ApplicationController",
 	name: "matter.edit",
 	data : function(){
-		return Matters.findOne(this.params.matterId);
+		return Matters.findOne(this.params.id);
 	},
 	action : function () {
 		var data = this.data();
@@ -25,12 +25,12 @@ Router.route("/matter/edit/:matterId", {
 		this.render("matteredit");
 	}
 });
-Router.route("/matter/:matterId", {
+Router.route("/matter/:id", {
 	controller : "ApplicationController",
 	name: "matter.show",
 	data : function(){
 		return {
-			matter : Matters.findOne(this.params.matterId),
+			matter : Matters.findOne(this.params.id),
 		};
 	},
 	action : function () {
@@ -69,5 +69,3 @@ Router.route("/matter", {
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=matter.js.map

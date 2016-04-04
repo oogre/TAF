@@ -13,59 +13,116 @@
 
 Meteor.methods({
 	workerUpdator: function (workerid, worker) {
-		// Make sure the user is logged in before inserting a task
-		if (! Meteor.userId()) {
-			return new Meteor.Error("not-authorized");
+		if( (!Meteor.isChief()) ? workerid != Meteor.userId() : !Meteor.isChief()){
+			throw new Meteor.Error("not authorized", "Pour modifier ce travailleur, vous devez être ce travailleur ou vous devez être un Chef ");
+		}
+		if(!Match.test(workerid, Match.Where(function(id){
+			return 	Match.test(id, String) &&
+					Workers.findOne(id);
+		}))){
+			throw new Meteor.Error("unknown work", "Le travailleur que vous voulez modifier n'existe pas");
+		}
+		if(!Match.test(worker, Match.Where(function(worker){
+			return 	Match.test(worker, Object) &&
+					Match.test(worker.firstname, String) &&
+					Match.test(worker.lastname, String) &&
+					Match.test(worker.phone, String) &&
+					Match.test(worker.role, Match.Integer) &&
+					Match.test(worker.address, Object) &&
+					Match.test(worker.address.city, String) &&
+					Match.test(worker.address.country, String) &&
+					Match.test(worker.address.number, String) &&
+					Match.test(worker.address.street, String) &&
+					Match.test(worker.address.zipcode, String)
+		}))){
+			throw new Meteor.Error("wrong formatting object", "Les donnée reçue sont incomplète");
+		}
+		worker.firstname = worker.firstname.toLowerCase();
+		worker.lastname = worker.lastname.toLowerCase();
+		worker.firstname = worker.firstname.toLowerCase();
+		worker.lastname = worker.lastname.toLowerCase();
+		
+		if(Workers.findOne({
+			_id : {
+				$ne : workerid
+			},
+			$or : [{
+				firstname : worker.firstname,
+				lastname : worker.lastname
+			},{
+				firstname : worker.lastname,
+				lastname : worker.firstname
+			}]
+		})){
+			throw new Meteor.Error("unknown work", "Un travailleur porte déjà ce nom et ce prénom");
 		}
 		this.unblock();
-		return Workers.update(workerid, {$set : {profile : worker}});
+		Workers.update(workerid, {$set : {profile : worker}});
+		if(this.isSimulation){
+			Session.set("successMessage", "Le travailleur a été modifier" );
+		}
+		return "Le travailleur a été modifier";
 	},
 	workerDestroyer: function (workerid) {
-		// Make sure the user is logged in before inserting a task
-		if (! Meteor.userId()) {
-			return new Meteor.Error("not-authorized");
+		if(!Meteor.isBoss()){
+			throw new Meteor.Error("not authorized", "Vous devez être un Boss pour supprimer un travailleur");
 		}
+		if(!Match.test(workerid, Match.Where(function(id){
+			return 	Match.test(id, String) &&
+					Workers.findOne(id);
+		}))){
+			throw new Meteor.Error("unknown work", "Le travailleur que vous voulez supprmer n'existe pas");
+		}
+
 		this.unblock();
-		return Workers.remove(workerid);
+		Workers.remove(workerid);
+		if(Meteor.isSimulation){
+			Session.set("successMessage", "Le travailleur à été supprimé" );
+		}
+		return "Le travailleur à été supprimé";
 	},
 	workerCreator: function (worker, button) {
-		// Make sure the user is logged in before inserting a task
-		if (! Meteor.userId()) {
-			return new Meteor.Error("not-authorized");
+		if(!Meteor.isBoss()){
+			throw new Meteor.Error("not authorized", "Vous devez être un Boss pour créer un travailleur");
 		}
+		if(!Match.test(worker, Match.Where(function(worker){
+			return 	Match.test(worker, Object) &&
+					Match.test(worker.profile, Object) &&
+					Match.test(worker.profile.firstname, String) &&
+					Match.test(worker.profile.lastname, String) &&
+					Match.test(worker.profile.phone, String) &&
+					Match.test(worker.profile.role, Match.Integer) &&
+					Match.test(worker.profile.address, Object) &&
+					Match.test(worker.profile.address.city, String) &&
+					Match.test(worker.profile.address.country, String) &&
+					Match.test(worker.profile.address.number, String) &&
+					Match.test(worker.profile.address.street, String) &&
+					Match.test(worker.profile.address.zipcode, String)
+		}))){
+			throw new Meteor.Error("wrong formatting object", "Les donnée reçue sont incomplète");
+		}
+		worker.profile.firstname = worker.profile.firstname.toLowerCase();
+		worker.profile.lastname = worker.profile.lastname.toLowerCase();
+
+		if(Workers.findOne({
+				$or : [{
+					"profile.firstname" : worker.profile.firstname,
+					"profile.lastname" : worker.profile.lastname
+				},{
+					"profile.firstname" : worker.profile.lastname,
+					"profile.lastname" : worker.profile.firstname
+				}]
+		})){
+			throw new Meteor.Error("unknown work", "Un travailleur porte déjà ce nom et ce prénom");
+		}
+
+
 		this.unblock();
 
 		if(Meteor.isServer){
-			var Future = Npm.require("fibers/future");
-			var myFuture = new Future();
-			//var url = "https://passwordwolf.com/api/?upper=off&special=off&length=10&repeat=1";
-
-
-
-			//HTTP.get(url, {
-			//	followRedirects : true
-			//}, function (error, result) {
-				//if(error) myFuture.throw(error);
-				//if(result.statusCode != 200) myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
-				//try{
-					//var body = JSON.parse(result.content);
-					worker.password = "gdutaf";
-
-					var account = Accounts.createUser(worker);
-
-					/*Email.send({
-						to: worker.email,
-						from: "robot@taf.com",
-						subject: "Welcom on TAF",
-						text: "GO and connect on TAF. email : "+worker.email+" password : "+worker.password
-					});*/
-
-					myFuture.return(account);
-				//}catch(e){
-				//	myFuture.throw(new Meteor.Error("statusCode-"+result.statusCode));
-				//}
-			//});
-			return myFuture.wait();
+			worker.password = "gdutaf";
+			var value = Accounts.createUser(worker);
+			return "Le travailleur à été créé : <a href='"+Router.path("worker.view", {id : value})+"'>Voir</a>";
 		}
 		
 		if(this.isSimulation){
@@ -73,6 +130,7 @@ Meteor.methods({
 			.removeClass("btn-primary")
 			.addClass("btn-success");
 			Router.go("home");
+			Session.set("successMessage", "Le travailleur à été créé" );
 		}
 	},
 	workerSchedule : function( workId, workerId, action, datetime){
@@ -138,5 +196,3 @@ Meteor.methods({
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=workers.js.map

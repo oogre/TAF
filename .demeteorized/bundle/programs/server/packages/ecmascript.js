@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var Babel = Package['babel-compiler'].Babel;
 var BabelCompiler = Package['babel-compiler'].BabelCompiler;
 
@@ -10,31 +12,37 @@ var ECMAScript;
 
 (function(){
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// packages/ecmascript/ecmascript.js                                 //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
-                                                                     //
-ECMAScript = {                                                       // 1
-  compileForShell: function (command) {                              // 2
-    var babelOptions = Babel.getDefaultOptions();                    // 3
-    babelOptions.sourceMap = false;                                  // 4
-    babelOptions.ast = false;                                        // 5
-    babelOptions.externalHelpers = true;                             // 6
-    return Babel.compile(command, babelOptions).code;                // 7
-  }                                                                  //
-};                                                                   //
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                                                                  //
+// packages/ecmascript/ecmascript.js                                                                //
+//                                                                                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+                                                                                                    //
+ECMAScript = {                                                                                      // 1
+  compileForShell: function () {                                                                    // 2
+    function compileForShell(command) {                                                             //
+      var babelOptions = Babel.getDefaultOptions();                                                 // 3
+      babelOptions.sourceMap = false;                                                               // 4
+      babelOptions.ast = false;                                                                     // 5
+      return Babel.compile(command, babelOptions).code;                                             // 6
+    }                                                                                               //
+                                                                                                    //
+    return compileForShell;                                                                         //
+  }()                                                                                               //
+};                                                                                                  //
+//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
 
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package.ecmascript = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package.ecmascript = {}, {
   ECMAScript: ECMAScript
-};
+});
 
 })();
 

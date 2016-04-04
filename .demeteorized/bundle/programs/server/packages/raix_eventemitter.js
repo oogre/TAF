@@ -2,6 +2,8 @@
 
 /* Imports */
 var Meteor = Package.meteor.Meteor;
+var global = Package.meteor.global;
+var meteorEnv = Package.meteor.meteorEnv;
 var _ = Package.underscore._;
 
 /* Package-scope variables */
@@ -15,21 +17,21 @@ var EventEmitter;
 //                                                                        //
 ////////////////////////////////////////////////////////////////////////////
                                                                           //
-(function () {                                                            // 1
-                                                                          // 2
-///////////////////////////////////////////////////////////////////////   // 3
-//                                                                   //   // 4
-// packages/raix:eventemitter/eventemitter.server.js                 //   // 5
-//                                                                   //   // 6
-///////////////////////////////////////////////////////////////////////   // 7
-                                                                     //   // 8
+(function () {
+
+///////////////////////////////////////////////////////////////////////
+//                                                                   //
+// packages/raix:eventemitter/eventemitter.server.js                 //
+//                                                                   //
+///////////////////////////////////////////////////////////////////////
+                                                                     //
 /* global EventEmitter: true */                                      // 1
 EventEmitter = Npm.require('events').EventEmitter;                   // 2
                                                                      // 3
-///////////////////////////////////////////////////////////////////////   // 12
-                                                                          // 13
-}).call(this);                                                            // 14
-                                                                          // 15
+///////////////////////////////////////////////////////////////////////
+
+}).call(this);
+
 ////////////////////////////////////////////////////////////////////////////
 
 }).call(this);
@@ -37,10 +39,11 @@ EventEmitter = Npm.require('events').EventEmitter;                   // 2
 
 /* Exports */
 if (typeof Package === 'undefined') Package = {};
-Package['raix:eventemitter'] = {
+(function (pkg, symbols) {
+  for (var s in symbols)
+    (s in pkg) || (pkg[s] = symbols[s]);
+})(Package['raix:eventemitter'] = {}, {
   EventEmitter: EventEmitter
-};
+});
 
 })();
-
-//# sourceMappingURL=raix_eventemitter.js.map

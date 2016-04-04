@@ -29,5 +29,3 @@ Router.route("/signin", {
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=sign.js.map

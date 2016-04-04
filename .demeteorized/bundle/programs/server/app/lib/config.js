@@ -10,5 +10,3 @@ Meteor.startup(function () {
 	};
 });
 }).call(this);
-
-//# sourceMappingURL=config.js.map

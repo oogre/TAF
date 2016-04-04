@@ -6,7 +6,7 @@ Router.route("/shop", {
 	action : function () {
 		Session.set(Meteor.PAGE_TITLE, "Liste des Magasins/Clients");
 		this.render("shopindex");
-		if(Meteor.isBoss()){
+		if(Meteor.isWorker()){
 			Session.set(Meteor.FILL_CONTEXT_MENU_KEY, true);
 			this.render("shopaction", {to : "action"}); //contextmenu.action
 		}
@@ -61,11 +61,11 @@ Router.route("/shop/new", {
 
 
 
-Router.route("/shop/edit/:shopId", {
+Router.route("/shop/edit/:id", {
 	controller : "CleanController",
 	name: "shop.edit",
 	data : function(){
-		return Shops.findOne(this.params.shopId); 
+		return Shops.findOne(this.params.id); 
 	},
 	action : function () {
 		var data = this.data();
@@ -82,21 +82,22 @@ Router.route("/shop/edit/:shopId", {
 
 
 
-Router.route("/shop/:shopId", {
+Router.route("/shop/:id", {
 	controller : "ApplicationController",
 	name: "shop.view",
 	data : function(){
-		var date = moment(this.params.query.date || Session.get(Meteor.CALENDAR_CONF).defaultDate);
+		var date = moment(this.params.query.date || undefined);
 		date = moment([date.year(), date.month()]);
-
-
-		Session.set(Meteor.DATE_CONF, date.format());
 		
+
+		var start = _.clone(date).startOf('month').toISOString();
+		var stop = _.clone(date).endOf('month').toISOString();
+
 		var where = {
-			"shop._id" : this.params.shopId, 
+			"shop._id" : this.params.id, 
 			rdv : {
-				$gte: date.toISOString(),
-				$lte: date.endOf('month').toISOString()
+				$gte: start,
+				$lte: stop
 			}
 		};
 		var tmp = 	_
@@ -121,12 +122,12 @@ Router.route("/shop/:shopId", {
 		var torun = [];
 		unfinished = 	unfinished
 						.map(function(work){
-							
 							if( _
-								.chain(work.schedular)
-								.keys()
-								.map(function(worker){
-									return  work.schedular[worker].length > 0;
+								.chain(work.schedule)
+								.pluck("timetable")
+								.flatten()
+								.map(function(item){
+									return  item && item.start;
 								})
 								.some()
 								.value()
@@ -143,7 +144,7 @@ Router.route("/shop/:shopId", {
 		return{
 			works : {
 				count : Works.find(where).count(),
-				date : date,
+				date : date.toISOString(),
 				torun : torun.reverse(),
 				unfinished : unfinished,
 				finished : 	_
@@ -158,7 +159,7 @@ Router.route("/shop/:shopId", {
 							})
 							.value()
 			},
-			shop : Shops.findOne(this.params.shopId)
+			shop : Shops.findOne(this.params.id)
 		};
 	},
 	action : function () {
@@ -172,11 +173,11 @@ Router.route("/shop/:shopId", {
 
 
 
-Router.route("/shop/modules/:shopId", {
+Router.route("/shop/modules/:id", {
 	controller : "ApplicationController",
 	name: "shop.modules",
 	data : function(){
-		var shopId = this.params.shopId;
+		var shopId = this.params.id;
 		return {
 			shop : Shops.findOne(shopId),
 			modules : 	Modules
@@ -201,5 +202,3 @@ Router.route("/shop/modules/:shopId", {
 	}
 });
 }).call(this);
-
-//# sourceMappingURL=shop.js.map
