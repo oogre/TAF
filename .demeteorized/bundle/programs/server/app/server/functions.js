@@ -48,7 +48,7 @@ Meteor.checkTVA = function(tva, next){
 };
 
 Meteor.geocode = function(addres, next){
-	var getGeocodeUrl = "http://maps.googleapis.com/maps/api/geocode/json?address=[ADDRES]&key=[APIKEY]";
+	var getGeocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=[ADDRES]&key=[APIKEY]";
 	getGeocodeUrl = getGeocodeUrl
 					.replace("[ADDRES]", addres)
 					.replace("[APIKEY]", process.env.KEY_GOOGLE);
@@ -73,7 +73,7 @@ Meteor.getLocationInfo = function(address, next){
 	}
 	Meteor.geocode(address, function(error, location){
 		if(error) return next(error, null);
-		var getDistanceUrl = "http://maps.googleapis.com/maps/api/distancematrix/json?origins=[ORIGIN_LOCATION]&destinations=[DESTINATION_LOCATION]&language=fr-FR&key=[APIKEY]";
+		var getDistanceUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=[ORIGIN_LOCATION]&destinations=[DESTINATION_LOCATION]&language=fr-FR&key=[APIKEY]";
 		getDistanceUrl = getDistanceUrl
 						.replace("[ORIGIN_LOCATION]", Meteor.QG.location.lat+","+Meteor.QG.location.lng)
 						.replace("[DESTINATION_LOCATION]", location.lat+","+location.lng)
