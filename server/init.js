@@ -138,6 +138,21 @@ var initAdmin = function(){
 			}
 		});
 	}
+	if(Shops.find().count() == 0){
+		Meteor.call("shopCreator", {
+			brand : "ogre",
+			name : "asbl productions associées",
+			tva : "be0896755397",
+			contacts : ["vincent@ogre.be"],
+			address : {
+				city: "bruxelles",
+				country : "belgique",
+				number : "11",
+				street : "avenue télémaque",
+				zipcode : "1190"
+			}
+		});
+	}
 }
 
 WebApp.connectHandlers.use(function(req, res, next) {
