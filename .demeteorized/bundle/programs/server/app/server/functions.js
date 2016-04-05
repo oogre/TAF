@@ -48,13 +48,12 @@ Meteor.checkTVA = function(tva, next){
 };
 
 Meteor.geocode = function(addres, next){
-	var getGeocodeUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=[ADDRES]&key=[APIKEY]";
-	getGeocodeUrl = getGeocodeUrl
-					.replace("[ADDRES]", addres)
-					.replace("[APIKEY]", process.env.KEY_GOOGLE);
-	console.log(getGeocodeUrl);
-	HTTP.get(getGeocodeUrl, {
-		followRedirects : true
+	HTTP.get("https://maps.googleapis.com/maps/api/geocode/json", {
+		followRedirects : true,
+		data : {
+			address : addres,
+			key : process.env.KEY_GOOGLE,
+		}
 	}, function (error, result) {
 		if(error) return next(error);
 		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
@@ -73,13 +72,14 @@ Meteor.getLocationInfo = function(address, next){
 	}
 	Meteor.geocode(address, function(error, location){
 		if(error) return next(error, null);
-		var getDistanceUrl = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=[ORIGIN_LOCATION]&destinations=[DESTINATION_LOCATION]&language=fr-FR&key=[APIKEY]";
-		getDistanceUrl = getDistanceUrl
-						.replace("[ORIGIN_LOCATION]", Meteor.QG.location.lat+","+Meteor.QG.location.lng)
-						.replace("[DESTINATION_LOCATION]", location.lat+","+location.lng)
-						.replace("[APIKEY]", process.env.KEY_GOOGLE);
-		HTTP.get(getDistanceUrl, {
-			followRedirects : true
+		HTTP.get("https://maps.googleapis.com/maps/api/distancematrix/json", {
+			followRedirects : true,
+			data : {
+				origins : Meteor.QG.location.lat+","+Meteor.QG.location.lng,
+				destinations : location.lat+","+location.lng,
+				key : process.env.KEY_GOOGLE,
+				language  : "fr-FR"
+			}
 		}, function (error, result) {
 			if(error) return next(error, null);
 			if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode), null);
