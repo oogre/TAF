@@ -122,12 +122,9 @@ var expandItmModuleToAllITMShop = function(){
 	});
 };
 var initAdmin = function(){
-	console.log("initAdmin");
-	console.log(JSON.stringify(Workers.find().fetch()));
 	if(Workers.find().count() == 0){
-		console.log("YO");
 		var id = Accounts.createUser({
-					email : "vinent@ogre.be",
+					email : "vincent@ogre.be",
 					password : "gdutaf",
 					profile : {
 						firstname : "vincent",
