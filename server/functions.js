@@ -50,7 +50,7 @@ Meteor.checkTVA = function(tva, next){
 Meteor.geocode = function(addres, next){
 	console.log("https://maps.googleapis.com/maps/api/geocode/json");
 	HTTP.call("GET", "https://maps.googleapis.com/maps/api/geocode/json", {
-		data : {
+		params : {
 			address : addres,
 			key : process.env.KEY_GOOGLE,
 		}
@@ -76,7 +76,7 @@ Meteor.getLocationInfo = function(address, next){
 	Meteor.geocode(address, function(error, location){
 		if(error) return next(error, null);
 		HTTP.call("GET", "https://maps.googleapis.com/maps/api/distancematrix/json", {
-			data : {
+			params : {
 				origins : Meteor.QG.location.lat+","+Meteor.QG.location.lng,
 				destinations : location.lat+","+location.lng,
 				key : process.env.KEY_GOOGLE,
