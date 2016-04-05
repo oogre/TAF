@@ -71,7 +71,7 @@ Meteor.getLocationInfo = function(address, next){
 	}
 	Meteor.geocode(address, function(error, location){
 		if(error) return next(error, null);
-		HTTP.call(, "GET", "https://maps.googleapis.com/maps/api/distancematrix/json", {
+		HTTP.call("GET", "https://maps.googleapis.com/maps/api/distancematrix/json", {
 			data : {
 				origins : Meteor.QG.location.lat+","+Meteor.QG.location.lng,
 				destinations : location.lat+","+location.lng,
