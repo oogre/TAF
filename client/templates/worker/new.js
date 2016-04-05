@@ -41,7 +41,7 @@ Template.workernew.events({
 			profile : {
 				firstname : firstname.value.toLowerCase(),
 				lastname : lastname.value.toLowerCase(),
-				role : parseInt(100),
+				role : 50,
 				phone : phone.value.toLowerCase(),
 				address : {
 					street : address_street.value.toLowerCase(),

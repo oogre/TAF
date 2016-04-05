@@ -125,17 +125,19 @@ var initAdmin = function(){
 	if(Workers.find().count() == 0){
 		Accounts.createUser({
 			email : "vinent@ogre.be",
-			firstname : "vincent",
-			lastname : "evrard",
-			phone : "+32495876315",
-			password : "gdutaf",
-			role : 100,
-			address : {
-				city: "bruxelles",
-				country : "belgique",
-				number : "11",
-				street : "avenue télémaque",
-				zipcode : "+1190"
+			profile : {
+				firstname : "vincent",
+				lastname : "evrard",
+				phone : "+32495876315",
+				password : "gdutaf",
+				role : 100,
+				address : {
+					city: "bruxelles",
+					country : "belgique",
+					number : "11",
+					street : "avenue télémaque",
+					zipcode : "+1190"
+				}
 			}
 		});
 	}

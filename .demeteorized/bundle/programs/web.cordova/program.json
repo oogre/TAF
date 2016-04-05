@@ -2193,9 +2193,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/worker/new.js?hash=0f51f7842ac245eb31f43c95a3def1e55a873de0",
-      "size": 2018,
-      "hash": "0f51f7842ac245eb31f43c95a3def1e55a873de0"
+      "url": "/app/client/templates/worker/new.js?hash=f4867c883bee9bc3c40b67a35d0c0785d10b8720",
+      "size": 2007,
+      "hash": "f4867c883bee9bc3c40b67a35d0c0785d10b8720"
     },
     {
       "path": "app/client/templates/worker/selector.js",
