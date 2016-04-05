@@ -2,10 +2,9 @@
 /*global Meteor : false */
 
 Meteor.startup(function () {
-	Meteor.pictureUploadServer = "http://localhost:3000/upload";//http://localhost:3000/upload";//"http://192.168.1.42:3000";//"http://taf.ogre.be";taf.ogre.be
-	Meteor.pictureServer = "http://localhost:3000/upload";//http://localhost:3000/upload" ;
+	Meteor.pictureUploadServer = "http://taf.ogre.be/upload";//http://localhost:3000/upload";//"http://192.168.1.42:3000";//"http://taf.ogre.be";taf.ogre.be
+	Meteor.pictureServer = "http://tafpict.ogre.be";//http://localhost:3000/upload" ;
 	moment.locale('fr');
-	
 });
 
 Meteor.QG = {
@@ -14,11 +13,6 @@ Meteor.QG = {
 		lng: 5.532689
 	}
 };
-/*
-Meteor.google = {
-	keys : "AIzaSyBJeMgB6UgQgrVBSHDkRc1c6533odymHJM"
-};
-*/
 Meteor.indexLimit = 10;
 Meteor.indexSkip = 0;
 

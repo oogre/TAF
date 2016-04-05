@@ -158,5 +158,9 @@ Meteor.startup(function () {
 			lng: 5.532689
 		}
 	};
-	process.env.KEY_GOOGLE = process.env.KEY_GOOGLE || "AIzaSyCVOeZt_PwTAqSjIv-7DBc5JZCuiZTp-Co";
+
+	Meteor.config = {
+		path : "/programs/web.browser/app" //"/public" // /programs/web.browser/app/
+	}
+	process.env.KEY_GOOGLE = process.env.KEY_GOOGLE;
 });

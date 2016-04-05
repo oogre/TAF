@@ -34,16 +34,16 @@ Meteor.pdfkit = function(param){
 		},
 		fonts : [{
 				name : "DejaVuSans",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSans.ttf"
+				file : process.env.PWD+Meteor.config.path+"/fonts/dejavu/DejaVuSans.ttf"
 			},{
 				name : "DejaVuSans-Bold",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSans-Bold.ttf"
+				file : process.env.PWD+Meteor.config.path+"/fonts/dejavu/DejaVuSans-Bold.ttf"
 			},{
 				name : "DejaVuSansMono",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSansMono.ttf"
+				file : process.env.PWD+Meteor.config.path+"/fonts/dejavu/DejaVuSansMono.ttf"
 			},{
 				name : "DejaVuSansMono-Bold",
-				file : process.env.PWD + "/public/fonts/dejavu/DejaVuSansMono-Bold.ttf"
+				file : process.env.PWD+Meteor.config.path+"/fonts/dejavu/DejaVuSansMono-Bold.ttf"
 			}]
 	};
 	param = _.extend(_param, param);

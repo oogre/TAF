@@ -147,7 +147,7 @@ Meteor.methods({
 
 		var header = function(){
 			pdf
-			.template("header", process.env.PWD+"/public/images/adf-logo.png") // /programs/web.browser/app/
+			.template("header", process.env.PWD+Meteor.config.path+"/images/adf-logo.png") // /programs/web.browser/app/
 			.template("footer", [{
 				size : 1.75,
 					text : [{
@@ -628,14 +628,14 @@ Meteor.methods({
 		if(work.signatures && work.signatures.client && work.signatures.client.path && fs.existsSync(process.env.PWD + "/.uploads/"+work.signatures.client.path)) {
 			clientSig += "/.uploads/"+work.signatures.client.path;
 		}else{
-			clientSig += "/public/images/ADF-management.png";
+			clientSig += Meteor.config.path+"/images/ADF-management.png";
 		}
 		
 		var adfSig = process.env.PWD;
 		if(work.signatures && work.signatures.adf && work.signatures.adf.path && fs.existsSync(process.env.PWD + "/.uploads/"+work.signatures.adf.path)) {
 			adfSig += "/.uploads/"+work.signatures.adf.path;
 		}else{
-			adfSig += "/public/images/ADF-management.png";
+			adfSig += Meteor.config.path+"/images/ADF-management.png";
 		}
 
 		pdf
@@ -656,7 +656,7 @@ Meteor.methods({
 				align : "center",
 				size : 2, 
 				image : [{
-					src : process.env.PWD+"/public/images/ADF-management.png" // /programs/web.browser/app/
+					src : process.env.PWD+Meteor.config.path+"/images/ADF-management.png" // /programs/web.browser/app/
 				}]
 			}]
 		});

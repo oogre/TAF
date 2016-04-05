@@ -412,9 +412,6 @@
       "path": "app/lib/router.js"
     },
     {
-      "path": "app/server/pdf/methods.maintenance.js"
-    },
-    {
       "path": "app/server/pdf/methods.work.js"
     },
     {
