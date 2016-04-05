@@ -1932,9 +1932,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/module/index.js?hash=5e27b481be77b230f0e45739ce432df9f865e2f5",
-      "size": 1072,
-      "hash": "5e27b481be77b230f0e45739ce432df9f865e2f5"
+      "url": "/app/client/templates/module/index.js?hash=80004474b23d346024254db91a599f58bb4d8884",
+      "size": 1084,
+      "hash": "80004474b23d346024254db91a599f58bb4d8884"
     },
     {
       "path": "app/client/templates/module/module.js",

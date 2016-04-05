@@ -4,7 +4,7 @@
 /*global Template : false */
 Template.moduleindex.helpers({
 	modules : function(){
-		return this.modules.map(function(mod){
+		return (this.modules||[]).map(function(mod){
 			mod.id = mod._id
 			delete  mod._id;
 			return mod
@@ -13,7 +13,7 @@ Template.moduleindex.helpers({
 });
 Template.modulegroupe.helpers({
 	modules : function(){
-		return this.modules.map(function(mod){
+		return (this.modules||[]).map(function(mod){
 			mod.id = mod._id
 			delete  mod._id;
 			return mod
