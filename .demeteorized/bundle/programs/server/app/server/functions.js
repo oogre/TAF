@@ -48,12 +48,16 @@ Meteor.checkTVA = function(tva, next){
 };
 
 Meteor.geocode = function(addres, next){
+	console.log("https://maps.googleapis.com/maps/api/geocode/json");
 	HTTP.call("GET", "https://maps.googleapis.com/maps/api/geocode/json", {
 		data : {
 			address : addres,
 			key : process.env.KEY_GOOGLE,
 		}
 	}, function (error, result) {
+		console.log(this);
+		console.log(error);
+		console.log(result);
 		if(error) return next(error);
 		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
 		console.log(result);
