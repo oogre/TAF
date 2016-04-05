@@ -53,7 +53,7 @@
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>
-        <key>10.0.2.2</key>
+        <key>taf.ogre.be</key>
         <dict>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>

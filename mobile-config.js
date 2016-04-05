@@ -18,14 +18,12 @@ App.accessRule("*");
 
 // Set up resources such as icons and launch screens.
 App.icons({
-	"android_ldpi": "public/icons/icon-36x36.png",
 	"android_mdpi": "public/icons/icon-48x48.png",
 	"android_hdpi": "public/icons/icon-72x72.png",
 	"android_xhdpi": "public/icons/icon-96x96.png"
 });
 
 App.launchScreens({
-	"android_ldpi_portrait": "public/splash/splash-320x426.png",
 	"android_mdpi_portrait": "public/splash/splash-320x470.png",
 	"android_hdpi_portrait": "public/splash/splash-480x800.png",
 	"android_xhdpi_portrait": "public/splash/splash-720x1280.png"

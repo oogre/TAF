@@ -11,12 +11,5 @@
   "devDependencies": {
     "eachline": "https://github.com/meteor/node-eachline/tarball/ff89722ff94e6b6a08652bf5f44c8fffea8a21da",
     "chalk": "0.5.1"
-  },
-  "engines": {
-    "node": "0.10.41"
-  },
-  "main": "../../main.js",
-  "scripts": {
-    "start": "node ../../main"
   }
 }

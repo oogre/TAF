@@ -101,7 +101,6 @@
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <allow-navigation href="http://localhost" />
-    <access origin="*://localhost" />
-    <access origin="*://10.0.2.2" />
+    <access origin="*://taf.ogre.be" />
     <access origin="*" />
 </widget>
