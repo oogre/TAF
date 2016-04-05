@@ -123,25 +123,28 @@ var expandItmModuleToAllITMShop = function(){
 };
 var initAdmin = function(){
 	if(Workers.find().count() == 0){
-		Accounts.createUser({
-			email : "vinent@ogre.be",
-			profile : {
-				firstname : "vincent",
-				lastname : "evrard",
-				phone : "+32495876315",
-				password : "gdutaf",
-				role : 100,
-				address : {
-					city: "bruxelles",
-					country : "belgique",
-					number : "11",
-					street : "avenue télémaque",
-					zipcode : "+1190"
-				}
-			}
-		});
+		console.log("YO");
+		var id = Accounts.createUser({
+					email : "vinent@ogre.be",
+					profile : {
+						firstname : "vincent",
+						lastname : "evrard",
+						phone : "+32495876315",
+						password : "gdutaf",
+						role : 100,
+						address : {
+							city: "bruxelles",
+							country : "belgique",
+							number : "11",
+							street : "avenue télémaque",
+							zipcode : "+1190"
+						}
+					}
+				});
+		console.log("user created : "+id);
 	}
 	if(Shops.find().count() == 0){
+		console.log("LO");
 		var shop = {
 			brand : "ogre",
 			name : "asbl productions associées",
@@ -156,12 +159,14 @@ var initAdmin = function(){
 			}
 		};
 		var shopId = Shops.insert(shop);
-
+		console.log("shop created : "+shopId);
+		var address = shop.address.street+" "+shop.address.number+" "+shop.address.city+" "+shop.address.zipcode;
 		Meteor.getLocationInfo(address, function(err, locationInfo){
 			if(err) throw err;
 			Shops.update(shopId, {
 				$set : locationInfo
 			});
+			console.log("shop updated : "+shopId);
 		});
 	}
 }
