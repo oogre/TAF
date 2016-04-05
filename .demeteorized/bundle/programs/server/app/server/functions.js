@@ -48,20 +48,22 @@ Meteor.checkTVA = function(tva, next){
 };
 
 Meteor.geocode = function(addres, next){
-	console.log("https://maps.googleapis.com/maps/api/geocode/json");
+	if(!Match.test(next, Function)){
+		next = function(err, data){
+			if(error) return console.log(error);
+			console.log(data);
+		}
+	}
 	HTTP.call("GET", "https://maps.googleapis.com/maps/api/geocode/json", {
 		params : {
 			address : addres,
 			key : process.env.KEY_GOOGLE,
 		}
 	}, function (error, result) {
-		console.log(this);
-		console.log(error);
-		console.log(result);
 		if(error) return next(error);
 		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
-		console.log(result);
-		var location = result.data.rows[0].geometry.location;
+		if(results.data.status != "OK" ) return next(new Meteor.Error("status : "+results.data.status));
+		var location = result.data.results[0].geometry.location;
 		return next(null, location);
 	});
 };
