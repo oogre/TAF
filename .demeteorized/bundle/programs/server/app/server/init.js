@@ -123,11 +123,12 @@ var expandItmModuleToAllITMShop = function(){
 };
 var initAdmin = function(){
 	if(Workers.find().count() == 0){
-		Meteor.call("workCreator", {
+		Accounts.createUser({
 			email : "vinent@ogre.be",
 			firstname : "vincent",
 			lastname : "evrard",
 			phone : "+32495876315",
+			password : "gdutaf",
 			role : 100,
 			address : {
 				city: "bruxelles",
@@ -139,7 +140,7 @@ var initAdmin = function(){
 		});
 	}
 	if(Shops.find().count() == 0){
-		Meteor.call("shopCreator", {
+		var shop = {
 			brand : "ogre",
 			name : "asbl productions associées",
 			tva : "be0896755397",
@@ -151,6 +152,14 @@ var initAdmin = function(){
 				street : "avenue télémaque",
 				zipcode : "1190"
 			}
+		};
+		var shopId = Shops.insert(shop);
+
+		Meteor.getLocationInfo(address, function(err, locationInfo){
+			if(err) throw err;
+			Shops.update(shopId, {
+				$set : locationInfo
+			});
 		});
 	}
 }
