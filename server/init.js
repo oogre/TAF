@@ -123,7 +123,7 @@ var expandItmModuleToAllITMShop = function(){
 };
 var initAdmin = function(){
 	console.log("initAdmin");
-	console.log(Workers.remove("gNf6WASd3itLXGJyZ"));
+	console.log(JSON.stringify(Workers.find().fetch()));
 	if(Workers.find().count() == 0){
 		console.log("YO");
 		var id = Accounts.createUser({
@@ -133,14 +133,13 @@ var initAdmin = function(){
 						firstname : "vincent",
 						lastname : "evrard",
 						phone : "+32495876315",
-						
 						role : 100,
 						address : {
 							city: "bruxelles",
 							country : "belgique",
 							number : "11",
 							street : "avenue télémaque",
-							zipcode : "+1190"
+							zipcode : "1190"
 						}
 					}
 				});
