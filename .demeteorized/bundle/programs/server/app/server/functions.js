@@ -58,13 +58,9 @@ Meteor.geocode = function(addres, next){
 	}, function (error, result) {
 		if(error) return next(error);
 		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
-		try{
-			var body = result.content;
-			var location = JSON.parse(body).results[0].geometry.location;
-			return next(null, location);
-		}catch(e){
-			return next(new Meteor.Error("geocode_parsing_error"));
-		}
+		console.log(result.data);
+		var location = result.data.rows[0].geometry.location;
+		return next(null, location);
 	});
 };
 
