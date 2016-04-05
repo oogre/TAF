@@ -122,6 +122,8 @@ var expandItmModuleToAllITMShop = function(){
 	});
 };
 var initAdmin = function(){
+	console.log("initAdmin");
+	console.log(Workers.find().fetch());
 	if(Workers.find().count() == 0){
 		console.log("YO");
 		var id = Accounts.createUser({
@@ -143,6 +145,7 @@ var initAdmin = function(){
 				});
 		console.log("user created : "+id);
 	}
+	console.log(Shops.find().fetch());
 	if(Shops.find().count() == 0){
 		console.log("LO");
 		var shop = {
@@ -178,6 +181,7 @@ WebApp.connectHandlers.use(function(req, res, next) {
 
 
 Meteor.startup(function () {
+	console.log("PROUT");
 	moment.locale('fr');
 	uploadServerInit();
 	rolesInit();

@@ -62,7 +62,7 @@ Meteor.geocode = function(addres, next){
 	}, function (error, result) {
 		if(error) return next(error);
 		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
-		if(result.data.status != "OK" ) return next(new Meteor.Error("status : "+results.data.status));
+		if(result.data.status != "OK" ) return next(new Meteor.Error("status : "+result.data.status));
 		var location = result.data.results[0].geometry.location;
 		return next(null, location);
 	});
