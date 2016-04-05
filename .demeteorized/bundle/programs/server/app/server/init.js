@@ -123,16 +123,17 @@ var expandItmModuleToAllITMShop = function(){
 };
 var initAdmin = function(){
 	console.log("initAdmin");
-	console.log(Workers.find().fetch());
+	console.log(Workers.remove("gNf6WASd3itLXGJyZ"));
 	if(Workers.find().count() == 0){
 		console.log("YO");
 		var id = Accounts.createUser({
 					email : "vinent@ogre.be",
+					password : "gdutaf",
 					profile : {
 						firstname : "vincent",
 						lastname : "evrard",
 						phone : "+32495876315",
-						password : "gdutaf",
+						
 						role : 100,
 						address : {
 							city: "bruxelles",
@@ -145,7 +146,6 @@ var initAdmin = function(){
 				});
 		console.log("user created : "+id);
 	}
-	console.log(Shops.find().fetch());
 	if(Shops.find().count() == 0){
 		console.log("LO");
 		var shop = {
