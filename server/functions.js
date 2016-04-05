@@ -58,7 +58,7 @@ Meteor.geocode = function(addres, next){
 	}, function (error, result) {
 		if(error) return next(error);
 		if(result.statusCode != 200) return next(new Meteor.Error("statusCode-"+result.statusCode));
-		console.log(result.data);
+		console.log(result);
 		var location = result.data.rows[0].geometry.location;
 		return next(null, location);
 	});
