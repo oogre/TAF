@@ -143,7 +143,6 @@ var initAdmin = function(){
 		console.log("user created : "+id);
 	}
 	if(Shops.find().count() == 0){
-		console.log("LO");
 		var shop = {
 			brand : "ogre",
 			name : "asbl productions associées",
@@ -177,7 +176,6 @@ WebApp.connectHandlers.use(function(req, res, next) {
 
 
 Meteor.startup(function () {
-	console.log("PROUT");
 	moment.locale('fr');
 	uploadServerInit();
 	rolesInit();

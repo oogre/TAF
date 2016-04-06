@@ -15,15 +15,19 @@
 
 Meteor.startup(function () {
 	Meteor.publish("shops", function() {
+		this.ready();
 		return(Shops.find({}));
 	});
 	Meteor.publish("picts", function() {
+		this.ready();
 		return Picts.find({});
 	});
 	Meteor.publish("mattersOriginsUnits", function() {
+		this.ready();
 		return [Matters.find({}), Origins.find({}), Units.find({})];
 	});
 	Meteor.publish("workers", function() {
+		this.ready();
 		return Workers.find({});
 	});
 
@@ -34,7 +38,7 @@ Meteor.startup(function () {
 
 		var start = moment(date.toISOString()).startOf('month').toISOString();
 		var stop = moment(date.toISOString()).endOf('month').toISOString();
-
+		this.ready();
 		return Moves.find({
 			dateTime : {
 				$gte: start,
@@ -43,6 +47,7 @@ Meteor.startup(function () {
 		});
 	}),
 	Meteor.publish("works&wikis", function(data) {
+		
 		if(_.isObject(data)){
 			var works =	Works
 						.find({
@@ -58,6 +63,7 @@ Meteor.startup(function () {
 									.value()
 						}
 					});
+			this.ready();
 			return [works, wikis];
 		}
 
@@ -97,15 +103,19 @@ Meteor.startup(function () {
 									.value()
 						}
 					});
+		this.ready();
 		return [works, wikis];
 	});
 	Meteor.publish("roles", function() {
+		this.ready();
 		return Roles.find({});
 	});
 	Meteor.publish("tasks", function() {
+		this.ready();
 		return Tasks.find({});
 	});
 	Meteor.publish("modules", function() {
+		this.ready();
 		return Modules.find({});
 	});
 });

@@ -406,6 +406,9 @@
       "path": "app/lib/config.js"
     },
     {
+      "path": "app/lib/function.js"
+    },
+    {
       "path": "app/lib/rights.js"
     },
     {

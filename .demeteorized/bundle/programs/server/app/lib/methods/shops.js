@@ -36,7 +36,7 @@ Meteor.methods({
 		if(!Match.test(shop.contacts, [String])){
 			throw new Meteor.Error("wrong formatting object.contacts", "Ajouter au moins un contact");
 		}
-		this.unblock();
+		// this.unblock();
 		return Shops.insert(shop);
 	},
 
@@ -99,7 +99,7 @@ Meteor.methods({
 		}))){
 			throw new Meteor.Error("wrong formatting object.contacts", "Ajouter au moins un contact");
 		}
-		this.unblock();
+		// this.unblock();
 		
 		var address = shop.address.street+" "+shop.address.number+" "+shop.address.city+" "+shop.address.zipcode;
 		
@@ -130,7 +130,7 @@ Meteor.methods({
 		if (! Meteor.isBoss()) {
 			throw new Meteor.Error("not authorized", "Vous devez être un Boss pour supprimer un client");
 		}
-		this.unblock();
+		// this.unblock();
 		Shops.remove(id);
 		if(this.isSimulation){
 			Session.set("successMessage", "Le client à été supprimé" );
@@ -213,7 +213,7 @@ Meteor.methods({
 			throw new Meteor.Error("wrong formatting object.contacts", "Ajouter au moins un contact");
 		}
 
-		this.unblock();
+		// this.unblock();
 
 		Shops.update(shopId, shop);
 
@@ -309,7 +309,7 @@ Meteor.methods({
 		}))){
 			throw new Meteor.Error("unknown shop", "Un module porte déjà ce serial");
 		}
-		this.unblock();
+		// this.unblock();
 
 		var updator = {};
 		updator["modules."+key+".serial"] = serial;
@@ -355,7 +355,7 @@ Meteor.methods({
 		}))){
 			throw new Meteor.Error("unknown module", "Le module que vous voulez supprimer n'existe pas");
 		}
-		this.unblock();
+		// this.unblock();
 
 		
 		shop.modules.splice(data.key, 1);
@@ -383,11 +383,26 @@ Meteor.methods({
 		if(!Match.test(tva, String) || _.isEmpty(tva)){
 			throw new Meteor.Error("wrong formatting object", "Aucune donnée relative à la TVA reçue");
 		}
-		this.unblock();
+		// this.unblock();
 		if(Meteor.isServer){
 			return Meteor.checkTVA(tva);
 		}
 	}
 });
+
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"easyShopCreator",
+		"shopCreator",
+		"shopDestroyer",
+		"shopUpdator",
+		"shopAddModule",
+		"shopModuleSetSerial",
+		"shopModuleDestroyer",
+		"checkTVA"
+
+	]);
+}
 
 }).call(this);

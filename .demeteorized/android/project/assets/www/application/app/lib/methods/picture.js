@@ -61,7 +61,7 @@ Meteor.methods({
 		}))){
 			throw new Meteor.Error("unknown "+Collection._name+" for link.id : "+link.id, "You probably type a wrong link.id : "+link.id);
 		}
-		this.unblock();		
+		// this.unblock();		
 		
 		var pictId =	Picts.insert({
 							data : picture, 
@@ -82,4 +82,11 @@ Meteor.methods({
 		return "L'image est ajouter à ce travail";
 	}
 });
+
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"pictureCreator"
+	]);
+}
 }).call(this);

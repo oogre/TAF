@@ -26,7 +26,7 @@ Meteor.methods({
 			throw new Meteor.Error("wrong formatting module.type", "Ajouter au moins un type pour ce client");
 		}
 
-		this.unblock();
+		// this.unblock();
 
 		module.name = module.name.toLowerCase();
 		module.type = module.type.toLowerCase();
@@ -38,7 +38,7 @@ Meteor.methods({
 			throw new Meteor.Error("non unique module.name", "Un module porte déjà ce nom");
 		} 
 		
-		this.unblock();
+		// this.unblock();
 
 		var moduleId = Modules.insert(module);
 		
@@ -58,7 +58,7 @@ Meteor.methods({
 		if (! Meteor.isBoss()) {
 			return new Meteor.Error("not authorized", "Vous devez être un Boss pour supprimer un module");
 		}
-		this.unblock();
+		// this.unblock();
 		Modules.remove(id);
 		if(this.isSimulation){
 			Session.set("successMessage", "Le module à été supprimé" );
@@ -108,7 +108,7 @@ Meteor.methods({
 			throw new Meteor.Error("wrong formatting object.name", "Un module porte déjà ce nom");
 		}
 
-		this.unblock();
+		// this.unblock();
 		
 		Modules.update(id, module);
 
@@ -122,4 +122,13 @@ Meteor.methods({
 		return "Le module à été modifier";
 	}
 });
+
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"moduleCreator",
+		"moduleDestroyer",
+		"moduleUpdator"
+	]);
+}
 }).call(this);

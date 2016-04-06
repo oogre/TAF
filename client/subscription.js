@@ -5,16 +5,19 @@
 
 Meteor.startup(function () {
 	Tracker.autorun(function () {
-		if(Meteor.loggingIn() || Meteor.user()){
-			Meteor.subscribe("shops");
+		if(Meteor.status().connected && (Meteor.loggingIn() || Meteor.user())){
 			Meteor.subscribe("roles");
 			Meteor.subscribe("tasks");
 			Meteor.subscribe("picts"); 
-			Meteor.subscribe("modules"); 
-			Meteor.subscribe("workers");
-			Meteor.subscribe("works&wikis", Session.get(Meteor.CALENDAR_CONF).defaultDate);
+			Meteor.subscribe("modules");
 			Meteor.subscribe("moves", Session.get(Meteor.MOVES_DATE));
-			Meteor.subscribe("mattersOriginsUnits");
+			var shops = Meteor.subscribe("shops");
+			var worksWikis = Meteor.subscribe("works&wikis", Session.get(Meteor.CALENDAR_CONF).defaultDate);
+			var mattersOriginsUnits = Meteor.subscribe("mattersOriginsUnits");
+			var workers = Meteor.subscribe("workers");
+			if(worksWikis.ready() && shops.ready() && mattersOriginsUnits.ready() && workers.ready()){
+				Session.set(Meteor.DATA_RECIEVED, true);
+			}
 		}
 	});
 });

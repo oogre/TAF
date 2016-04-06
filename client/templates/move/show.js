@@ -12,7 +12,11 @@ Template.originshow.helpers({
 			shop = 	Shops.findOne(work.shop._id);
 		}else{
 			shop = 	Shops.findOne({
-						'modules.0.serial' : destinyId
+						modules : {
+							$elemMatch: {
+								serial : destinyId
+							}
+						}
 					});
 		}
 		

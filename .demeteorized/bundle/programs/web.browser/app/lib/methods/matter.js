@@ -31,7 +31,7 @@ Meteor.methods({
 			throw new Meteor.Error("wrong formatting object.unit", "Ajouter au moin une unité pour ce matériel");
 		}
 
-		this.unblock();
+		// this.unblock();
 
 		matter.name = matter.name.toLowerCase();
 		matter.unit = matter.unit.toLowerCase();
@@ -69,7 +69,7 @@ Meteor.methods({
 		if (! Meteor.isBoss()) {
 			throw new Meteor.Error("not authorized", "Vous devez être un Boss pour supprimer un matériel");
 		}
-		this.unblock();
+		// this.unblock();
 		Matters.remove(id);
 		if(this.isSimulation){
 			Session.set("successMessage", "Le matériel à été supprimé" );
@@ -110,7 +110,7 @@ Meteor.methods({
 		}))){
 			throw new Meteor.Error("wrong formatting object.unit", "Ajouter au moin une unité pour ce matériel");
 		}
-		this.unblock();
+		// this.unblock();
 
 		matter.name = matter.name.toLowerCase();
 		matter.unit = matter.unit.toLowerCase();
@@ -144,4 +144,13 @@ Meteor.methods({
 		return id;
 	}
 });
+
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"matterCreator",
+		"matterDestroyer",
+		"matterUpdator"
+	]);
+}
 }).call(this);

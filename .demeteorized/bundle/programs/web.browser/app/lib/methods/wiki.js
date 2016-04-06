@@ -26,7 +26,7 @@ Meteor.methods({
 			throw new Meteor.Error("wrong formatting object", "Ajouter au moins une description pour ce wiki");
 		}
 
-		this.unblock();
+		// this.unblock();
 		
 		var currentWiki = Wikis.insert({
 			createdAt : moment().toISOString(),
@@ -60,7 +60,7 @@ Meteor.methods({
 		}))){
 			throw new Meteor.Error("unknown shop", "Le wiki que vous voulez supprimer n'existe pas");
 		}
-		this.unblock();
+		// this.unblock();
 
 		if(wiki.linkTo && wiki.linkTo._id && wiki.linkTo.collection){
 			var Collection = this.isSimumation ? window[wiki.linkTo.collection] : global[wiki.linkTo.collection];
@@ -78,4 +78,11 @@ Meteor.methods({
 		return "Le wiki à été supprimé";
 	}
 });
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"wikiCreator",
+		"wikiDestroyer"
+	]);
+}
 }).call(this);

@@ -38,8 +38,10 @@ Meteor.ORIGIN_REF				= "originRef";
 Meteor.MOVES_DATE				= "movesDate";
 Meteor.ERROR_MESSAGE			= "errorMessage";
 Meteor.SUCCESS_MESSAGE			= "successMessage";
+Meteor.DATA_RECIEVED			= "dataReceived";
 
 
+Session.setDefault(Meteor.DATA_RECIEVED, false);
 Session.setDefault(Meteor.PAGE_TITLE, false);
 Session.setDefault(Meteor.MENU_KEY, false);
 Session.setDefault(Meteor.CONTEXT_MENU_KEY, false);

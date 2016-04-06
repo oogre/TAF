@@ -1626,99 +1626,99 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/matter.js?hash=0b2ebd7dac116c946defdd9d2db905be19750728",
-      "size": 4154,
-      "hash": "0b2ebd7dac116c946defdd9d2db905be19750728"
+      "url": "/app/lib/methods/matter.js?hash=648655e58b40341edd46f61fa0e6c9b9f2579c0a",
+      "size": 4278,
+      "hash": "648655e58b40341edd46f61fa0e6c9b9f2579c0a"
     },
     {
       "path": "app/lib/methods/module.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/module.js?hash=bb16e33e1b9d8f52a6eead3e5916539dc759c568",
-      "size": 3364,
-      "hash": "bb16e33e1b9d8f52a6eead3e5916539dc759c568"
+      "url": "/app/lib/methods/module.js?hash=ca156b74391b1761dc233a459410e63c9280eb50",
+      "size": 3491,
+      "hash": "ca156b74391b1761dc233a459410e63c9280eb50"
     },
     {
       "path": "app/lib/methods/move.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/move.js?hash=3f86675a2ea35b8665071906a598f2ef2eb8859e",
-      "size": 2729,
-      "hash": "3f86675a2ea35b8665071906a598f2ef2eb8859e"
+      "url": "/app/lib/methods/move.js?hash=2cbc28e9a31b4673b09a3d11def5936d384fd969",
+      "size": 2873,
+      "hash": "2cbc28e9a31b4673b09a3d11def5936d384fd969"
     },
     {
       "path": "app/lib/methods/origins.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/origins.js?hash=5a45ed0aa752c8aecc55e50648b2f633c90f2c8c",
-      "size": 1678,
-      "hash": "5a45ed0aa752c8aecc55e50648b2f633c90f2c8c"
+      "url": "/app/lib/methods/origins.js?hash=4408530e2cec72aad2736933f83cd04d11352bc9",
+      "size": 1780,
+      "hash": "4408530e2cec72aad2736933f83cd04d11352bc9"
     },
     {
       "path": "app/lib/methods/picture.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/picture.js?hash=78fd33e3c47a507468fd6553fded7b38fc84ba74",
-      "size": 2351,
-      "hash": "78fd33e3c47a507468fd6553fded7b38fc84ba74"
+      "url": "/app/lib/methods/picture.js?hash=99de0e2bcd312f1c82b92a5cde418e7c708b1e06",
+      "size": 2430,
+      "hash": "99de0e2bcd312f1c82b92a5cde418e7c708b1e06"
     },
     {
       "path": "app/lib/methods/shops.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/shops.js?hash=74e256ebcf0a247317d84854264433761b1e820e",
-      "size": 11609,
-      "hash": "74e256ebcf0a247317d84854264433761b1e820e"
+      "url": "/app/lib/methods/shops.js?hash=546a17457ccd63802154805c649f3c5cf03f41a0",
+      "size": 11844,
+      "hash": "546a17457ccd63802154805c649f3c5cf03f41a0"
     },
     {
       "path": "app/lib/methods/task.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/task.js?hash=990be87fbb7f4fc972800a2448c1dd7cb5fb0d8b",
-      "size": 3723,
-      "hash": "990be87fbb7f4fc972800a2448c1dd7cb5fb0d8b"
+      "url": "/app/lib/methods/task.js?hash=6454c2a58224b4f0bfe1380db5576c67351e24d1",
+      "size": 3840,
+      "hash": "6454c2a58224b4f0bfe1380db5576c67351e24d1"
     },
     {
       "path": "app/lib/methods/wiki.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/wiki.js?hash=dcf53a610b4831e47c651de063f773054e3d7b4c",
-      "size": 2172,
-      "hash": "dcf53a610b4831e47c651de063f773054e3d7b4c"
+      "url": "/app/lib/methods/wiki.js?hash=b52c09060c9696a223c2dc7bdbbb58972337f9a8",
+      "size": 2269,
+      "hash": "b52c09060c9696a223c2dc7bdbbb58972337f9a8"
     },
     {
       "path": "app/lib/methods/work.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/work.js?hash=82e4f7b6a5bd3fc9d2f7f231f7171998631981f3",
-      "size": 14258,
-      "hash": "82e4f7b6a5bd3fc9d2f7f231f7171998631981f3"
+      "url": "/app/lib/methods/work.js?hash=1ce794a2728e96d8925b58c868f741fbf0b98b5b",
+      "size": 14530,
+      "hash": "1ce794a2728e96d8925b58c868f741fbf0b98b5b"
     },
     {
       "path": "app/lib/methods/workers.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/methods/workers.js?hash=71fcc2f5ff2a6b085981c2f7c428b1bbb167f8ad",
-      "size": 6218,
-      "hash": "71fcc2f5ff2a6b085981c2f7c428b1bbb167f8ad"
+      "url": "/app/lib/methods/workers.js?hash=081b64f62c5af1d9f94125bb9a4e6aaa60232812",
+      "size": 7558,
+      "hash": "081b64f62c5af1d9f94125bb9a4e6aaa60232812"
     },
     {
       "path": "app/lib/routers/home.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/routers/home.js?hash=6c93e2f1d7554b2d0e941f30093fa9fba8426193",
-      "size": 608,
-      "hash": "6c93e2f1d7554b2d0e941f30093fa9fba8426193"
+      "url": "/app/lib/routers/home.js?hash=9c9991445885364b4946c028c3cdd0714e6f0f93",
+      "size": 458,
+      "hash": "9c9991445885364b4946c028c3cdd0714e6f0f93"
     },
     {
       "path": "app/lib/routers/matter.js",
@@ -1811,6 +1811,15 @@
       "hash": "f62cc58b9721018b2d767b6a17d80e7a2e96eeba"
     },
     {
+      "path": "app/lib/function.js",
+      "where": "client",
+      "type": "js",
+      "cacheable": true,
+      "url": "/app/lib/function.js?hash=e085db2e4c75235ef0b5ef0b4ae8c3d3e1ec075f",
+      "size": 949,
+      "hash": "e085db2e4c75235ef0b5ef0b4ae8c3d3e1ec075f"
+    },
+    {
       "path": "app/lib/rights.js",
       "where": "client",
       "type": "js",
@@ -1824,9 +1833,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/lib/router.js?hash=21393bf586912bc1ceb26123be0c9e4c231db5e2",
-      "size": 2945,
-      "hash": "21393bf586912bc1ceb26123be0c9e4c231db5e2"
+      "url": "/app/lib/router.js?hash=e97e09c65584d527ef14803d9caf1e68911c3f0b",
+      "size": 2943,
+      "hash": "e97e09c65584d527ef14803d9caf1e68911c3f0b"
     },
     {
       "path": "app/client/templates/buttons/destroy.js",
@@ -1977,9 +1986,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/templates/move/show.js?hash=6472680ce2f1ef8595815df137fbe5607c6a5b4f",
-      "size": 4190,
-      "hash": "6472680ce2f1ef8595815df137fbe5607c6a5b4f"
+      "url": "/app/client/templates/move/show.js?hash=8a02088c181e1285507298d60020ca5b6278be61",
+      "size": 4236,
+      "hash": "8a02088c181e1285507298d60020ca5b6278be61"
     },
     {
       "path": "app/client/templates/role/selector.js",
@@ -2229,18 +2238,18 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/config/config.js?hash=d1619a18380149d2a1e2013619a72317e485dca3",
-      "size": 478,
-      "hash": "d1619a18380149d2a1e2013619a72317e485dca3"
+      "url": "/app/client/config/config.js?hash=11f9866f34c46a35ed3c73a3da8defa6e71f3a60",
+      "size": 545,
+      "hash": "11f9866f34c46a35ed3c73a3da8defa6e71f3a60"
     },
     {
       "path": "app/client/config/sessions.js",
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/config/sessions.js?hash=d3bc0e45c99ccab65ff08748889238a407bcdd3a",
-      "size": 3206,
-      "hash": "d3bc0e45c99ccab65ff08748889238a407bcdd3a"
+      "url": "/app/client/config/sessions.js?hash=fafa174ec9d8a9a172adf1c1c8ff7ae7d6706cee",
+      "size": 3296,
+      "hash": "fafa174ec9d8a9a172adf1c1c8ff7ae7d6706cee"
     },
     {
       "path": "app/client/functions.js",
@@ -2256,9 +2265,9 @@
       "where": "client",
       "type": "js",
       "cacheable": true,
-      "url": "/app/client/subscription.js?hash=85bef0208aa2cef02a07b9590e3b88fd7ac89e97",
-      "size": 616,
-      "hash": "85bef0208aa2cef02a07b9590e3b88fd7ac89e97"
+      "url": "/app/client/subscription.js?hash=50f269cbde1541318e3d4ea3f29ddad9e358c642",
+      "size": 859,
+      "hash": "50f269cbde1541318e3d4ea3f29ddad9e358c642"
     },
     {
       "path": "app/client/templates/menu/main.js",

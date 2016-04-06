@@ -34,7 +34,7 @@ Meteor.methods({
 			throw new Meteor.Error("wrong formatting object.value", "Le type de réponse attendue pour cette tâche est incompréhanssible");
 		}
 		
-		this.unblock();
+		// this.unblock();
 
 		var taskId = Tasks.insert(task);
 		
@@ -51,7 +51,7 @@ Meteor.methods({
 		if (! Meteor.isBoss()) {
 			throw new Meteor.Error("not authorized", "Vous devez être un Boss pour supprimer une tâche");
 		}
-		this.unblock();
+		// this.unblock();
 		Tasks.remove(taskId);
 		
 		if(this.isSimulation){
@@ -96,7 +96,7 @@ Meteor.methods({
 		if(!Match.test(task.value, Boolean)){
 			throw new Meteor.Error("wrong formatting object.value", "Le type de réponse attendue pour cette tâche est incompréhanssible");
 		}
-		this.unblock();
+		// this.unblock();
 		
 		Tasks.update(taskId, task);
 
@@ -110,4 +110,12 @@ Meteor.methods({
 		return "La tâche à été modifier";
 	}
 });
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"taskCreator",
+		"taskDestroyer",
+		"taskUpdator"
+	]);
+}
 }).call(this);

@@ -56,7 +56,7 @@ Meteor.methods({
 		})){
 			throw new Meteor.Error("unknown work", "Un travailleur porte déjà ce nom et ce prénom");
 		}
-		this.unblock();
+		// this.unblock();
 		Workers.update(workerid, {$set : {profile : worker}});
 		if(this.isSimulation){
 			Session.set("successMessage", "Le travailleur a été modifier" );
@@ -74,7 +74,7 @@ Meteor.methods({
 			throw new Meteor.Error("unknown work", "Le travailleur que vous voulez supprmer n'existe pas");
 		}
 
-		this.unblock();
+		// this.unblock();
 		Workers.remove(workerid);
 		if(Meteor.isSimulation){
 			Session.set("successMessage", "Le travailleur à été supprimé" );
@@ -117,7 +117,7 @@ Meteor.methods({
 		}
 
 
-		this.unblock();
+		// this.unblock();
 
 		if(Meteor.isServer){
 			worker.password = "gdutaf";
@@ -134,7 +134,45 @@ Meteor.methods({
 		}
 	},
 	workerSchedule : function( workId, workerId, action, datetime){
-		this.unblock();
+		if(!Meteor.isWorker()){
+			throw new Meteor.Error("not authorized", "Vous devez être un Travailleur pour ajouter un travailleur à ce travail");
+		}
+		if(!Match.test(workId, Match.Where(function(id){
+			return 	Match.test(id, String) &&
+					Works.findOne(id);
+		}))){
+			throw new Meteor.Error("unknown work", "Le travail que vous voulez modifier n'existe pas");
+		}
+		if(!Match.test(workerId, Match.Where(function(id){
+			return 	Match.test(id, String) &&
+					Workers.findOne(id)
+					
+		}))){
+			throw new Meteor.Error("unknown worker", "Ce travailleur n'existe pas");
+		}
+		if(!Match.test(workerId, Match.Where(function(id){
+			return 	Match.test(id, String) &&
+					Works.findOne({
+						_id : workId,
+						schedule : {
+							$elemMatch: {
+								workerId : id
+							}
+						}
+					})		
+		}))){
+			throw new Meteor.Error("unknown worker", "Ce travailleur ne participe pas à ce travail'");
+		}
+		if(!Match.test(datetime, Match.Where(function(date){
+			return 	moment(date).isValid()
+		}))){
+			throw new Meteor.Error("wrong formatting datetime", "Le date transmise est incompréhanssible : "+datetime);
+		}
+		datetime = moment(datetime).toISOString();
+
+		// this.unblock();
+
+		//STOP WORKER WORKING
 		Works
 		.find({
 			$where : function(){
@@ -164,6 +202,7 @@ Meteor.methods({
 			
 		});
 		/**/
+		
 
 
 		//START WORKER WORKING
@@ -195,4 +234,13 @@ Meteor.methods({
 		/**/
 	}
 });
+
+if ( Meteor.isClient ) {
+	Ground.methodResume([
+		"workerUpdator",
+		"workerDestroyer",
+		"workerCreator",
+		"workerSchedule"
+	]);
+}
 }).call(this);
