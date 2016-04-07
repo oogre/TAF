@@ -12,10 +12,10 @@ Meteor.isChief = function(){
 	return Meteor.user() && Meteor.user().profile && Meteor.user().profile.role >= 80;
 };
 Meteor.isWorker = function(){
-	return Meteor.user() && Meteor.user().profile && Meteor.user().profile.role >= 70;
+	return Meteor.user() && Meteor.user().profile && Meteor.user().profile.role >= 60;
 };
 Meteor.isVisitor = function(){
-	return Meteor.user() && Meteor.user().profile && Meteor.user().profile.role >= 60;	
+	return Meteor.user() && Meteor.user().profile && Meteor.user().profile.role >= 50;	
 };
 
 UI.registerHelper("isConnected", function(){

@@ -13,12 +13,12 @@
 			{{/if}}
 		</li>
 		
-		{{#if isConnected}}
-			{{#if end}}
+		{{#if isConnected end}}
+			{{#unless isMobile}}
 				<li>
 					<button class="btn btn-lg btn-block btn-default print" >Imprimer</button>
 				</li>
-			{{/if}}
+			{{/unless}}
 		{{/if}}
 	</ul>
 </template>

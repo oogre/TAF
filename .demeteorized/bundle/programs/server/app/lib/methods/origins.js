@@ -20,7 +20,8 @@ Meteor.methods({
 						ref : ref
 					});
 		if(origin){
-			throw new Meteor.Error("non unique ref", "Un conteneur porte déjà ce nom de référence <a href='"+Router.path("origin.show", {originId : origin._id})+"'>Voir</a>");
+			var matter = Matters.findOne(origin.matter);
+			throw new Meteor.Error("non unique ref", "Un conteneur porte déjà ce nom de référence <a href='"+Router.path("origin.show", {originId : origin._id})+"'>Voir</a> <a href='"+Router.path("matter.show", {id : matter._id})+"'>"+matter.name+"</a>");
 		}
 		if(!Match.test(matterId, Match.Where(function(id){
 			return 	Match.test(id, String) &&
