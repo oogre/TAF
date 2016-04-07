@@ -189,7 +189,7 @@ Meteor.startup(function () {
 	};
 
 	Meteor.config = {
-		path : "/www/application/app" //"/public" // /programs/web.browser/app/ // /www/application/app
+		path : "/programs/web.browser/app" //"/public" // /programs/web.browser/app/
 	}
 	process.env.KEY_GOOGLE = process.env.KEY_GOOGLE;
 });
